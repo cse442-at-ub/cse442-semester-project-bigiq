@@ -81,14 +81,6 @@ export default class HomePage extends Component {
             <Image source = {require('./assets/accountIcon.png')} 
             style = {styles.accountIcon}/>
         </View>
-        <View style={styles.switchType}>
-          <TouchableOpacity onPress = {this.changeText} style={{width:'50%'}}>
-            <Text style={{color:this.state.textColor,fontSize:30,fontWeight:'bold'}}>Text</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress = {this.changeVoice}>
-            <Text style={{color: this.state.voiceColor, fontSize:30,fontWeight:'bold'}}>Voice</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }

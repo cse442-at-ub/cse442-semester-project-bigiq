@@ -7,18 +7,13 @@ import {
 } from 'react-native'
 
 import Splash from './pages/Splash';
-
+import HomePage from './homePage';
 
 export default class App extends Component {
   render() {
   return(
-    <View style = {styles.container}>
-      <StatusBar
-        backgroundColor="#1cd313a"
-        barStyle="light-content"
-      />
-      <Splash/>
-    </View>
+
+      <HomePage/>
   );
   }
 }
