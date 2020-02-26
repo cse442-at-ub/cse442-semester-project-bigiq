@@ -1,6 +1,7 @@
 package com.example.AnonMe.database;
 
 
+import com.example.AnonMe.model.UserEntry;
 import com.fasterxml.jackson.databind.BeanProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

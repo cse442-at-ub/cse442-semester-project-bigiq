@@ -1,4 +1,4 @@
-package com.example.AnonMe.database;
+package com.example.AnonMe.model;
 
 public class UserEntry {
     private String phone_number;
