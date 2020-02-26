@@ -1,14 +1,21 @@
-import React, { Component } from "react";
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Home from "./pages/Home";
+import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import HomePage from "./pages/homePage";
 import Splash from "./pages/Splash";
 
-const Project= createStackNavigator({
+const screens= ({
  Splash: {
-    screen: Splash
-  },
-  Home: {
-   screen: Home
-  },
+  screen: Splash,
+  navigationOptions:{
+   headerShown: false
+  }
+ },
+ HomePage: {
+  screen: HomePage,
+  navigationOptions:{
+   headerShown: false
+  }
+ }
 });
-export default createAppContainer(Project);
+const Routes = createStackNavigator(screens);
+export default createAppContainer(Routes);
