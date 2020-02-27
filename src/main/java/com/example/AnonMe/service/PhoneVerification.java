@@ -14,41 +14,46 @@ public class PhoneVerification {
     public PhoneVerification(){
         serviceSID = getServiceSID();
     }
-    public String getServiceSID(){
+    private static String getServiceSID(){
         Twilio.init(SID, token);
         ResourceSet<Service> services = Service.reader().limit(20).read();
         for(Service record : services) {
-            if(record.getFriendlyName().equals("Your AnonMe")){
+            if(record.getFriendlyName().equals("AnonMe")){
                 return record.getSid();
             }
         }
         return createNewServiceSID();
     }
-    public String createNewServiceSID(){
+    private static String createNewServiceSID(){
         Twilio.init(SID, token);
-        Service service = Service.creator("Your AnonMe").create();
+        Service service = Service.creator("AnonMe").create();
         return service.getSid();
     }
 
     public int sendCode(String phoneNumber){
         try {
+            String areaCode = "+1";
+            areaCode += phoneNumber;
             Twilio.init(SID, token);
             Verification verification = Verification.creator(
                     serviceSID,
-                    phoneNumber,
+                    areaCode,
                     "sms")
                     .create();
             return 1;
         }catch (com.twilio.exception.ApiException exception){
+            exception.printStackTrace();
             return 0;
         }
     }
     public int checkVerification(String phoneNumber, String userCode){
+        String areaCode = "+1";
+        areaCode += phoneNumber;
         Twilio.init(SID, token);
         VerificationCheck verificationCheck = VerificationCheck.creator(
                 serviceSID,
                 userCode)
-                .setTo(phoneNumber).create();
+                .setTo(areaCode).create();
         if(!verificationCheck.getStatus().equals("approved")){
             return 0;
         }
