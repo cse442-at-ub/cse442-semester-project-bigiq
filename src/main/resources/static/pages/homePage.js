@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 
 export default class HomePage extends Component {
   constructor(props){
@@ -8,8 +8,19 @@ export default class HomePage extends Component {
       home: require('../assets/homeIconClick.png'),
       following: require('../assets/followingIcon.png'),
       group: require('../assets/groupIcon.png'),
+      account: require('../assets/accountIcon.png'),
       textColor: '#4704a5',
       voiceColor: '#000000'
+    }
+  }
+  changeAccountIcon = () =>{
+    if (this.state.account === require('../assets/accountIcon.png')) {
+      this.setState({
+        home: require('../assets/homeIcon.png'),
+        following: require('../assets/followingIcon.png'),
+        group:require('../assets/groupIcon.png'),
+        account:require('../assets/accountIconClick.png')
+      })
     }
   }
   changeHomeIcon = () =>{
@@ -17,7 +28,8 @@ export default class HomePage extends Component {
       this.setState({
         home: require('../assets/homeIconClick.png'),
         following: require('../assets/followingIcon.png'),
-        group:require('../assets/groupIcon.png')
+        group:require('../assets/groupIcon.png'),
+        account:require('../assets/accountIcon.png')
       })
     }
   }
@@ -29,6 +41,7 @@ export default class HomePage extends Component {
       })
     }
   }
+
   changeVoice = () =>{
     if (this.state.voiceColor === '#000000') {
       this.setState({
@@ -58,7 +71,6 @@ export default class HomePage extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Hello, world!</Text>
         <View style = {styles.navBar}>
           <TouchableOpacity onPress = {this.changeHomeIcon}>
             <Image source = {this.state.home} 
@@ -68,20 +80,24 @@ export default class HomePage extends Component {
             <Image source = {this.state.following} 
               style = {styles.navImages}/>
           </TouchableOpacity>
+          <TouchableWithoutFeedback>
+            <Image source = {require('../assets/postIcon.png')}
+                   style = {styles.postIcon}/>
+          </TouchableWithoutFeedback>
           <TouchableOpacity onPress = {this.changeGroupIcon}>
             <Image source = {this.state.group} 
               style = {styles.navImages}/>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source = {require('../assets/postIcon.png')}
-                   style = {styles.postIcon}/>
+          <TouchableOpacity onPress = {this.changeAccountIcon}>
+            <Image source = {this.state.account}
+                   style = {styles.accountIcon}/>
           </TouchableOpacity>
+
         </View>
         <View style={styles.top}>
           <Image source = {require('../assets/logo.png')}
             style = {styles.logo}/>
-            <Image source = {require('../assets/accountIcon.png')}
-            style = {styles.accountIcon}/>
+
         </View>
         <View style={styles.switchType}>
           <TouchableOpacity onPress = {this.changeText} style={{width:'50%'}}>
@@ -126,9 +142,6 @@ const styles = StyleSheet.create({
   logo:{
     width: 100, height: 100, top: 20, resizeMode:"contain", marginLeft: 30
   },
-  accountIcon:{
-    width: 40, height: 40, top: 45, resizeMode:"contain", marginRight: 30
-  },
   navBar:{
     position: 'absolute',
     bottom: 0,
@@ -155,6 +168,9 @@ const styles = StyleSheet.create({
     width: 45, height: 45, marginLeft: 25, top: 10, resizeMode:"contain"
   },
   postIcon:{
-    width: 50, height: 50, marginRight:20, top: 7, resizeMode:"contain"
-  }
+    width: 70, height: 70, top: '-7%', resizeMode:"contain"
+  },
+  accountIcon:{
+    width: 48, height: 48, marginRight:20, top: 7, resizeMode:"contain"
+  },
 })

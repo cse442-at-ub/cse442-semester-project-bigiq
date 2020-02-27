@@ -3,12 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="8f624089-0046-4964-837e-7f3a1161b609" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/PhoneVerificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/PhoneVerificationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -24,11 +32,16 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunManager">
     <configuration name="AnonMeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -63,7 +76,8 @@
       <updated>1582692398508</updated>
       <workItem from="1582692400098" duration="198000" />
       <workItem from="1582757770681" duration="665000" />
-      <workItem from="1582765894096" duration="21000" />
+      <workItem from="1582765894096" duration="74000" />
+      <workItem from="1582774399680" duration="5368000" />
     </task>
     <servers />
   </component>
@@ -74,9 +88,41 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="465" y="264" key="com.intellij.ide.util.TipDialog" timestamp="1582765893497">
+    <state width="1270" height="191" key="GridCell.Tab.0.bottom" timestamp="1582789664174">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="465" y="264" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1582765893497" />
+    <state width="1270" height="191" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
+    <state width="1270" height="191" key="GridCell.Tab.0.center" timestamp="1582789664174">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
+    <state width="1270" height="191" key="GridCell.Tab.0.left" timestamp="1582789664174">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
+    <state width="1270" height="191" key="GridCell.Tab.0.right" timestamp="1582789664174">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
+    <state width="1270" height="191" key="GridCell.Tab.1.bottom" timestamp="1582789664175">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582789664175" />
+    <state width="1270" height="191" key="GridCell.Tab.1.center" timestamp="1582789664174">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
+    <state width="1270" height="191" key="GridCell.Tab.1.left" timestamp="1582789664174">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
+    <state width="1270" height="191" key="GridCell.Tab.1.right" timestamp="1582789664175">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1582789664175" />
+    <state x="465" y="264" key="com.intellij.ide.util.TipDialog" timestamp="1582774457851">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="264" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1582774457851" />
   </component>
 </project>

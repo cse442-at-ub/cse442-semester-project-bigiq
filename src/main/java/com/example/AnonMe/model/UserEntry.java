@@ -3,38 +3,27 @@ package com.example.AnonMe.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserEntry {
-    private String phone_number;
-    private String screen_name;
+    private String phoneNumber;
+    private String screenName;
 
-    public UserEntry() {
-    }
-
-    public UserEntry(@JsonProperty("phoneNumber") String phone_number, @JsonProperty("screenName") String screen_name) {
-        this.phone_number = phone_number;
-        this.screen_name = screen_name;
+    public UserEntry(@JsonProperty("phoneNumber") String phoneNumber, @JsonProperty("screenName") String screenName) {
+        this.phoneNumber = phoneNumber;
+        this.screenName = screenName;
     }
 
     public String getPhone_number() {
-        return phone_number;
+        return phoneNumber;
     }
 
     public String getScreen_name() {
-        return screen_name;
+        return screenName;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhone_number(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public void setScreen_name(String screen_name) {
-        this.screen_name = screen_name;
-    }
-
-    @Override
-    public String toString() {
-        return "UserEntry{" +
-                "phone_number='" + phone_number + '\'' +
-                ", screen_name='" + screen_name + '\'' +
-                '}';
+    public void setScreen_name(String screenName) {
+        this.screenName = screenName;
     }
 }

@@ -20,10 +20,9 @@ public class UserController {
         return user_repo.getAllUsers();
     }
 
-    @PutMapping(path="/adduser")
-    public void addUser(@RequestParam String phoneNumber, @RequestParam String screenName){
-        UserEntry TestEntry = new UserEntry(phoneNumber,screenName);
-        user_repo.insertUser(TestEntry);
+    @PostMapping(path="/adduser")
+    public void addUser(@RequestBody UserEntry user){
+        user_repo.insertUser(user);
     }
 
     @DeleteMapping(path="/removeuser")

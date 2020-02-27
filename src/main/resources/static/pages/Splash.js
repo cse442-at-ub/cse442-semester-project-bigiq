@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {
     Image, KeyboardAvoidingView,
-    StyleSheet, Text, TextInput, TouchableOpacity,
+    StyleSheet, Text, TextInput, TouchableOpacity, ImageBackground,
     View,
 } from 'react-native'
 
 export default function Splash ({navigation}){
     return (
         <View style={styles.container}>
+            <ImageBackground source={require('../assets/background.png')} style={{width:'100%',height:'100%', resizeMode: 'contain'}}>
             <View style ={styles.containerLogo}>
                 <Image style={{width:150,height:150, resizeMode: 'contain'}} source={require('../assets/logo.png')}/>
                 <Text style= {styles.logoText}> Welcome to AnonMe!  </Text>
@@ -26,6 +27,7 @@ export default function Splash ({navigation}){
                     <Text style={styles.loginButton}>Login / Signup</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
+            </ImageBackground>
         </View>
     )
 }
