@@ -1,5 +1,7 @@
 package com.example.AnonMe.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserEntry {
     private String phone_number;
     private String screen_name;
@@ -7,7 +9,7 @@ public class UserEntry {
     public UserEntry() {
     }
 
-    public UserEntry(String phone_number, String screen_name) {
+    public UserEntry(@JsonProperty("phoneNumber") String phone_number, @JsonProperty("screenName") String screen_name) {
         this.phone_number = phone_number;
         this.screen_name = screen_name;
     }
