@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @org.springframework.stereotype.Repository
@@ -21,6 +22,11 @@ public class UserRepository {
     @Autowired
     JdbcTemplate jdbc_temp;
 
+    /*
+    * =========================================
+    * getAllUsers()
+    * returns a list of UserEntry objects for all users in the current DB.
+    * */
     public List<UserEntry> getAllUsers(){
         List<UserEntry> userList = new ArrayList<>();
         String sql = "select * from user_info";
@@ -31,7 +37,45 @@ public class UserRepository {
         return userList;
     }
 
+    /* ==========================================
+    * VerifyName(String screenName)
+    * Verifies validity of a new screenName
+    * Checks for and flags:
+    *       0 -- Valid screenName, no issues found.
+    *       1 -- screenName already used by user.
+    *       2 -- screenName contains invalid characters.
+    *       3 -- screenName exceeds 16 characters.
+    * =========================================*/
+    public int VerifyName(String screenName){
+        int flag_ret = 3;
+        final ArrayList<Character> InvalidChars = new ArrayList<>(Arrays.asList('/','\\','\'','?','!','@','='));
 
+
+        //3 -- Checking for screenName length
+        if (screenName.length() > 16) return flag_ret;
+        flag_ret--; //Test passed
+
+        //2 -- Checking for invalid chars
+        for (int i = 0; i < screenName.length(); i++){
+            if (InvalidChars.contains(screenName.charAt(i))) return flag_ret;
+        } flag_ret--; //Test passed
+
+        //1 -- Checking for uniqueness
+        List<UserEntry> ret = new ArrayList<>();
+        String sql = "select * from user_info user_ where user_.screen_name = '" + screenName + "'";
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
+        if (ret.size() == 0) flag_ret--; //Test passed
+
+        return flag_ret;
+    }
+
+    /* ==========================================
+     * insertUser(UserEntry newEntry)
+     * Inserts a new user into the database, with phone_number being the PK
+     *
+     * Returns 1 if unsuccessful
+     *         0 if successful
+     * =========================================*/
     public int insertUser(UserEntry newEntry){
         String sql = "insert into user_info " +
                 "(phone_number, screen_name) " +
@@ -44,13 +88,20 @@ public class UserRepository {
             jdbc_temp.update(sql, params, types);
         } catch (DataAccessException ex){
             System.out.println(0 + " row affected");
-            return 0;
+            return 1;
         }
 
         System.out.println(1 + " row affected");
-        return 1;
+        return 0;
     }
 
+    /* ==========================================
+     * removeUser(UserEntry newEntry)
+     * Removes a user from the database
+     *
+     * Returns 1 if unsuccessful
+     *         0 if successful
+     * =========================================*/
     public int removeUser(UserEntry newEntry){
         String sql = "DELETE FROM user_info WHERE " +
                 "phone_number = ? ";
@@ -62,11 +113,11 @@ public class UserRepository {
             jdbc_temp.update(sql, params, types);
         } catch (DataAccessException ex){
             System.out.println(0 + " row affected");
-            return 0;
+            return 1;
         }
         
         System.out.println(1 + " row affected");
-        return 1;
+        return 0;
     }
 
 }
