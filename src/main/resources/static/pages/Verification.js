@@ -5,7 +5,8 @@ import {
     View,
 } from 'react-native'
 
-export default function Splash ({navigation}){
+export default function Verification ({navigation}){
+
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/background.png')} style={{width:'100%',height:'100%', resizeMode: 'contain'}}>
@@ -18,16 +19,15 @@ export default function Splash ({navigation}){
                 style ={styles.containerForm}>
                 <TextInput style = {styles.phoneNumberBox}
                            underlineColorAndroid = 'rgba(0,0,0,0)'
-                           placeholder = "Phone Number"
+                           placeholder = "Enter 6-Digit Verification Code Here"
                            placeholderTextColor = '#ffffff'
                            keyboardType = 'number-pad'
+                           onChangeText={(text) => this.setState({text})}
+                           value={this.state.text}
                 />
 
                 <TouchableOpacity style = {styles.button} onPress = {() => navigation.navigate('HomePage')}>
-                    <Text style={styles.loginButton}>Login / Signup</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('HomePage')}>
-                    <Text style = {styles.loginButton}>Continue as Guest</Text>
+                    <Text style={styles.loginButton}>Enter</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
             </ImageBackground>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     phoneNumberBox: {
-        width: 300,
+        width: 280,
         backgroundColor: 'rgba(255,255,255,0.3)',
         borderRadius : 25,
         paddingHorizontal : 16,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         paddingVertical: 13,
     },
     button: {
-        width: 300,
+        width: 70,
         backgroundColor: '#1c313a',
         borderRadius : 25,
         marginVertical : 10,

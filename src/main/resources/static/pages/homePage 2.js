@@ -9,8 +9,8 @@ export default class HomePage extends Component {
       following: require('../assets/followingIcon.png'),
       group: require('../assets/groupIcon.png'),
       account: require('../assets/accountIcon.png'),
-      textColor: '#000000',
-      voiceColor: '#663399'
+      textColor: '#4704a5',
+      voiceColor: '#000000'
     }
   }
   changeAccountIcon = () =>{
@@ -36,7 +36,7 @@ export default class HomePage extends Component {
   changeText = () =>{
     if (this.state.textColor === '#000000') {
       this.setState({
-        textColor: '#663399',
+        textColor: '#4704a5',
         voiceColor: '#000000'
       })
     }
@@ -46,7 +46,7 @@ export default class HomePage extends Component {
     if (this.state.voiceColor === '#000000') {
       this.setState({
         textColor: '#000000',
-        voiceColor: '#663399'
+        voiceColor: '#4704a5'
       })
     }
   }
@@ -55,8 +55,7 @@ export default class HomePage extends Component {
       this.setState({
         home: require('../assets/homeIcon.png'),
         following: require('../assets/followingIconClick.png'),
-        group:require('../assets/groupIcon.png'),
-        account:require('../assets/accountIcon.png')
+        group:require('../assets/groupIcon.png')
       })
     }
   }
@@ -65,8 +64,7 @@ export default class HomePage extends Component {
       this.setState({
         home: require('../assets/homeIcon.png'),
         following: require('../assets/followingIcon.png'),
-        group:require('../assets/groupIconClick.png'),
-        account:require('../assets/accountIcon.png')
+        group:require('../assets/groupIconClick.png')
       })
     }
   }
@@ -102,10 +100,10 @@ export default class HomePage extends Component {
 
         </View>
         <View style={styles.switchType}>
-          <TouchableOpacity onPress = {this.changeVoice} style={{width:'50%'}}>
+          <TouchableOpacity onPress = {this.changeText} style={{width:'50%'}}>
             <Text style={{color:this.state.textColor,fontSize:30,fontWeight:'bold'}}>Text</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress = {this.changeText}>
+          <TouchableOpacity onPress = {this.changeVoice}>
             <Text style={{color: this.state.voiceColor, fontSize:30,fontWeight:'bold'}}>Voice</Text>
           </TouchableOpacity>
         </View>
