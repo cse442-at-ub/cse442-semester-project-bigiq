@@ -8,6 +8,7 @@ const screens= ({
   screen: Splash,
   navigationOptions:{
    headerShown: false
+
   }
  },
  HomePage: {
@@ -15,6 +16,9 @@ const screens= ({
   navigationOptions:{
    headerShown: false
   }
+ },
+ Tabs: {
+  screen: Tabs
  }
 });
 const Routes = createStackNavigator(screens);

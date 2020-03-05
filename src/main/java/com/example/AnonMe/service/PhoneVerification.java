@@ -32,31 +32,39 @@ public class PhoneVerification {
 
     public int sendCode(String phoneNumber){
         try {
-            String areaCode = "+1";
-            areaCode += phoneNumber;
+            String checkedNumber = checkNumber(phoneNumber);
             Twilio.init(SID, token);
             Verification verification = Verification.creator(
                     serviceSID,
-                    areaCode,
+                    checkedNumber,
                     "sms")
                     .create();
-            return 1;
-        }catch (com.twilio.exception.ApiException exception){
-            exception.printStackTrace();
             return 0;
+        }catch (com.twilio.exception.ApiException exception){
+            return 1;
         }
     }
     public int checkVerification(String phoneNumber, String userCode){
-        String areaCode = "+1";
-        areaCode += phoneNumber;
+        String checkedNumber = checkNumber(phoneNumber);
         Twilio.init(SID, token);
         VerificationCheck verificationCheck = VerificationCheck.creator(
                 serviceSID,
                 userCode)
-                .setTo(areaCode).create();
+                .setTo(checkedNumber).create();
         if(!verificationCheck.getStatus().equals("approved")){
-            return 0;
+            return 1;
         }
-        return 1;
+        return 0;
+    }
+
+    private static String checkNumber(String phoneNumber){
+        StringBuilder number = new StringBuilder(phoneNumber);
+        if(number.charAt(0) != '+'){
+            number.insert(0, '+');
+        }
+        if(number.charAt(1) != '1'){
+            number.insert(1, '1');
+        }
+        return number.toString();
     }
 }

@@ -21,8 +21,8 @@ public class UserController {
     }
 
     @PostMapping(path="/adduser")
-    public void addUser(@RequestBody UserEntry user){
-        user_repo.insertUser(user);
+    public void addUser(@RequestBody UserEntry userEntry){
+        user_repo.insertUser(userEntry);
     }
 
     @DeleteMapping(path="/removeuser")

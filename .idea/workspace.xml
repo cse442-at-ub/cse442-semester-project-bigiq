@@ -2,14 +2,41 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f624089-0046-4964-837e-7f3a1161b609" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/BottomNav.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/AccountScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/FollowingScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/HomeScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/PostScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/AnonMe/UserControllerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnonMe.iml" beforeDir="false" afterPath="$PROJECT_DIR$/AnonMe.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/PhoneVerificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/PhoneVerificationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/service/PhoneVerification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/service/PhoneVerification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/Routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/Routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/homePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/homePage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -32,6 +59,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -41,9 +69,25 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.AnonMeApplication">
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.AnonMe.Test" />
+      <module name="AnonMe" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.AnonMe.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AnonMeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="AnonMe" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.AnonMe.AnonMeApplication" />
@@ -51,6 +95,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -78,6 +127,12 @@
       <workItem from="1582757770681" duration="665000" />
       <workItem from="1582765894096" duration="74000" />
       <workItem from="1582774399680" duration="5368000" />
+      <workItem from="1582831741575" duration="614000" />
+      <workItem from="1583010486521" duration="20000" />
+      <workItem from="1583018452903" duration="32000" />
+      <workItem from="1583215019929" duration="7761000" />
+      <workItem from="1583296215802" duration="657000" />
+      <workItem from="1583447006403" duration="1672000" />
     </task>
     <servers />
   </component>
@@ -88,41 +143,53 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1270" height="191" key="GridCell.Tab.0.bottom" timestamp="1582789664174">
+    <state x="269" y="62" key="#Project_Structure" timestamp="1583251457055">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
-    <state width="1270" height="191" key="GridCell.Tab.0.center" timestamp="1582789664174">
+    <state x="269" y="62" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1583251457055" />
+    <state x="269" y="62" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583018475057">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
-    <state width="1270" height="191" key="GridCell.Tab.0.left" timestamp="1582789664174">
+    <state x="269" y="62" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1583018475057" />
+    <state width="1270" height="191" key="GridCell.Tab.0.bottom" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
-    <state width="1270" height="191" key="GridCell.Tab.0.right" timestamp="1582789664174">
+    <state width="1270" height="191" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.0.center" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
-    <state width="1270" height="191" key="GridCell.Tab.1.bottom" timestamp="1582789664175">
+    <state width="1270" height="191" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.0.left" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582789664175" />
-    <state width="1270" height="191" key="GridCell.Tab.1.center" timestamp="1582789664174">
+    <state width="1270" height="191" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.0.right" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
-    <state width="1270" height="191" key="GridCell.Tab.1.left" timestamp="1582789664174">
+    <state width="1270" height="191" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.1.bottom" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1582789664174" />
-    <state width="1270" height="191" key="GridCell.Tab.1.right" timestamp="1582789664175">
+    <state width="1270" height="191" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.1.center" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1270" height="191" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1582789664175" />
-    <state x="465" y="264" key="com.intellij.ide.util.TipDialog" timestamp="1582774457851">
+    <state width="1270" height="191" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.1.left" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="465" y="264" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1582774457851" />
+    <state width="1270" height="191" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state width="1270" height="191" key="GridCell.Tab.1.right" timestamp="1583276832873">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1270" height="191" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1583276832873" />
+    <state x="497" y="85" key="Maven.ArtifactSearchDialog" timestamp="1583274728643">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="497" y="85" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1583274728643" />
+    <state x="465" y="264" key="com.intellij.ide.util.TipDialog" timestamp="1583447007239">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="264" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1583447007239" />
   </component>
 </project>
