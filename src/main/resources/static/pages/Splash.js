@@ -1,40 +1,67 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
     Image, KeyboardAvoidingView,
     StyleSheet, Text, TextInput, TouchableOpacity, ImageBackground,
     View,
 } from 'react-native'
 
-export default function Splash ({navigation}){
-    return (
-        <View style={styles.container}>
-            <ImageBackground source={require('../assets/background.png')} style={{width:'100%',height:'100%', resizeMode: 'contain'}}>
-            <View style ={styles.containerLogo}>
-                <Image style={{width:150,height:150, resizeMode: 'contain'}} source={require('../assets/logo.png')}/>
-                <Text style= {styles.logoText}> Welcome to AnonMe!  </Text>
+export default class Splash extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            phoneNumber : '',
+            status : null
+        }
+    }
+
+    verification = () => {
+        if(this.state.phoneNumber.length === 10) {
+            fetch("http://localhost:8080/verify/phoneVerification?phoneNumber=" + this.state.phoneNumber, {mode: 'no-cors'}).then(response => response.json()).then(data => {
+                if (data.status === '0') {
+                    this.props.navigation.navigate('Verification', {phoneNumber: this.state.phoneNumber})
+                }
+                else {
+                    console.log(data.status)
+                }
+            }).catch((error) => {
+                console.error('error:', error)
+            });
+        }
+    }
+    render() {
+        return (
+            <View style={styles.container}>
+                <ImageBackground source={require('../assets/background.png')}
+                                 style={{width: '100%', height: '100%', resizeMode: 'contain'}}>
+                    <View style={styles.containerLogo}>
+                        <Image style={{width: 150, height: 150, resizeMode: 'contain'}}
+                               source={require('../assets/logo.png')}/>
+                        <Text style={styles.logoText}> Welcome to AnonMe! </Text>
+                    </View>
+                    <KeyboardAvoidingView
+                        behavior="padding"
+                        style={styles.containerForm}>
+                        <TextInput style={styles.phoneNumberBox}
+                                   underlineColorAndroid='rgba(0,0,0,0)'
+                                   placeholder="Click to Enter Phone Number"
+                                   placeholderTextColor='#ffffff'
+                                   keyboardType='number-pad'
+                                   onChangeText={input => this.setState({phoneNumber:input})}
+                                   maxLength= {10}
+                        />
+
+                        <TouchableOpacity style={styles.button} onPress={this.verification()}>
+                            <Text style={styles.loginButton}>Login / Signup</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Verification')}>
+                            <Text style={styles.loginButton}>Continue as Guest</Text>
+                        </TouchableOpacity>
+                    </KeyboardAvoidingView>
+                </ImageBackground>
             </View>
-            <KeyboardAvoidingView
-                behavior = "padding"
-                style ={styles.containerForm}>
-                <TextInput style = {styles.phoneNumberBox}
-                           underlineColorAndroid = 'rgba(0,0,0,0)'
-                           placeholder = "Phone Number"
-                           placeholderTextColor = '#ffffff'
-                           keyboardType = 'number-pad'
-                />
-
-                <TouchableOpacity style = {styles.button} onPress = {() => navigation.navigate('HomePage')}>
-                    <Text style={styles.loginButton}>Login / Signup</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('HomePage')}>
-                    <Text style = {styles.loginButton}>Continue as Guest</Text>
-                </TouchableOpacity>
-            </KeyboardAvoidingView>
-            </ImageBackground>
-        </View>
-    )
+        )
+    }
 }
-
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#4704a5',
@@ -42,38 +69,38 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    containerLogo : {
-        flexGrow : 1,
+    containerLogo: {
+        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    logoText : {
-        fontSize : 18,
+    logoText: {
+        fontSize: 18,
         color: 'rgba(255,255,255,0.7)',
         position: 'absolute',
         top: '55%'
     },
-    containerForm : {
-        flexGrow : 1,
+    containerForm: {
+        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },
     phoneNumberBox: {
         width: 300,
         backgroundColor: 'rgba(255,255,255,0.3)',
-        borderRadius : 25,
-        paddingHorizontal : 16,
+        borderRadius: 25,
+        paddingHorizontal: 16,
         fontSize: 16,
-        color : '#ffffff',
+        color: '#ffffff',
         textAlign: 'center',
-        marginVertical : 10,
+        marginVertical: 10,
         paddingVertical: 13,
     },
     button: {
         width: 300,
         backgroundColor: '#1c313a',
-        borderRadius : 25,
-        marginVertical : 10,
+        borderRadius: 25,
+        marginVertical: 10,
         paddingVertical: 13
     },
     loginButton: {

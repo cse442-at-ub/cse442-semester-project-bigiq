@@ -18,6 +18,7 @@ public class PhoneVerificationController {
     public HashMap<String, String> initialize(@RequestParam String phoneNumber){
         HashMap<String, String> response = new HashMap<>();
         response.put("status", Integer.toString(verification.sendCode(phoneNumber)));
+        System.out.println(phoneNumber);
         return response;
     }
 

@@ -7,8 +7,8 @@ import com.twilio.rest.verify.v2.service.Verification;
 import com.twilio.rest.verify.v2.service.VerificationCheck;
 
 public class PhoneVerification {
-    private static final String SID = "AC1a742dd5e8dc1abf0e0d6fa29f82287c";
-    private static final String token = "ec35496b8d7d5476b845ec3c55ffc3d2";
+    private static final String SID = "AC59f69c95631b95751498be0a64cab821";
+    private static final String token = "9a401a54e2d913491557b4d82a9d0e04";
     private static String serviceSID;
 
     public PhoneVerification(){
@@ -32,6 +32,9 @@ public class PhoneVerification {
 
     public int sendCode(String phoneNumber){
         try {
+            if(phoneNumber.length() < 10){
+                return 2;
+            }
             String checkedNumber = checkNumber(phoneNumber);
             Twilio.init(SID, token);
             Verification verification = Verification.creator(
@@ -41,6 +44,7 @@ public class PhoneVerification {
                     .create();
             return 0;
         }catch (com.twilio.exception.ApiException exception){
+            exception.printStackTrace();
             return 1;
         }
     }
