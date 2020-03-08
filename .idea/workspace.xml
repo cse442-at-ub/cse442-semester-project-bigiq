@@ -35,7 +35,51 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="post_data: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="user_comment: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="user_flag_like: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="user_info: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+    </expand>
     <select />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -46,7 +90,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../442 Copy/cse442-semester-project-bigiq" />
   </component>
   <component name="ProjectId" id="1YKXjyyPZGIb1ubb6M3kxoZYgtf" />
   <component name="ProjectLevelVcsManager">
@@ -67,7 +111,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="jdk.selected.JAVA_MODULE" value="13" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../442 Copy/cse442-semester-project-bigiq" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -106,7 +151,17 @@
       <list>
         <serviceView>
           <treeState>
-            <expand />
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@51e2e318" type="9fbbdea:ServiceModel$ServiceNode" />
+              </path>
+            </expand>
             <select />
           </treeState>
         </serviceView>
@@ -133,6 +188,7 @@
       <workItem from="1583215019929" duration="7761000" />
       <workItem from="1583296215802" duration="657000" />
       <workItem from="1583447006403" duration="1672000" />
+      <workItem from="1583453213845" duration="8960000" />
     </task>
     <servers />
   </component>
@@ -143,14 +199,22 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="269" y="62" key="#Project_Structure" timestamp="1583251457055">
+    <state x="269" y="62" key="#Project_Structure" timestamp="1583708393764">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="269" y="62" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1583251457055" />
+    <state x="269" y="62" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1583708393764" />
     <state x="269" y="62" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583018475057">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="269" y="62" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1583018475057" />
+    <state x="400" y="101" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1583453498978">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="400" y="101" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1536.824@0.0.1536.824" timestamp="1583453498978" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1583453428141">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1583453428141" />
     <state width="1270" height="191" key="GridCell.Tab.0.bottom" timestamp="1583276832873">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -187,9 +251,17 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="497" y="85" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1583274728643" />
+    <state x="485" y="54" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1583699802423">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="485" y="54" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1536.824@0.0.1536.824" timestamp="1583699802423" />
     <state x="465" y="264" key="com.intellij.ide.util.TipDialog" timestamp="1583447007239">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="465" y="264" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1583447007239" />
+    <state x="209" y="0" key="new project wizard" timestamp="1583453430364">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="209" y="0" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1583453430364" />
   </component>
 </project>

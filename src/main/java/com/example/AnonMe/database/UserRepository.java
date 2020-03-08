@@ -22,31 +22,16 @@ public class UserRepository {
     @Autowired
     JdbcTemplate jdbc_temp;
 
-    /*
-    * =========================================
-    * getAllUsers()
-    * returns a list of UserEntry objects for all users in the current DB.
-    * */
-    public List<UserEntry> getAllUsers(){
-        List<UserEntry> userList = new ArrayList<>();
-        String sql = "select * from user_info";
-
-        userList.addAll(jdbc_temp.query(sql,
-                BeanPropertyRowMapper.newInstance(UserEntry.class)));
-
-        return userList;
-    }
-
     /* ==========================================
     * VerifyName(String screenName)
     * Verifies validity of a new screenName
-    * Checks for and flags:
+    * Checks for and returns flags:
     *       0 -- Valid screenName, no issues found.
     *       1 -- screenName already used by user.
     *       2 -- screenName contains invalid characters.
     *       3 -- screenName exceeds 16 characters.
     * =========================================*/
-    public int VerifyName(String screenName){
+    public int verifyName(String screenName){
         int flag_ret = 3;
         final ArrayList<Character> InvalidChars = new ArrayList<>(Arrays.asList('/','\\','\'','?','!','@','='));
 
@@ -120,4 +105,34 @@ public class UserRepository {
         return 0;
     }
 
+    /*
+    * getUser(String phone_number)
+    *
+    * Returns a UserEntry with the data associated with phone_number.
+    *         null if User does not exist.
+    */
+    public UserEntry getUser(String phone_number){
+        String sql = "SELECT FROM user_info WHERE phone_number = '" + phone_number + "'";
+
+        List<UserEntry> access = new ArrayList<>();
+        access.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
+
+        if (access.size() == 0) return null;
+        else return access.get(0);
+    }
+
+    /*
+     * =========================================
+     * getAllUsers()
+     * returns a list of UserEntry objects for all users in the current DB.
+     * */
+    public List<UserEntry> getAllUsers(){
+        List<UserEntry> userList = new ArrayList<>();
+        String sql = "select * from user_info";
+
+        userList.addAll(jdbc_temp.query(sql,
+                BeanPropertyRowMapper.newInstance(UserEntry.class)));
+
+        return userList;
+    }
 }
