@@ -1,25 +1,28 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import HomePage from "./pages/homePage";
+import BottomNav from "./BottomNav";
 import Splash from "./pages/Splash";
+import Verification from "./pages/Verification";
 
 const screens= ({
  Splash: {
   screen: Splash,
   navigationOptions:{
    headerShown: false
-
   }
  },
- HomePage: {
-  screen: HomePage,
+ BottomNav: {
+  screen: BottomNav,
   navigationOptions:{
    headerShown: false
   }
  },
- Tabs: {
-  screen: Tabs
- }
+ Verification: {
+  screen: Verification,
+  navigationOptions: {
+   headerShown: false
+  }
+ },
 });
 const Routes = createStackNavigator(screens);
 export default createAppContainer(Routes);

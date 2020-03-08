@@ -6,24 +6,13 @@ import {
   StatusBar
 } from 'react-native'
 
-import Splash from './pages/Splash';
-import HomePage from './pages/homePage';
-import Verification from './pages/Verification';
+import Navigator from './Routes';
 
 
 export default class App extends Component {
   render() {
   return(
-  
-    <View style = {styles.container}>
-      <StatusBar
-        backgroundColor="#1cd313a"
-        barStyle="light-content"
-      />
-      <Verification/>
-      {/* <HomePage/> */}
-      {/* <Splash/> */}
-    </View>
+      <Navigator/>
   );
   }
 }
