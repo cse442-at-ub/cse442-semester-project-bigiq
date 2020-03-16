@@ -122,6 +122,20 @@ public class UserRepository {
     }
 
     /*
+     * getUserScreen(String screen_name)
+     *
+     * Returns a UserEntry with the data associated with screen_name.
+     *       null if User does not exist.
+     */
+    public UserEntry getUserScreen(String screen_name){
+        List<UserEntry> ret = new ArrayList<>();
+        String sql = "select * from user_info user_ where user_.screen_name = '" + screen_name + "'";
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
+        if (ret.size() == 0) return null;
+        else return ret.get(0);
+    }
+
+    /*
      * =========================================
      * getAllUsers()
      * returns a list of UserEntry objects for all users in the current DB.
