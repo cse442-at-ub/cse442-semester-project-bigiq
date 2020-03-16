@@ -126,4 +126,113 @@ public class PostRepository {
         System.out.println("Multiple rows affected");
         return 0;
     }
+
+
+    /* Accessors -- [Task #27] ------------------------------------------------------------
+     * List getAllPosts() - returns all posts in DB
+     * List getPostsRecent(int num) - returns num-th most recent posts.
+     * List getPostsLiked(int num) - returns num-th most liked posts.
+     * List getPostsPnum(string phone_number) - returns all posts from a user (by phone_number).
+     * List getPostsAuth(string screen_name) - returns all posts from a user (by screen_name).
+     * PostEntry getPostID(string PostID) - returns post matched by PostID.
+     */
+
+    /**
+     * getAllPosts - returns all posts in DB
+     * @return List of PostEntry of all posts in DB
+     */
+    public List<PostEntry> getAllPosts(){
+        List<PostEntry> ret = new ArrayList<>();
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number";
+        ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
+        return ret;
+    }
+
+    /**
+     * getPostsRecent - returns all n-posts sorted by most recent
+     * @param num number of posts to be returned from database.
+     * @return List of PostEntry of all num-th most recent posts in DB.
+     */
+    public List<PostEntry> getPostsRecent(int num){
+        List<PostEntry> ret = new ArrayList<>();
+        if (num <= 0) return ret;
+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number "+
+                "order by timestamp DESC limit " + num;
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        return ret;
+    }
+
+    /**
+     * getPostsLiked - returns all n-posts sorted by most liked
+     * @param num number of posts to be returned from database.
+     * @return List of PostEntry of all num-th most liked posts in DB.
+     */
+    public List<PostEntry> getPostsLiked(int num){
+        List<PostEntry> ret = new ArrayList<>();
+        if (num <= 0) return ret;
+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number "+
+                "order by like_ctr DESC limit " + num;
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        return ret;
+    }
+
+    /**
+     * getPostsPnum - returns all posts associated to a user by phone number.
+     * @param phone_number phone number of user to retrieve posts by.
+     * @return List of PostEntry of all posts from a single user.
+     */
+    public List<PostEntry> getPostsPnum(String phone_number){
+        List<PostEntry> ret = new ArrayList<>();
+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number AND a.phone_number = " + phone_number;
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        return ret;
+    }
+
+    /**
+     * getPostsAuth - returns all posts associated to a user by screen name.
+     * @param screen_name screen name of user to retrieve posts by.
+     * @return List of PostEntry of all posts from a single user.
+     */
+    public List<PostEntry> getPostsAuth(String screen_name){
+        List<PostEntry> ret = new ArrayList<>();
+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number AND b.screen_name = " + screen_name;
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        return ret;
+    }
+
+    /**
+     * getPostID - returns the post associated to a post ID.
+     * @param postID target postID
+     * @return PostEntry associated to postID given, null if doesn't exist.
+     */
+    public PostEntry getPostID(String postID){
+        List<PostEntry> ret = new ArrayList<>();
+
+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number AND a.post_id = " + postID;
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        if (ret.size() == 0) return null;
+        return ret.get(0);
+    }
 }
