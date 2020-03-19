@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,16 @@ public class UserController {
         return user_repo.getAllUsers();
     }
 
+    @GetMapping(path="/checkname")
+    public HashMap<String, String> checkName(@RequestParam String screenName){
+        HashMap<String, String> response = new HashMap<>();
+        response.put("status", Integer.toString(user_repo.verifyName(screenName)));
+        return response;
+    }
+
     @PostMapping(path="/adduser")
     public void addUser(@RequestBody UserEntry userEntry){
+        System.out.println(userEntry.getScreen_name() + " " + userEntry.getPhone_number());
         user_repo.insertUser(userEntry);
     }
 

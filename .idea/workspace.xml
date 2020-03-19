@@ -2,9 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f624089-0046-4964-837e-7f3a1161b609" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/Comment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/Post.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/key.p12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnonMe.iml" beforeDir="false" afterPath="$PROJECT_DIR$/AnonMe.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/service/PhoneVerification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/service/PhoneVerification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/Routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/Routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/Splash.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/Splash.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/Verification.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/Verification.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -12,12 +26,33 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/src/main/resources/static/package.json" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1Yrnec5H9aNDXbJcg2vouE7uCDK" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RequestMappingsPanelOrder0" value="0" />
@@ -27,6 +62,40 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\night\Documents\GitHub\cse442-semester-project-bigiq\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.AnonMeApplication">
+    <configuration name="Post" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.AnonMe.model.Post" />
+      <module name="AnonMe" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.AnonMe.model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AnonMeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="AnonMe" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.AnonMe.AnonMeApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Post" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -39,6 +108,17 @@
       <option name="presentableId" value="Default" />
       <updated>1583709677748</updated>
       <workItem from="1583709681576" duration="839000" />
+      <workItem from="1583710685415" duration="2052000" />
+      <workItem from="1583713640780" duration="683000" />
+      <workItem from="1583715240218" duration="89000" />
+      <workItem from="1583783438342" duration="543000" />
+      <workItem from="1583789339918" duration="970000" />
+      <workItem from="1584206469335" duration="3536000" />
+      <workItem from="1584218887336" duration="284000" />
+      <workItem from="1584220672727" duration="133000" />
+      <workItem from="1584220986906" duration="3285000" />
+      <workItem from="1584234355734" duration="6213000" />
+      <workItem from="1584578180635" duration="4145000" />
     </task>
     <servers />
   </component>
@@ -46,41 +126,53 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1150" height="191" key="GridCell.Tab.0.bottom" timestamp="1583709655837">
+    <state x="494" y="170" width="404" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1584229981575">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583709655837" />
-    <state width="1150" height="191" key="GridCell.Tab.0.center" timestamp="1583709655836">
+    <state x="494" y="170" width="404" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1536.824@0.0.1536.824" timestamp="1584229981575" />
+    <state width="1405" height="163" key="GridCell.Tab.0.bottom" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583709655836" />
-    <state width="1150" height="191" key="GridCell.Tab.0.left" timestamp="1583709655836">
+    <state width="1405" height="163" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state width="1405" height="163" key="GridCell.Tab.0.center" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583709655836" />
-    <state width="1150" height="191" key="GridCell.Tab.0.right" timestamp="1583709655837">
+    <state width="1405" height="163" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state width="1405" height="163" key="GridCell.Tab.0.left" timestamp="1584579764641">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583709655837" />
-    <state width="1150" height="191" key="GridCell.Tab.1.bottom" timestamp="1583709655837">
+    <state width="1405" height="163" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1584579764641" />
+    <state width="1405" height="163" key="GridCell.Tab.0.right" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583709655837" />
-    <state width="1150" height="191" key="GridCell.Tab.1.center" timestamp="1583709655837">
+    <state width="1405" height="163" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state width="1405" height="163" key="GridCell.Tab.1.bottom" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1583709655837" />
-    <state width="1150" height="191" key="GridCell.Tab.1.left" timestamp="1583709655837">
+    <state width="1405" height="163" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state width="1405" height="163" key="GridCell.Tab.1.center" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1583709655837" />
-    <state width="1150" height="191" key="GridCell.Tab.1.right" timestamp="1583709655837">
+    <state width="1405" height="163" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state width="1405" height="163" key="GridCell.Tab.1.left" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1150" height="191" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1583709655837" />
-    <state x="633" y="214" key="com.intellij.ide.util.TipDialog" timestamp="1583710385791">
+    <state width="1405" height="163" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state width="1405" height="163" key="GridCell.Tab.1.right" timestamp="1584579764642">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="633" y="214" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1583710385791" />
+    <state width="1405" height="163" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1584579764642" />
+    <state x="467" y="45" key="Maven.ArtifactSearchDialog" timestamp="1583710755500">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="467" y="45" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1583710755500" />
+    <state x="633" y="214" key="com.intellij.ide.util.TipDialog" timestamp="1584578302584">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="633" y="214" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1584578302584" />
+    <state x="358" y="124" width="672" height="678" key="search.everywhere.popup" timestamp="1584238383200">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="358" y="124" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1584238383200" />
   </component>
 </project>

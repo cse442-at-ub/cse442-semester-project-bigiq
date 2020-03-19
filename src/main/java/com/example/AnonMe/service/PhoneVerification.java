@@ -6,13 +6,17 @@ import com.twilio.rest.verify.v2.Service;
 import com.twilio.rest.verify.v2.service.Verification;
 import com.twilio.rest.verify.v2.service.VerificationCheck;
 
+import java.util.HashMap;
+
 public class PhoneVerification {
     private static final String SID = "AC59f69c95631b95751498be0a64cab821";
-    private static final String token = "9a401a54e2d913491557b4d82a9d0e04";
+    private static final String token = "ca4485b1b8e6acad1e03bfe6a0b2d982";
     private static String serviceSID;
+    private static HashMap<String, Integer> attempts;
 
     public PhoneVerification(){
         serviceSID = getServiceSID();
+        attempts = new HashMap<>();
     }
     private static String getServiceSID(){
         Twilio.init(SID, token);
@@ -31,11 +35,12 @@ public class PhoneVerification {
     }
 
     public int sendCode(String phoneNumber){
+        if(phoneNumber.length() < 10){
+            return 2;
+        }
         try {
-            if(phoneNumber.length() < 10){
-                return 2;
-            }
             String checkedNumber = checkNumber(phoneNumber);
+            attempts.put(checkedNumber, 0);
             Twilio.init(SID, token);
             Verification verification = Verification.creator(
                     serviceSID,
@@ -48,8 +53,17 @@ public class PhoneVerification {
             return 1;
         }
     }
+    /*
+        0 = Success
+        1 = Fail
+        2 = Max Attempt
+     */
     public int checkVerification(String phoneNumber, String userCode){
         String checkedNumber = checkNumber(phoneNumber);
+        if(attempts.get(checkedNumber) > 3){
+            return 2;
+        }
+        attempts.replace(checkedNumber,  attempts.get(checkedNumber) + 1);
         Twilio.init(SID, token);
         VerificationCheck verificationCheck = VerificationCheck.creator(
                 serviceSID,

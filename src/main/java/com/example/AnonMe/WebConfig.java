@@ -17,11 +17,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    //@Override
-    /*public void addCorsMappings(CorsRegistry registry) {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
-    }*/
-    @Value("${server.port}")
+    }
+    /*@Value("${server.port}")
     int httpsPort;
     @Value("${httpPort}")
     int httpPort;
@@ -51,5 +51,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         connector.setSecure(false);
         connector.setRedirectPort(httpsPort);
         return connector;
-    }
+    }*/
 }

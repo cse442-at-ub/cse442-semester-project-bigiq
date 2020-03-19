@@ -10,15 +10,11 @@ import java.util.UUID;
 public class UserEntry {
     private String phoneNumber;
     private String screenName;
-    private List<UUID> following;
-    private List<UUID> userPost;
 
     @JsonCreator
     public UserEntry(@JsonProperty("phoneNumber") String phoneNumber, @JsonProperty("screenName") String screenName) {
         this.phoneNumber = phoneNumber;
         this.screenName = screenName;
-        this.following = new LinkedList<>();
-        this.userPost = new LinkedList<>();
     }
 
     public String getPhone_number() {
@@ -36,4 +32,5 @@ public class UserEntry {
     public void setScreen_name(String screenName) {
         this.screenName = screenName;
     }
+    
 }

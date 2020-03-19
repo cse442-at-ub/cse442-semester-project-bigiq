@@ -3,7 +3,7 @@ import {
     Image, KeyboardAvoidingView,
     StyleSheet, Text, TextInput, TouchableOpacity, ImageBackground,
     View,
-    Linking,
+    Platform,
 } from 'react-native'
 // import axios from 'axios';
 
@@ -18,15 +18,19 @@ export default class Verification extends React.Component {
             code: ''
         }
     }
+
     checkCode = () => {
         if(this.state.code.length === 6) {
             const {params} = this.props.navigation.state;
             const phoneNumber = params ? params.phoneNumber : null;
-            fetch("http://localhost:8080/verify/phoneVerificationCheck?phoneNumber=" + phoneNumber + "&code=" + this.state.code).then(response => response.json()).then(data => {
+            const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") +
+                ":8080/verify/phoneVerificationCheck?phoneNumber=";
+            fetch(url + phoneNumber + "&code=" + this.state.code).then(response => response.json()).then(data => {
                 if (data.status === '0') {
-                    this.props.navigation.navigate('BottomNav')
+                    this.props.navigation.navigate('registerName', {phoneNumber: phoneNumber})
+                }else {
+                    this.setState({success: false})
                 }
-                this.state.success = false;
                 console.log(data)
             });
         }
@@ -34,7 +38,7 @@ export default class Verification extends React.Component {
 
     render() {
 
-        let suc = this.state.success
+        let suc = this.state.success;
         function printTryAgain () {
             if (suc === false) {
                 return (<Text style={styles.IncorrectCode}>Verification Code Incorrect, Try Again</Text>)
@@ -44,7 +48,7 @@ export default class Verification extends React.Component {
         return (
             <View style={styles.container}>
                 <ImageBackground source={require('../assets/background.png')}
-                                 style={{width: '100%', height: '100%', resizeMode: 'contain'}}>
+                                 style={{width: '100%', height: '100%'}}>
                     <View style={styles.containerLogo}>
                         <Image style={{width: 150, height: 150, resizeMode: 'contain'}}
                                source={require('../assets/logo.png')}/>
