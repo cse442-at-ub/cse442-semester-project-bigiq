@@ -1,11 +1,17 @@
 package com.example.AnonMe.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 public class UserEntry {
     private String phoneNumber;
     private String screenName;
 
+    @JsonCreator
     public UserEntry(@JsonProperty("phoneNumber") String phoneNumber, @JsonProperty("screenName") String screenName) {
         this.phoneNumber = phoneNumber;
         this.screenName = screenName;
@@ -26,4 +32,5 @@ public class UserEntry {
     public void setScreen_name(String screenName) {
         this.screenName = screenName;
     }
+    
 }

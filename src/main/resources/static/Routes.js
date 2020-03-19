@@ -1,7 +1,9 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import HomePage from "./pages/homePage";
+import BottomNav from "./BottomNav";
 import Splash from "./pages/Splash";
+import Verification from "./pages/Verification";
+import registerName from "./pages/registerName";
 
 const screens= ({
  Splash: {
@@ -10,8 +12,20 @@ const screens= ({
    headerShown: false
   }
  },
- HomePage: {
-  screen: HomePage,
+ Verification: {
+  screen: Verification,
+  navigationOptions: {
+   headerShown: false
+  }
+ },
+ registerName: {
+  screen: registerName,
+  navigationOptions:{
+   headerShown: false
+  }
+ },
+ BottomNav: {
+  screen: BottomNav,
   navigationOptions:{
    headerShown: false
   }
