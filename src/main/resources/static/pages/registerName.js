@@ -47,9 +47,6 @@ export default class registerName extends React.Component{
             if(response.ok &&  that.state.validName){
                 that.props.navigation.navigate('BottomNav',{phoneNumber: phoneNumber, screenName: that.screenName });
             }
-            else {
-
-            }
         });
     }
     render() {
