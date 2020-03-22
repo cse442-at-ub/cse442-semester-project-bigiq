@@ -51,7 +51,7 @@ export default class Splash extends React.Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.verification()}>
                             <Text style={styles.loginButton}>Login / Signup</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('BottomNav')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('BottomNav',{phoneNumber: "123"})}>
                             <Text style={styles.loginButton}>Continue as Guest</Text>
                         </TouchableOpacity>
                     </KeyboardAvoidingView>

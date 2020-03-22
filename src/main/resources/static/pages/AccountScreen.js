@@ -11,6 +11,7 @@ export default class AccountScreen extends React.Component{
     render() {
         let status = this.state.singInStatus;
         let that = this;
+
         function f() {
             if(status){
                 return (

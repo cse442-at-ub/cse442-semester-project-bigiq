@@ -4,6 +4,7 @@ import {
     StyleSheet, Text, TextInput, TouchableOpacity,
     View,
 } from 'react-native'
+import { AsyncStorage } from "react-native";
 
 
 export default class registerName extends React.Component{
@@ -27,7 +28,8 @@ export default class registerName extends React.Component{
                 that.setState({success: false})
             }
         });
-    }
+    };
+
     addUser = async () => {
         const that  = this;
         await that.checkName();
@@ -38,17 +40,18 @@ export default class registerName extends React.Component{
             screenName: that.state.screenName
         };
         const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") + ":8080/users/adduser";
-        console.log(JSON.stringify( payload ))
         await fetch(url, {
             method: "POST",
             body: JSON.stringify( payload ),
             headers: new Headers({'content-type': 'application/json'}),
         }).then(function(response) {
-            if(response.ok &&  that.state.validName){
-                that.props.navigation.navigate('BottomNav',{phoneNumber: phoneNumber, screenName: that.screenName });
+            if(response.ok){
+                AsyncStorage.setItem('phoneNumber', phoneNumber);
+                AsyncStorage.setItem('screenName', that.state.screenName);
+                that.props.navigation.navigate('BottomNav');
             }
         });
-    }
+    };
     render() {
         let suc = this.state.success;
         function printTryAgain () {

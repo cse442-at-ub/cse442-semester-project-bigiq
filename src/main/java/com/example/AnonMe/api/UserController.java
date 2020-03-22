@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping(path="/adduser")
     public void addUser(@RequestBody UserEntry userEntry){
         System.out.println(userEntry.getScreen_name() + " " + userEntry.getPhone_number());
-        user_repo.insertUser(userEntry);
+        //user_repo.insertUser(userEntry);
     }
 
     @DeleteMapping(path="/removeuser")
