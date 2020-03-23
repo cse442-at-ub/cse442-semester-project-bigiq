@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping(path="/checkname")
-    public HashMap<String, String> checkName(@RequestBody String screenName){
+    public HashMap<String, String> checkName(@RequestParam String screenName){
         HashMap<String, String> response = new HashMap<>();
         response.put("status", Integer.toString(user_repo.verifyName(screenName)));
         return response;

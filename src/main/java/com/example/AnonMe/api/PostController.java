@@ -17,6 +17,7 @@ public class PostController {
 
     @GetMapping(path="/getAllPosts")
     public List<PostEntry> getAllPosts(){
+        System.out.println(postRepository.getAllPosts());
         return postRepository.getAllPosts();
     }
     @PostMapping(path="/insertPost")

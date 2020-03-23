@@ -11,7 +11,8 @@ export default class PostScreen extends React.Component {
         super(props);
         this.state = {
             content: '',
-            screenName: ''
+            screenName: '',
+            textInput: ''
         }
     }
 
@@ -28,19 +29,25 @@ export default class PostScreen extends React.Component {
         }).then(function(response) {
             if(response.ok){
                 console.log("POSTED")
-                console.log(author);
             }
         });
     };
     render() {
         return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+
+                <View style={{flex: 1}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around', }}>
+                        <TouchableOpacity style={styles.button} onPress = {() => this.postFetch()}>
+                            <Text style={styles.loginButton}>Post</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress = {Keyboard.dismiss}>
+                            <Text style={styles.loginButton}>Exit</Text>
+                        </TouchableOpacity>
+                    </View>
                     <KeyboardAvoidingView
                         behavior="padding"
                         style={styles.containerForm}>
                         <TextInput style={styles.postInput}
-                                   underlineColorAndroid='rgba(0,0,0,0)'
                                    placeholder="Your NameTag"
                                    placeholderTextColor='#ffffff'
                                    onChangeText={input => this.setState({content: input})}
@@ -48,11 +55,8 @@ export default class PostScreen extends React.Component {
                                    multiline = {true}
                         />
                     </KeyboardAvoidingView>
-                    <TouchableOpacity style={styles.button} onPress = {() => this.postFetch()}>
-                        <Text style={styles.loginButton}>Post</Text>
-                    </TouchableOpacity>
                 </View>
-            </TouchableWithoutFeedback>
+
         );
     }
 }
@@ -84,12 +88,5 @@ export default class PostScreen extends React.Component {
             marginVertical: 10,
             paddingVertical: 13,
         },
-        exitButton: {
-            width: 80,
-            backgroundColor: '#1c313a',
-            borderRadius: 25,
-            marginVertical: 10,
-            paddingVertical: 13,
-        }
     });
 

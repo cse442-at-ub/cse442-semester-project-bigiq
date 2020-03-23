@@ -18,7 +18,9 @@ export default class Verification extends React.Component {
             code: ''
         }
     }
+    checkUser = () => {
 
+    };
     checkCode = () => {
         if(this.state.code.length === 6) {
             const {params} = this.props.navigation.state;

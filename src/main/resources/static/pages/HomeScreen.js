@@ -2,9 +2,6 @@ import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image} fro
 import * as React from 'react';
 import { AsyncStorage } from "react-native";
 
-const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
-    ":8080/posts/getAllPosts";
-const fetchPost = fetch(getAllPostUrl).then(response => response.json());
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
@@ -13,14 +10,23 @@ export default class HomeScreen extends React.Component {
             data : [],
             like: 0,
         };
-        fetchPost.then( dataAPI => this.setState({data : dataAPI}));
-
     }
-    getData = () =>{
-        fetchPost.then( dataAPI => this.setState({data : dataAPI}));
-        console.log(this.state.data);
+    fetchData = () =>{
+        const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
+            ":8080/posts/getAllPosts";
+        fetch(getAllPostUrl).then(response => response.json()).then( dataAPI => this.setState({data : dataAPI}));
     };
-
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.focusListener = navigation.addListener("focus", () => {
+            this.fetchData();
+            console.log(this.state.data.length)
+        });
+    }
+    componentWillUnmount() {
+        // Remove the event listener
+        this.focusListener.remove();
+    }
     render() {
         let dataDisplayed = this.state.data;
         let that = this;
