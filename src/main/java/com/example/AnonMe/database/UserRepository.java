@@ -112,7 +112,7 @@ public class UserRepository {
     *         null if User does not exist.
     */
     public UserEntry getUser(String phone_number){
-        String sql = "SELECT FROM user_info WHERE phone_number = '" + phone_number + "'";
+        String sql = "SELECT * FROM user_info WHERE phone_number = '" + phone_number + "'";
 
         List<UserEntry> access = new ArrayList<>();
         access.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));

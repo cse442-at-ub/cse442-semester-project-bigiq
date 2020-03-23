@@ -41,6 +41,10 @@ public class PostController {
     public List<PostEntry> recentPosts(@RequestParam int amount){
         return postRepository.getPostsRecent(amount);
     }
+    @GetMapping(path="/mostLikedPosts")
+    public List<PostEntry> mostLikedPosts(){
+        return postRepository.getPostsLiked(25);
+    }
     @GetMapping(path="/postsByPhone")
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
         return postRepository.getPostsPnum(phoneNumber);

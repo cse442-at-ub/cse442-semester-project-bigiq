@@ -6,17 +6,32 @@ export default class AccountScreen extends React.Component{
         super(props);
         this.state = {
             singInStatus: true,
-            screenName: ''
+            screenName: '',
+            doneLoading: false,
         }
     }
+    /*storageGet = async() => {
+        try {
+            const result = await AsyncStorage.getItem("screenName");
+            console.log(result);
+            return result;
+        } catch(error) {
+            console.log(error);
+        }
+    };*/
+    componentDidMount() {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+                doneLoading: true
+            });
+        });
+    };
     render() {
         let status = this.state.singInStatus;
         let that = this;
-        AsyncStorage.getItem('screenName').then((value) => {
-            this.setState({"screenName": value});
-        }).done();
         function f() {
-            if(status){
+            if(that.state.doneLoading){
                 return (
                     <View style={{flex: 1, alignItems: 'center' }}>
                         <Image style={styles.circle}
@@ -32,11 +47,6 @@ export default class AccountScreen extends React.Component{
             }else {
                 return(
                     <View style={styles.loggedOutContainer}>
-                        <Image style={{width: 100, height: 100, resizeMode: 'contain'}}
-                               source={require('../assets/lockIcon.png')}/>
-                        <Text style={styles.loggedOutText}>
-                            Log In or Sign Up to Access
-                        </Text>
                     </View>
                 )
             }
@@ -49,6 +59,13 @@ export default class AccountScreen extends React.Component{
         )
     }
 }
+/*
+<Image style={{width: 100, height: 100, resizeMode: 'contain'}}
+                               source={require('../assets/lockIcon.png')}/>
+                        <Text style={styles.loggedOutText}>
+                            Log In or Sign Up to Access
+                        </Text>
+ */
 const styles = StyleSheet.create({
     circle: {
         position: 'absolute',

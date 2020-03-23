@@ -32,6 +32,14 @@ public class UserController {
         System.out.println(screenName);
         return user_repo.getUserScreen(screenName.trim());
     }
+    @GetMapping(path="/getCheckUserExist")
+    public HashMap<String, String> getCheckUserExist(@RequestParam String phoneNumber){
+        HashMap<String, String> response = new HashMap<>();
+        UserEntry entry = user_repo.getUser(phoneNumber);
+        if(entry == null) response.put("screenName", "null");
+        else response.put("screenName", entry.getScreen_name());
+        return response;
+    }
 
     @PostMapping(path="/adduser")
     public void addUser(@RequestBody UserEntry userEntry){
