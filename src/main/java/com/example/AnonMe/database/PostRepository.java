@@ -55,17 +55,17 @@ public class PostRepository {
      */
     public int insertPost(PostEntry post) {
         String sql = "insert into post_data " +
-                "(post_id, phone_number, content, flag_ctr, like_ctr, timestamp) " +
-                "values  ( ? , ? , ? , ? , ? , ? )";
+                "(post_id, phone_number, content, flag_ctr, like_ctr, timestamp, timestamp_front) " +
+                "values  ( ? , ? , ? , ? , ? , NOW(), ? )";
 
         //Retrieving phone_number attributed to screen name.
-        UserEntry tmp = repo.getUserScreen(post.getAuthor());
+        UserEntry tmp = repo.getUserScreen(post.getScreenName());
         if (tmp == null) return 1;
         String phone_number = tmp.getPhone_number();
 
         //Setting up Query
-        Object[] params = new Object[]{post.getPost_id(), phone_number, post.getContent(), post.getFlag_ctr(), post.getLike_ctr(), post.getTimestamp()};
-        int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP};
+        Object[] params = new Object[]{post.getPost_id(), phone_number, post.getContent(), post.getFlag_ctr(), post.getLike_ctr(), post.getTimestampFront()};
+        int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR};
 
         //Running Query
         try {
@@ -143,10 +143,11 @@ public class PostRepository {
      */
     public List<PostEntry> getAllPosts(){
         List<PostEntry> ret = new ArrayList<>();
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number";
         ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
         return ret;
     }
 
@@ -159,7 +160,7 @@ public class PostRepository {
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number "+
                 "order by timestamp DESC limit " + num;
@@ -177,7 +178,7 @@ public class PostRepository {
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number "+
                 "order by like_ctr DESC limit " + num;
@@ -194,7 +195,7 @@ public class PostRepository {
     public List<PostEntry> getPostsPnum(String phone_number){
         List<PostEntry> ret = new ArrayList<>();
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number AND a.phone_number = " + phone_number;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
@@ -210,7 +211,7 @@ public class PostRepository {
     public List<PostEntry> getPostsAuth(String screen_name){
         List<PostEntry> ret = new ArrayList<>();
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number AND b.screen_name = " + screen_name;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
@@ -227,7 +228,7 @@ public class PostRepository {
         List<PostEntry> ret = new ArrayList<>();
 
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp "+
+        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number AND a.post_id = " + postID;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
