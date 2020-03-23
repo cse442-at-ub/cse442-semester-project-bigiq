@@ -1,24 +1,22 @@
 import React from 'react';
-import {Image, StyleSheet, View, Text, TouchableOpacity, AsyncStorage} from 'react-native';
+import {Image, StyleSheet, View, Text, TouchableOpacity, AsyncStorage, FlatList, Platform} from 'react-native';
 
 export default class AccountScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            singInStatus: true,
             screenName: '',
             doneLoading: false,
+            data: []
         }
     }
-    /*storageGet = async() => {
-        try {
-            const result = await AsyncStorage.getItem("screenName");
-            console.log(result);
-            return result;
-        } catch(error) {
-            console.log(error);
-        }
-    };*/
+
+    fetchUserPost = () =>{
+        const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
+            ":8080/posts/postsByScreenName?screenName=";
+        fetch(getAllPostUrl + this.state.screenName).then(response => response.json()).then( dataAPI => this.setState({data : dataAPI}));
+
+    };
     componentDidMount() {
         AsyncStorage.getItem('screenName').then((token) => {
             this.setState({
@@ -26,9 +24,16 @@ export default class AccountScreen extends React.Component{
                 doneLoading: true
             });
         });
+        /*const { navigation } = this.props;
+        this.focusListener = navigation.addListener("focus", () => {
+            this.fetchUserPost();
+            console.log(this.state.data.length)
+        });*/
     };
+    /*componentWillUnmount() {
+        this.focusListener.remove();
+    }*/
     render() {
-        let status = this.state.singInStatus;
         let that = this;
         function f() {
             if(that.state.doneLoading){
@@ -42,6 +47,9 @@ export default class AccountScreen extends React.Component{
                             <Text style={styles.signOut}> Sign Out</Text>
                         </TouchableOpacity>
                         <Text>{that.state.screenName}</Text>
+                        <View>
+
+                        </View>
                     </View>
                 );
             }else {

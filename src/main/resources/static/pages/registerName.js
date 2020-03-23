@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     registerText : {
         fontSize : 20,
         color : '#ffffff',
-        top : '60%',
+
     },
     containerForm : {
         flexGrow : 1,
