@@ -204,7 +204,7 @@ public class PostRepository {
 
         String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number AND a.phone_number = " + phone_number;
+                "where a.phone_number = b.phone_number AND a.phone_number = '" + phone_number + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         return ret;
@@ -220,7 +220,7 @@ public class PostRepository {
 
         String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number AND b.screen_name = " + screen_name;
+                "where a.phone_number = b.phone_number AND b.screen_name = '" + screen_name + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         return ret;
@@ -237,7 +237,7 @@ public class PostRepository {
 
         String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number AND a.post_id = " + postID;
+                "where a.phone_number = b.phone_number AND a.post_id = '"  + postID + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         if (ret.size() == 0) return null;
