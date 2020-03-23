@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {
-    AsyncStorage,
     KeyboardAvoidingView, Platform, StyleSheet, Text,
-    TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback
+    TextInput, TouchableOpacity, View, Keyboard
 } from 'react-native'
 
 
@@ -34,9 +33,8 @@ export default class PostScreen extends React.Component {
     };
     render() {
         return (
-
-                <View style={{flex: 1}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-around', }}>
+                <View style={{flex: 1, position: 'relative', top: 45}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <TouchableOpacity style={styles.button} onPress = {() => this.postFetch()}>
                             <Text style={styles.loginButton}>Post</Text>
                         </TouchableOpacity>
@@ -44,9 +42,7 @@ export default class PostScreen extends React.Component {
                             <Text style={styles.loginButton}>Exit</Text>
                         </TouchableOpacity>
                     </View>
-                    <KeyboardAvoidingView
-                        behavior="padding"
-                        style={styles.containerForm}>
+
                         <TextInput style={styles.postInput}
                                    placeholder="Your NameTag"
                                    placeholderTextColor='#ffffff'
@@ -54,7 +50,6 @@ export default class PostScreen extends React.Component {
                                    keyboardType='default'
                                    multiline = {true}
                         />
-                    </KeyboardAvoidingView>
                 </View>
 
         );
@@ -62,14 +57,16 @@ export default class PostScreen extends React.Component {
 }
     const styles = StyleSheet.create({
         postInput: {
-            position: 'absolute',
             borderRadius: 10,
             fontSize: 16,
             flex: 1,
             backgroundColor: 'white',
             width: 400,
             height: 300,
-            padding: 20
+            padding: 20,
+            flexGrow : 1,
+            justifyContent: 'center',
+            alignItems: 'center',
         },
         loginButton: {
             fontSize: 16,
@@ -77,9 +74,7 @@ export default class PostScreen extends React.Component {
             textAlign: 'center',
         },
         containerForm : {
-            flexGrow : 1,
-            justifyContent: 'center',
-            alignItems: 'center'
+
         },
         button: {
             width: 80,

@@ -22,11 +22,12 @@ export default class Verification extends React.Component {
         fetch(url + phoneNumber).then(response => response.json()).then(data => {
             if (data.screenName === "null") {
                 this.props.navigation.navigate('registerName', {phoneNumber: phoneNumber})
+            }else {
+                console.log("UserFound " + data.screenName)
+                AsyncStorage.setItem('phoneNumber', phoneNumber);
+                AsyncStorage.setItem('screenName', data.screenName);
+                this.props.navigation.navigate('BottomNav')
             }
-            console.log("UserFound " + data.screenName)
-            AsyncStorage.setItem('phoneNumber', phoneNumber);
-            AsyncStorage.setItem('screenName', data.screenName);
-            this.props.navigation.navigate('BottomNav')
         });
     };
     checkCode = () => {

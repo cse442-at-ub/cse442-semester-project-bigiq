@@ -52,8 +52,8 @@ public class PostController {
         return postRepository.getPostsAuth(screenName);
     }
     @GetMapping(path="/recentPosts")
-    public List<PostEntry> recentPosts(@RequestParam int amount){
-        return postRepository.getPostsRecent(amount,50);
+    public List<PostEntry> recentPosts(){
+        return postRepository.getPostsRecent(25,50);
     }
     @GetMapping(path="/mostLikedPosts")
     public List<PostEntry> mostLikedPosts(){
