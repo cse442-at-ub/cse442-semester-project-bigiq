@@ -11,6 +11,9 @@ public class UserEntry {
     private String phoneNumber;
     private String screenName;
 
+    public UserEntry(){
+    }
+
     @JsonCreator
     public UserEntry(@JsonProperty("phoneNumber") String phoneNumber, @JsonProperty("screenName") String screenName) {
         this.phoneNumber = phoneNumber;

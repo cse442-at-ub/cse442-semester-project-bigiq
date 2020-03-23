@@ -112,7 +112,7 @@ public class UserRepository {
     *         null if User does not exist.
     */
     public UserEntry getUser(String phone_number){
-        String sql = "SELECT FROM user_info WHERE phone_number = '" + phone_number + "'";
+        String sql = "SELECT * FROM user_info WHERE phone_number = '" + phone_number + "'";
 
         List<UserEntry> access = new ArrayList<>();
         access.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
@@ -129,7 +129,7 @@ public class UserRepository {
      */
     public UserEntry getUserScreen(String screen_name){
         List<UserEntry> ret = new ArrayList<>();
-        String sql = "select * from user_info user_ where user_.screen_name = '" + screen_name + "'";
+        String sql = "select * from user_info where screen_name = '" + screen_name + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
         if (ret.size() == 0) return null;
         else return ret.get(0);

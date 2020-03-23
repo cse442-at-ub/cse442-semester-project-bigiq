@@ -3,12 +3,8 @@ import {
     Image, KeyboardAvoidingView,
     StyleSheet, Text, TextInput, TouchableOpacity, ImageBackground,
     View,
-    Platform,
+    Platform, AsyncStorage,
 } from 'react-native'
-// import axios from 'axios';
-
-// import App from '../App';
-
 
 export default class Verification extends React.Component {
     constructor(props) {
@@ -18,23 +14,39 @@ export default class Verification extends React.Component {
             code: ''
         }
     }
-
+    checkUser = () => {
+        const {params} = this.props.navigation.state;
+        const phoneNumber = params ? params.phoneNumber : null;
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
+            ":8080/users/getCheckUserExist?phoneNumber=";
+        fetch(url + phoneNumber).then(response => response.json()).then(data => {
+            if (data.screenName === "null") {
+                this.props.navigation.navigate('registerName', {phoneNumber: phoneNumber})
+            }
+            console.log("UserFound " + data.screenName)
+            AsyncStorage.setItem('phoneNumber', phoneNumber);
+            AsyncStorage.setItem('screenName', data.screenName);
+            this.props.navigation.navigate('BottomNav')
+        });
+    };
     checkCode = () => {
         if(this.state.code.length === 6) {
             const {params} = this.props.navigation.state;
             const phoneNumber = params ? params.phoneNumber : null;
-            const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") +
+            const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
                 ":8080/verify/phoneVerificationCheck?phoneNumber=";
+            const that = this;
             fetch(url + phoneNumber + "&code=" + this.state.code).then(response => response.json()).then(data => {
                 if (data.status === '0') {
-                    this.props.navigation.navigate('registerName', {phoneNumber: phoneNumber})
+                    console.log("code correct")
+                    that.checkUser();
                 }else {
                     this.setState({success: false})
                 }
                 console.log(data)
             });
         }
-    }
+    };
 
     render() {
 
@@ -65,10 +77,8 @@ export default class Verification extends React.Component {
                                    keyboardType='number-pad'
                                    onChangeText={input => this.setState({code: input})}
                                    maxLength = {6}
-                            //    value={userInput}
 
                         />
-                        {/* {() => navigation.navigate('HomePage')} THIS GOES INTO ONPRESS FOR THE ENTER BUTTON */}
                         <TouchableOpacity style={styles.button} onPress={this.checkCode()}>
                             <Text style={styles.loginButton}>Enter</Text>
                         </TouchableOpacity>

@@ -14,8 +14,7 @@ export default class Splash extends React.Component {
         }
     }
     verification = () => {
-        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") + ":8080/verify/phoneVerification?phoneNumber=";
-        console.log(url);
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/verify/phoneVerification?phoneNumber=";
         fetch(url + this.state.phoneNumber).then(response => response.json()).then(data => {
             if (data.status === '0') {
                 this.props.navigation.navigate('Verification', {phoneNumber: this.state.phoneNumber})
@@ -26,7 +25,7 @@ export default class Splash extends React.Component {
         }).catch(function(err) {
             console.log(err);
         });
-    }
+    };
     render() {
         return (
             <View style={styles.container}>
@@ -52,7 +51,7 @@ export default class Splash extends React.Component {
                         <TouchableOpacity style={styles.button} onPress={() => this.verification()}>
                             <Text style={styles.loginButton}>Login / Signup</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('BottomNav')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('BottomNav',{phoneNumber: "123"})}>
                             <Text style={styles.loginButton}>Continue as Guest</Text>
                         </TouchableOpacity>
                     </KeyboardAvoidingView>
