@@ -70,7 +70,8 @@ public class UserRepository {
         int[] types = new int[] { Types.VARCHAR, Types.VARCHAR};
 
         try {
-            jdbc_temp.update(sql, params, types);
+            int i = jdbc_temp.update(sql, params, types);
+            if (i == 0) return 1;
         } catch (DataAccessException ex){
             System.out.println(0 + " row affected");
             return 1;
@@ -95,7 +96,8 @@ public class UserRepository {
         int[] types = new int[] {Types.VARCHAR};
 
         try {
-            jdbc_temp.update(sql, params, types);
+            int i = jdbc_temp.update(sql, params, types);
+            if (i == 0) return 1;
         } catch (DataAccessException ex){
             System.out.println(0 + " row affected");
             return 1;
