@@ -1,17 +1,20 @@
 import React from 'react';
-import {Image, StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, View, Text, TouchableOpacity, AsyncStorage} from 'react-native';
 
 export default class AccountScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            singInStatus: true
+            singInStatus: true,
+            screenName: ''
         }
     }
     render() {
         let status = this.state.singInStatus;
         let that = this;
-
+        AsyncStorage.getItem('screenName').then((value) => {
+            this.setState({"screenName": value});
+        }).done();
         function f() {
             if(status){
                 return (
@@ -23,6 +26,7 @@ export default class AccountScreen extends React.Component{
                         <TouchableOpacity style={styles.signOutTouch} onPress={() => that.setState({singInStatus: false})}>
                             <Text style={styles.signOut}> Sign Out</Text>
                         </TouchableOpacity>
+                        <Text>{that.state.screenName}</Text>
                     </View>
                 );
             }else {

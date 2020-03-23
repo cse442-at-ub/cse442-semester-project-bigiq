@@ -23,7 +23,7 @@ export default class Verification extends React.Component {
         if(this.state.code.length === 6) {
             const {params} = this.props.navigation.state;
             const phoneNumber = params ? params.phoneNumber : null;
-            const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") +
+            const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
                 ":8080/verify/phoneVerificationCheck?phoneNumber=";
             fetch(url + phoneNumber + "&code=" + this.state.code).then(response => response.json()).then(data => {
                 if (data.status === '0') {

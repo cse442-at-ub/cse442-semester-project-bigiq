@@ -18,7 +18,7 @@ export default class registerName extends React.Component{
     }
     checkName = () => {
         const that  = this;
-        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") +
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
             ":8080/users/checkname?screenName=" + this.state.screenName;
         fetch(url).then(response => response.json()).then(data => {
             if (data.status === '0') {
@@ -39,7 +39,7 @@ export default class registerName extends React.Component{
             phoneNumber: phoneNumber,
             screenName: that.state.screenName
         };
-        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") + ":8080/users/adduser";
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/users/adduser";
         await fetch(url, {
             method: "POST",
             body: JSON.stringify( payload ),

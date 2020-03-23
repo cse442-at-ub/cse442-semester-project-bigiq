@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     AsyncStorage,
     KeyboardAvoidingView, Platform, StyleSheet, Text,
-    TextInput, TouchableOpacity, View,
+    TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback
 } from 'react-native'
 
 
@@ -10,18 +10,21 @@ export default class PostScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            content: ''
+            content: '',
+            screenName: ''
         }
     }
 
     postFetch = () => {
-        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") + ":8080/posts/insertPost";
-        const author = AsyncStorage.getItem('screenName');
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/posts/insertPost";
+        AsyncStorage.getItem('screenName').then((value) => {
+            this.setState({"screenName": value});
+        }).done();
         const that = this;
         fetch(url, {
             method: "POST",
             body: JSON.stringify( {
-                author: "author",
+                author: "authorTest",
                 content: that.state.content
             } ),
             headers: new Headers({'content-type': 'application/json'}),
@@ -34,23 +37,25 @@ export default class PostScreen extends React.Component {
     };
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <KeyboardAvoidingView
-                    behavior="padding"
-                    style={styles.containerForm}>
-                    <TextInput style={styles.postInput}
-                               underlineColorAndroid='rgba(0,0,0,0)'
-                               placeholder="Your NameTag"
-                               placeholderTextColor='#ffffff'
-                               onChangeText={input => this.setState({content: input})}
-                               keyboardType='default'
-                               multiline = {true}
-                    />
-                </KeyboardAvoidingView>
-                <TouchableOpacity style={styles.button} onPress = {() => this.postFetch()}>
-                    <Text style={styles.loginButton}>Post</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <KeyboardAvoidingView
+                        behavior="padding"
+                        style={styles.containerForm}>
+                        <TextInput style={styles.postInput}
+                                   underlineColorAndroid='rgba(0,0,0,0)'
+                                   placeholder="Your NameTag"
+                                   placeholderTextColor='#ffffff'
+                                   onChangeText={input => this.setState({content: input})}
+                                   keyboardType='default'
+                                   multiline = {true}
+                        />
+                    </KeyboardAvoidingView>
+                    <TouchableOpacity style={styles.button} onPress = {() => this.postFetch()}>
+                        <Text style={styles.loginButton}>Post</Text>
+                    </TouchableOpacity>
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

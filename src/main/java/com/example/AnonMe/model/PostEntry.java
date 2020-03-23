@@ -40,6 +40,7 @@ public class PostEntry {
             this.flag_ctr = flag_ctr;
             this.like_ctr = likes;
             this.timestamp = timestamp;
+            this.timestampDB = timestampDB;
         }
     }
 

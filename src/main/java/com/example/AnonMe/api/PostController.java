@@ -2,7 +2,6 @@ package com.example.AnonMe.api;
 
 import com.example.AnonMe.database.PostRepository;
 import com.example.AnonMe.model.PostEntry;
-import com.example.AnonMe.service.TimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +14,9 @@ public class PostController {
     @Autowired
     PostRepository postRepository;
     List<PostEntry> temp = new ArrayList<>();
-    TimeFormatter formatter = new TimeFormatter();
 
     @GetMapping(path="/getAllPosts")
     public List<PostEntry> getAllPosts(){
-        System.out.println(temp);
         return temp;
         //return postRepository.getAllPosts();
     }
@@ -42,18 +39,10 @@ public class PostController {
     }
     @GetMapping(path="/recentPosts")
     public List<PostEntry> recentPosts(@RequestParam int amount){
-        List<PostEntry> postEntries = postRepository.getPostsRecent(amount);
-        for(PostEntry postEntry: postEntries){
-            postEntry.setTimestamp(formatter.format(postEntry.getTimestamp()));
-        }
-        return postEntries;
+        return postRepository.getPostsRecent(amount);
     }
     @GetMapping(path="/postsByPhone")
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
-        List<PostEntry> postEntries = postRepository.getPostsPnum(phoneNumber);
-        for(PostEntry postEntry: postEntries){
-            postEntry.setTimestamp(formatter.format(postEntry.getTimestamp()));
-        }
-        return postEntries;
+        return postRepository.getPostsPnum(phoneNumber);
     }
 }

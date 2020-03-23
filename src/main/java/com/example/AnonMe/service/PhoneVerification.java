@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class PhoneVerification {
     private static final String SID = "AC1a742dd5e8dc1abf0e0d6fa29f82287c";
-    private static final String token = "bc4900188c28822ff631bf6167a49c24";
+    private static final String token = "8ac5bb8764d628e89f2311d48df2ed2c";
     private static String serviceSID;
     private static HashMap<String, Integer> attempts;
 
@@ -18,7 +18,12 @@ public class PhoneVerification {
         serviceSID = getServiceSID();
         attempts = new HashMap<>();
     }
-    private static String getServiceSID(){
+
+    public String getSID() {
+        return serviceSID;
+    }
+
+    public String getServiceSID(){
         Twilio.init(SID, token);
         ResourceSet<Service> services = Service.reader().limit(20).read();
         for(Service record : services) {
@@ -28,14 +33,19 @@ public class PhoneVerification {
         }
         return createNewServiceSID();
     }
-    private static String createNewServiceSID(){
+    public String createNewServiceSID(){
         Twilio.init(SID, token);
         Service service = Service.creator("AnonMe").create();
         return service.getSid();
     }
+    /**
+     0 = Success
+     1 = Fail
+     2 = Incorrect number length
 
+     */
     public int sendCode(String phoneNumber){
-        if(phoneNumber.length() < 10){
+        if(phoneNumber.length() < 10 || phoneNumber.length() > 10){
             return 2;
         }
         try {
@@ -53,7 +63,7 @@ public class PhoneVerification {
             return 1;
         }
     }
-    /*
+    /**
         0 = Success
         1 = Fail
         2 = Max Attempt
@@ -80,7 +90,7 @@ public class PhoneVerification {
         return 0;
     }
 
-    private static String checkNumber(String phoneNumber){
+    public String checkNumber(String phoneNumber){
         StringBuilder number = new StringBuilder(phoneNumber);
         if(number.charAt(0) != '+'){
             number.insert(0, '+');

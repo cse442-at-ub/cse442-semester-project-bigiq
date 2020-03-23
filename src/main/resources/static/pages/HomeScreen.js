@@ -2,7 +2,7 @@ import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image} fro
 import * as React from 'react';
 import { AsyncStorage } from "react-native";
 
-const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") +
+const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
     ":8080/posts/getAllPosts";
 const fetchPost = fetch(getAllPostUrl).then(response => response.json());
 

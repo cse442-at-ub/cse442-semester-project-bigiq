@@ -14,7 +14,7 @@ export default class Splash extends React.Component {
         }
     }
     verification = () => {
-        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"localhost") + ":8080/verify/phoneVerification?phoneNumber=";
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/verify/phoneVerification?phoneNumber=";
         fetch(url + this.state.phoneNumber).then(response => response.json()).then(data => {
             if (data.status === '0') {
                 this.props.navigation.navigate('Verification', {phoneNumber: this.state.phoneNumber})
@@ -25,7 +25,7 @@ export default class Splash extends React.Component {
         }).catch(function(err) {
             console.log(err);
         });
-    }
+    };
     render() {
         return (
             <View style={styles.container}>

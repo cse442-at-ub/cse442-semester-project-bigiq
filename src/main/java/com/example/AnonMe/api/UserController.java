@@ -18,11 +18,11 @@ public class UserController {
 
     @GetMapping(path="/getusers")
     public List<UserEntry> getUsers(){
-        return user_repo.getAllUsers();
+       return user_repo.getAllUsers();
     }
 
     @GetMapping(path="/checkname")
-    public HashMap<String, String> checkName(@RequestParam String screenName){
+    public HashMap<String, String> checkName(@RequestBody String screenName){
         HashMap<String, String> response = new HashMap<>();
         response.put("status", Integer.toString(user_repo.verifyName(screenName)));
         return response;
@@ -30,14 +30,11 @@ public class UserController {
 
     @PostMapping(path="/adduser")
     public void addUser(@RequestBody UserEntry userEntry){
-        System.out.println(userEntry.getScreen_name() + " " + userEntry.getPhone_number());
-        //user_repo.insertUser(userEntry);
+        user_repo.insertUser(userEntry);
     }
-
     @DeleteMapping(path="/removeuser")
-    public void removeUser(@RequestParam String phoneNumber, @RequestParam String screenName){
-        UserEntry TestEntry = new UserEntry(phoneNumber,screenName);
-        user_repo.removeUser(TestEntry);
+    public void removeUser(@RequestBody UserEntry userEntry){
+        user_repo.removeUser(userEntry);
     }
 
 
