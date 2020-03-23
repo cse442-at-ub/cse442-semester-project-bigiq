@@ -448,4 +448,49 @@ public class PostRepository {
 
         return change;
     }
+
+    /*
+     * Post's like/flag button state retrieval. [Task #33]
+     * bool getLike (postId,screen_name) - returns on/off state of like-button
+     * bool getFlag (postId,screen_name) - returns on/off state of flag-button
+     */
+    /**
+     * getLike - returns current state of like-button
+     * @param postId target postID
+     * @param screen_name screen name of user changing post
+     * @return boolean indicating current state (false = off, true = on)
+     */
+    public boolean getLike(String postId, String screen_name){
+        String sql = "SELECT a.phone_number, a.post_id, a.like " +
+                "FROM user_flag_like a, user_info b " +
+                "WHERE a.phone_number = b.phone_number AND " +
+                "b.screen_name = '" + screen_name + "' AND " +
+                "a.post_id = '" + postId + "'";
+
+        List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
+        if (interaction.size() == 0) return false;
+        else{
+            return interaction.get(0).get("like").equals("1");
+        }
+    }
+
+    /**
+     * getFlag - returns current state of flag-button
+     * @param postId target postID
+     * @param screen_name screen name of user changing post
+     * @return boolean indicating current state (false = off, true = on)
+     */
+    public boolean getFlag(String postId, String screen_name){
+        String sql = "SELECT a.phone_number, a.post_id, a.flag " +
+                "FROM user_flag_like a, user_info b " +
+                "WHERE a.phone_number = b.phone_number AND " +
+                "b.screen_name = '" + screen_name + "' AND " +
+                "a.post_id = '" + postId + "'";
+
+        List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
+        if (interaction.size() == 0) return false;
+        else{
+            return interaction.get(0).get("flag").equals("1");
+        }
+    }
 }
