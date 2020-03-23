@@ -13,17 +13,16 @@ import java.util.List;
 public class PostController {
     @Autowired
     PostRepository postRepository;
-    List<PostEntry> temp = new ArrayList<>();
+
 
     @GetMapping(path="/getAllPosts")
     public List<PostEntry> getAllPosts(){
-        return temp;
-        //return postRepository.getAllPosts();
+        return postRepository.getAllPosts();
     }
     @PostMapping(path="/insertPost")
     public void insertPost(@RequestBody PostEntry postEntry){
-        temp.add(postEntry);
-        //postRepository.insertPost(postEntry);
+        postEntry.setScreenName(postEntry.getScreenName().trim());
+        postRepository.insertPost(postEntry);
     }
     @DeleteMapping(path="/deletePostByID")
     public void deletePost(@RequestParam String id){

@@ -17,14 +17,11 @@ export default class PostScreen extends React.Component {
 
     postFetch = () => {
         const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/posts/insertPost";
-        AsyncStorage.getItem('screenName').then((value) => {
-            this.setState({"screenName": value});
-        }).done();
         const that = this;
         fetch(url, {
             method: "POST",
             body: JSON.stringify( {
-                author: "authorTest",
+                author: "ewee",
                 content: that.state.content
             } ),
             headers: new Headers({'content-type': 'application/json'}),

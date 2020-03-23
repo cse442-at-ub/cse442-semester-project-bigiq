@@ -17,6 +17,7 @@ public class PostRepository {
 
     @Autowired
     private JdbcTemplate jdbc_temp;
+    @Autowired
     private UserRepository repo;
     private final ArrayList<Character> InvalidChars = new ArrayList<>(Arrays.asList('\\', '\'', '%', '_', '"'));
 
@@ -59,9 +60,11 @@ public class PostRepository {
                 "values  ( ? , ? , ? , ? , ? , NOW(), ? )";
 
         //Retrieving phone_number attributed to screen name.
+        System.out.println(post.getScreenName());
         UserEntry tmp = repo.getUserScreen(post.getScreenName());
-        if (tmp == null) return 1;
+        if (tmp.equals(null)) return 1;
         String phone_number = tmp.getPhone_number();
+        System.out.println(phone_number);
 
         //Setting up Query
         Object[] params = new Object[]{post.getPost_id(), phone_number, post.getContent(), post.getFlag_ctr(), post.getLike_ctr(), post.getTimestampFront()};
@@ -71,7 +74,7 @@ public class PostRepository {
         try {
             jdbc_temp.update(sql, params, types);
         } catch (DataAccessException ex) {
-            System.out.println(0 + " row affected");
+            ex.printStackTrace();
             return 1;
         }
 

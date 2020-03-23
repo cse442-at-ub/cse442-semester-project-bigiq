@@ -27,6 +27,11 @@ public class UserController {
         response.put("status", Integer.toString(user_repo.verifyName(screenName)));
         return response;
     }
+    @GetMapping(path="/getUserScreen")
+    public UserEntry getUserScreen(@RequestParam String screenName){
+        System.out.println(screenName);
+        return user_repo.getUserScreen(screenName.trim());
+    }
 
     @PostMapping(path="/adduser")
     public void addUser(@RequestBody UserEntry userEntry){
