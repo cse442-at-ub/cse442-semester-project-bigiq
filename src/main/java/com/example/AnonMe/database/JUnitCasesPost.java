@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.validation.constraints.AssertTrue;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -38,7 +40,42 @@ public class JUnitCasesPost extends TestCase {
         postrepo.removePostID("3111113");
     }
 
-    /*
-     *
-     */
+    //#26
+    @Test
+    public void testInsertPost(){
+        assertFalse(postrepo.getAllPosts(100).contains(post1));
+        postrepo.insertPost(post1);
+        assertTrue(postrepo.getPostID(post1.getPost_id()) != null);
+        assertTrue(postrepo.insertPost(post1) == 1);
+    }
+
+    @Test
+    public void testRemovePost(){
+        postrepo.insertPost(post2);
+        assertTrue(postrepo.getPostID(post2.getPost_id()) != null);
+        postrepo.removePostID(post2.getPost_id());
+        assertTrue(postrepo.getPostID(post2.getPost_id()) == null);
+        assertTrue(postrepo.removePostID(post2.getPost_id()) == 0);
+    }
+
+    @Test
+    public void testremovePostNum(){
+        postrepo.insertPost(post3);
+        assertTrue(postrepo.getPostID(post3.getPost_id()) != null);
+        postrepo.removePost(userrepo.getUserScreen(post3.getScreenName()).getPhone_number());
+        assertTrue(postrepo.getPostID(post3.getPost_id()) == null);
+        assertTrue(postrepo.removePost(userrepo.getUserScreen(post3.getScreenName()).getPhone_number()) == 0);
+    }
+
+    //#32+33
+    @Test
+    public void testpostLike(){
+
+    }
+
+    @Test
+    public void testpostFlag(){
+
+    }
+
 }
