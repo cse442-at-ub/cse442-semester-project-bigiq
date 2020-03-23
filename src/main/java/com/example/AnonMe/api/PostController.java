@@ -17,14 +17,24 @@ public class PostController {
 
     @GetMapping(path="/getAllPosts")
     public List<PostEntry> getAllPosts(){
-        System.out.println(postRepository.getAllPosts());
-        return postRepository.getAllPosts();
+        return postRepository.getAllPosts(50);
     }
     @PostMapping(path="/insertPost")
     public void insertPost(@RequestBody PostEntry postEntry){
         postEntry.setScreenName(postEntry.getScreenName().trim());
         postRepository.insertPost(postEntry);
     }
+
+    @PostMapping(path="/LikePost")
+    public boolean LikePost(@RequestParam String id, @RequestParam String user){
+        return postRepository.postLike(id,user);
+    }
+    @PostMapping(path="/FlagPost")
+    public boolean FlagPost(@RequestParam String id, @RequestParam String user){
+        return postRepository.postFlag(id,user);
+    }
+
+
     @DeleteMapping(path="/deletePostByID")
     public void deletePost(@RequestParam String id){
         postRepository.removePostID(id);
@@ -39,11 +49,11 @@ public class PostController {
     }
     @GetMapping(path="/recentPosts")
     public List<PostEntry> recentPosts(@RequestParam int amount){
-        return postRepository.getPostsRecent(amount);
+        return postRepository.getPostsRecent(amount,50);
     }
     @GetMapping(path="/mostLikedPosts")
     public List<PostEntry> mostLikedPosts(){
-        return postRepository.getPostsLiked(25);
+        return postRepository.getPostsLiked(25,50);
     }
     @GetMapping(path="/postsByPhone")
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){

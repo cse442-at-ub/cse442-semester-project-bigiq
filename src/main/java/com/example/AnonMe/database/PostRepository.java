@@ -11,6 +11,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @org.springframework.stereotype.Repository
 public class PostRepository {
@@ -142,11 +143,12 @@ public class PostRepository {
 
     /**
      * getAllPosts - returns all posts in DB
+     * @param lim - limit on number of chars of content
      * @return List of PostEntry of all posts in DB
      */
-    public List<PostEntry> getAllPosts(){
+    public List<PostEntry> getAllPosts(int lim){
         List<PostEntry> ret = new ArrayList<>();
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
+        String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number";
         ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
@@ -157,13 +159,14 @@ public class PostRepository {
     /**
      * getPostsRecent - returns all n-posts sorted by most recent
      * @param num number of posts to be returned from database.
+     * @param lim - limit on number of chars of content
      * @return List of PostEntry of all num-th most recent posts in DB.
      */
-    public List<PostEntry> getPostsRecent(int num){
+    public List<PostEntry> getPostsRecent(int num, int lim){
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
+        String sql = "select a.post_id, b.screen_name,  SUBSTRING(a.content, 1, "+ lim + ") as content,  a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number "+
                 "order by timestamp DESC limit " + num;
@@ -175,13 +178,14 @@ public class PostRepository {
     /**
      * getPostsLiked - returns all n-posts sorted by most liked
      * @param num number of posts to be returned from database.
+     * @param lim - limit on number of chars of content
      * @return List of PostEntry of all num-th most liked posts in DB.
      */
-    public List<PostEntry> getPostsLiked(int num){
+    public List<PostEntry> getPostsLiked(int num, int lim){
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
-        String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
+        String sql = "select a.post_id, b.screen_name,  SUBSTRING(a.content, 1, "+ lim + ") as content,  a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number "+
                 "order by like_ctr DESC limit " + num;
@@ -238,5 +242,210 @@ public class PostRepository {
 
         if (ret.size() == 0) return null;
         return ret.get(0);
+    }
+
+    /* Post like and flag counter interaction [Task #32]
+     * bool postLike - toggles like, changes like counter, returns bool of current button state
+     * bool postFlag - toggles flag, changes flag counter, returns bool of current button state
+     */
+    /**
+     * postLike - changes the DB in according to Like-Press by User
+     * @param postId target postID
+     * @param screen_name screen name of user changing post
+     * @return boolean indicating current state of button (false = off, true = on)
+     */
+    public boolean postLike(String postId, String screen_name){
+        //Pulling from interactions table
+        boolean change = false;
+        String sql = "SELECT a.phone_number, a.post_id, a.like " +
+                "FROM user_flag_like a, user_info b " +
+                "WHERE a.phone_number = b.phone_number AND " +
+                "b.screen_name = '" + screen_name + "' AND " +
+                "a.post_id = '" + postId + "'";
+
+        List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
+
+        /*
+        INTERACTION CASES
+         */
+        //First time interaction
+        if (interaction.size() == 0){
+            System.out.println("No previous interaction, inserting into records");
+            change = true;
+
+            sql = "insert into user_flag_like (phone_number, post_id, `like`, flag) " +
+                    "values ( ? , ? , ? , ? )";
+
+            UserEntry tmp = repo.getUserScreen(screen_name);
+            String phone_number = tmp.getPhone_number();
+
+            Object[] params = {phone_number,postId,"1","0"};
+            int[] types = {Types.VARCHAR,Types.VARCHAR,Types.CHAR,Types.CHAR};
+
+            try {
+                jdbc_temp.update(sql, params, types);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        //Previously liked
+        else if (interaction.get(0).get("like").equals("1")) {
+            System.out.println("Now removing like");
+            change = false;
+
+            sql = "UPDATE user_flag_like " +
+                    "SET `like` = '0' " +
+                    "WHERE phone_number = '" + interaction.get(0).get("phone_number") + "' AND " +
+                    "post_id = '" + interaction.get(0).get("post_id") + "'";
+
+            try {
+                jdbc_temp.update(sql);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        //Previously unliked
+        else {
+            System.out.println("Now liking");
+            change = true;
+
+            sql = "UPDATE user_flag_like " +
+                    "SET `like` = '1' " +
+                    "WHERE phone_number = '" + interaction.get(0).get("phone_number") + "' AND " +
+                    "post_id = '" + interaction.get(0).get("post_id") + "'";
+
+            try {
+                jdbc_temp.update(sql);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        /*
+        CHANGING COUNT OF LIKES FOR POST
+         */
+        if (change){
+            sql = "UPDATE post_data " +
+                    "SET like_ctr =  like_ctr + 1 " +
+                    "WHERE post_id = '" + postId + "'";
+        }
+        else{
+            sql = "UPDATE post_data " +
+                    "SET like_ctr =  like_ctr - 1 " +
+                    "WHERE post_id = '" + postId + "'";
+        }
+        try {
+            jdbc_temp.update(sql);
+        } catch (DataAccessException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+
+        /*
+        RETURNING CURRENT STATE OF BUTTON.
+         */
+        return change;
+    }
+
+    /**
+     * postFlag - changes the DB in according to Flag-Press by User
+     * @param postId target postID
+     * @param screen_name screen name of user changing post
+     * @return boolean indicating current state of button (false = off, true = on)
+     */
+    public boolean postFlag(String postId, String screen_name){
+//Pulling from interactions table
+        boolean change = false;
+        String sql = "SELECT a.phone_number, a.post_id, a.flag " +
+                "FROM user_flag_like a, user_info b " +
+                "WHERE a.phone_number = b.phone_number AND " +
+                "b.screen_name = '" + screen_name + "' AND " +
+                "a.post_id = '" + postId + "'";
+
+        List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
+
+        /*
+        INTERACTION CASES
+         */
+        if (interaction.size() == 0){
+            System.out.println("No previous interaction, inserting into records");
+            change = true;
+
+            sql = "insert into user_flag_like (phone_number, post_id, `like`, flag) " +
+                    "values ( ? , ? , ? , ? )";
+
+            UserEntry tmp = repo.getUserScreen(screen_name);
+            String phone_number = tmp.getPhone_number();
+
+            Object[] params = {phone_number,postId,"0","1"};
+            int[] types = {Types.VARCHAR,Types.VARCHAR,Types.CHAR,Types.CHAR};
+
+            try {
+                jdbc_temp.update(sql, params, types);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+        else if (interaction.get(0).get("flag").equals("1")){
+            System.out.println("Now removing flag");
+            change = false;
+
+            sql = "UPDATE user_flag_like " +
+                    "SET flag = '0' " +
+                    "WHERE phone_number = '" + interaction.get(0).get("phone_number") + "' AND " +
+                    "post_id = '" + interaction.get(0).get("post_id") + "'";
+
+            try {
+                jdbc_temp.update(sql);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+        else {
+            System.out.println("Now flagging");
+            change = true;
+
+            sql = "UPDATE user_flag_like " +
+                    "SET flag = '1' " +
+                    "WHERE phone_number = '" + interaction.get(0).get("phone_number") + "' AND " +
+                    "post_id = '" + interaction.get(0).get("post_id") + "'";
+
+            try {
+                jdbc_temp.update(sql);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        /*
+        UPDATE FLAG COUNTER
+         */
+        if (change){
+            sql = "UPDATE post_data " +
+                    "SET flag_ctr =  flag_ctr + 1 " +
+                    "WHERE post_id = '" + postId + "'";
+        }
+        else{
+            sql = "UPDATE post_data " +
+                    "SET flag_ctr =  flag_ctr - 1 " +
+                    "WHERE post_id = '" + postId + "'";
+        }
+        try {
+            jdbc_temp.update(sql);
+        } catch (DataAccessException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return change;
     }
 }
