@@ -33,6 +33,10 @@ public class PostController {
     public boolean FlagPost(@RequestParam String id, @RequestParam String user){
         return postRepository.postFlag(id,user);
     }
+    @PostMapping(path="/PostInterest")
+    public List<PostEntry> PostInterest(@RequestParam String user){
+        return postRepository.postInterest(user);
+    }
 
 
     @DeleteMapping(path="/deletePostByID")

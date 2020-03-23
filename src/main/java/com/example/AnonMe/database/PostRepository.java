@@ -493,4 +493,29 @@ public class PostRepository {
             return interaction.get(0).get("flag").equals("1");
         }
     }
+
+    /*
+     * Retrieving posts of interest [Task #6]
+     * List<PostEntry> postInterest(screen_name) - returns posts liked/posted by user
+     */
+
+    /**
+     * postInterest - returns posts of interests for a user
+     * @param screen_name - screen name of user targeted
+     * @return list of post entry that have been liked/posted by a user.
+     */
+    public List<PostEntry> postInterest(String screen_name){
+        //retrieving posts by screen_name
+        List<PostEntry> ret = getPostsAuth(screen_name);
+
+        //retrieving and appending posts liked by screen_name
+        String phone_number = repo.getUserScreen(screen_name).getPhone_number();
+
+        String sql = "SELECT b.post_id, c.screen_name, b.content, b.flag_ctr, b.like_ctr, b.timestamp_front " +
+                "FROM user_flag_like a, post_data b, user_info c " +
+                "WHERE b.post_id = a.post_id AND b.phone_number = c.phone_number AND a.like = '1' AND a.phone_number = '" + phone_number +"'";
+
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+        return ret;
+    }
 }
