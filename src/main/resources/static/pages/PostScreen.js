@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     KeyboardAvoidingView, Platform, StyleSheet, Text,
-    TextInput, TouchableOpacity, View, Keyboard
+    TextInput, TouchableOpacity, View, Keyboard, Image
 } from 'react-native'
 
 
@@ -18,6 +18,7 @@ export default class PostScreen extends React.Component {
     postFetch = () => {
         const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/posts/insertPost";
         const that = this;
+
         fetch(url, {
             method: "POST",
             body: JSON.stringify( {
@@ -31,7 +32,11 @@ export default class PostScreen extends React.Component {
             }
         });
     };
-    render() {
+
+    goBack = () => {
+        this.props.navigation.pop();
+    };
+    /*render() {
         return (
                 <View style={{flex: 1, position: 'relative', top: 45}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -53,35 +58,52 @@ export default class PostScreen extends React.Component {
                 </View>
 
         );
+    }*/
+    render() {
+        return (
+            <View style={{flex: 1 }}>
+                <View style={styles.topContainer}>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.goBack()}>
+                        <Image style={styles.topIcons}
+                               source={require('../assets/exitIcon.png')}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.postFetch()}>
+                        <Image style={styles.topIcons}
+                               source={require('../assets/uploadIcon.png')}/>
+                    </TouchableOpacity>
+                </View>
+                <View style={{paddingVertical: 20, paddingHorizontal: 20}}>
+                    <Text style={{fontSize: 20, fontWeight: "bold", color: '#4704a5'}}>Let's Start a Conversation</Text>
+                    <TextInput style={styles.nameTagBox}
+                               underlineColorAndroid='rgba(0,0,0,0)'
+                               placeholder="Write here"
+                               placeholderTextColor='gray'
+                               multiline = {true}
+                               autoFocus={true}
+                               onChangeText={input => this.setState({comment: input})}
+                               keyboardType='default'
+                    />
+                </View>
+            </View>
+
+        );
     }
 }
     const styles = StyleSheet.create({
-        postInput: {
-            borderRadius: 10,
-            fontSize: 16,
-            flex: 1,
-            backgroundColor: 'white',
-            width: 400,
-            height: 300,
-            padding: 20,
-            flexGrow : 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+        topContainer:{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            height: '13%',
+            borderBottomWidth: 2,
+            borderBottomColor: '#e0e0e0',
         },
-        loginButton: {
-            fontSize: 16,
-            color: '#ffffff',
-            textAlign: 'center',
+        topIcons: {
+            width: 20, height: 20, resizeMode: 'contain'
         },
-        containerForm : {
-
-        },
-        button: {
-            width: 80,
-            backgroundColor: '#1c313a',
-            borderRadius: 25,
-            marginVertical: 10,
-            paddingVertical: 13,
+        iconContainer:{
+            paddingHorizontal: 30,
+            paddingTop: '15%'
         },
     });
 

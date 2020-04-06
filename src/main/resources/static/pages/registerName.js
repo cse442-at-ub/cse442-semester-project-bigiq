@@ -48,7 +48,7 @@ export default class registerName extends React.Component{
             if(response.ok){
                 AsyncStorage.setItem('phoneNumber', phoneNumber);
                 AsyncStorage.setItem('screenName', that.state.screenName);
-                that.props.navigation.navigate('BottomNav');
+                that.props.navigation.navigate('AppScreen');
             }
         });
     };
