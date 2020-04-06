@@ -1,5 +1,17 @@
 import React from 'react';
-import {Image, StyleSheet, View, Text, TouchableOpacity, AsyncStorage, FlatList, Platform} from 'react-native';
+import {
+    Image,
+    StyleSheet,
+    View,
+    Text,
+    TouchableOpacity,
+    AsyncStorage,
+    FlatList,
+    Platform,
+    TouchableWithoutFeedback
+} from 'react-native';
+import * as NavigationActions from "react-navigation";
+import {color} from "react-native-reanimated";
 
 export default class AccountScreen extends React.Component{
     constructor(props) {
@@ -7,7 +19,7 @@ export default class AccountScreen extends React.Component{
         this.state = {
             screenName: '',
             doneLoading: false,
-            data: []
+            data: [],
         }
     }
 
@@ -30,39 +42,72 @@ export default class AccountScreen extends React.Component{
             console.log(this.state.data.length)
         });*/
     };
+    signOutHandler = async () =>{
+        AsyncStorage.clear();
+        this.props.navigation.navigate('Splash');
+    };
     /*componentWillUnmount() {
         this.focusListener.remove();
     }*/
     render() {
         let that = this;
-        function f() {
+
+        function loadFlatList() {
+            if(that.state.data.length > 0) {
+                return (
+                    <View>
+                        <Text>You have not posted or liked anything</Text>
+                    </View>
+                )
+            }
+            else {
+                return (
+                    <View>
+
+                    </View>
+                )
+            }
+        }
+        function renderScreen() {
             if(that.state.doneLoading){
                 return (
-                    <View style={{flex: 1, alignItems: 'center' }}>
-                        <Image style={styles.circle}
-                               source={require('../assets/accountTopCircle.png')}/>
-                        <Image style={styles.avatar}
-                               source={require('../assets/avatarDemo.png')}/>
-                        <TouchableOpacity style={styles.signOutTouch} onPress={() => that.setState({singInStatus: false})}>
-                            <Text style={styles.signOut}> Sign Out</Text>
-                        </TouchableOpacity>
-                        <Text>{that.state.screenName}</Text>
-                        <View>
 
+                        <View style={{ alignItems: 'center'}}>
+                            <Image style={styles.avatar}
+                                   source={require('../assets/avatars/1.png')}/>
+                            <View style={styles.nameContainer}>
+                                <Text style={{color:'white'}}>{that.state.screenName}</Text>
+                            </View>
+                            <View style={styles.statsContainer}>
+                                <View style={styles.statsView}>
+                                    <Text style={styles.statsText}>0</Text>
+                                    <Text style={{color: 'gray'}}>Posts</Text>
+                                </View>
+                                <View style={styles.statsView}>
+                                    <Text style={styles.statsText}>0</Text>
+                                    <Text style={{color: 'gray'}}>Likes</Text>
+                                </View>
+                                <View style={styles.statsView}>
+                                    <Text style={styles.statsText}>0</Text>
+                                    <Text style={{color: 'gray'}}>Following</Text>
+                                </View>
+                            </View>
+                            {loadFlatList()}
                         </View>
-                    </View>
+
+
                 );
             }else {
                 return(
-                    <View style={styles.loggedOutContainer}>
+                    <View>
                     </View>
                 )
             }
         }
 
         return(
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                {f()}
+            <View>
+                {renderScreen()}
             </View>
         )
     }
@@ -75,38 +120,31 @@ export default class AccountScreen extends React.Component{
                         </Text>
  */
 const styles = StyleSheet.create({
-    circle: {
-        position: 'absolute',
-        top:'-35%',
-        width: 500,
-        height: 500,
-        borderRadius: 500/2,
+    statsText: {fontSize: 30, fontWeight:'bold', color: '#4704a5'},
+    statsView:{
+        flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
     },
-    loggedOutContainer:{
-        flex: 1,
-        justifyContent: 'center',
+    statsContainer:{
+        width: '80%',
+        height: '25%',
+        borderRadius: 20,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+    nameContainer:{
+        backgroundColor: '#4704a5',
+        borderRadius: 20,
+        position: 'relative',
+        width: 140,
         alignItems: 'center',
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#6e6e6e',
-        //opacity: 0.4
-    },
-    signOut: {
-        color: 'white',
-        fontSize: 15
+        justifyContent: 'center',
+        height: 30,
+        top: -15
     },
     avatar:{
-        width: 100, height: 100, resizeMode: 'contain', marginTop: '10%'
+        width: 125, height: 125, resizeMode: 'contain', marginTop: '10%'
     },
-    signOutTouch :{
-        position: 'absolute',
-        right: '-25%',
-        top: '9%'
-    },
-    loggedOutText: {
-        fontSize: 20,
-        color: 'white',
-        marginTop: 20
-    }
+
 });
 

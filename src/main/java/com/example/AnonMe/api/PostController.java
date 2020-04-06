@@ -19,6 +19,27 @@ public class PostController {
     public List<PostEntry> getAllPosts(){
         return postRepository.getAllPosts(50);
     }
+    @GetMapping(path="/postsByScreenName")
+    public List<PostEntry> postByScreenName(@RequestParam String screenName){
+        return postRepository.getPostsAuth(screenName);
+    }
+    @GetMapping(path="/recentPosts")
+    public List<PostEntry> recentPosts(){
+        return postRepository.getPostsRecent(25,50);
+    }
+    @GetMapping(path="/mostLikedPosts")
+    public List<PostEntry> mostLikedPosts(){
+        return postRepository.getPostsLiked(25,50);
+    }
+    @GetMapping(path="/postsByPhone")
+    public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
+        return postRepository.getPostsPnum(phoneNumber);
+    }
+    @GetMapping(path="/postById")
+    public PostEntry postById(@RequestParam String id){
+        System.out.println(id);
+        return postRepository.getPostID(id);
+    }
     @PostMapping(path="/insertPost")
     public void insertPost(@RequestBody PostEntry postEntry){
         postEntry.setScreenName(postEntry.getScreenName().trim());
@@ -37,8 +58,6 @@ public class PostController {
     public List<PostEntry> PostInterest(@RequestParam String user){
         return postRepository.postInterest(user);
     }
-
-
     @DeleteMapping(path="/deletePostByID")
     public void deletePost(@RequestParam String id){
         postRepository.removePostID(id);
@@ -47,20 +66,5 @@ public class PostController {
     public void deleteAllAuthorPost(@RequestParam String phoneNumber){
         postRepository.removePost(phoneNumber);
     }
-    @GetMapping(path="/postsByScreenName")
-    public List<PostEntry> postByScreenName(@RequestParam String screenName){
-        return postRepository.getPostsAuth(screenName);
-    }
-    @GetMapping(path="/recentPosts")
-    public List<PostEntry> recentPosts(){
-        return postRepository.getPostsRecent(25,50);
-    }
-    @GetMapping(path="/mostLikedPosts")
-    public List<PostEntry> mostLikedPosts(){
-        return postRepository.getPostsLiked(25,50);
-    }
-    @GetMapping(path="/postsByPhone")
-    public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
-        return postRepository.getPostsPnum(phoneNumber);
-    }
+
 }
