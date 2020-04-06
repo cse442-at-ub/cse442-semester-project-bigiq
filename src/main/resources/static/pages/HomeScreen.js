@@ -1,16 +1,7 @@
-import {
-    Text,
-    View,
-    FlatList,
-    Platform,
-    TouchableOpacity,
-    StyleSheet,
-    Image,
-    TouchableWithoutFeedback,
-    ImageBackground, AsyncStorage
-} from "react-native";
+import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback, ImageBackground, AsyncStorage} from "react-native";
 import * as React from 'react';
-
+import {fetchDataRecent,fetchDataLiked} from "../fetches/HomeScreenFetch";
+import {Ionicons} from "@expo/vector-icons";
 
 
 export default class HomeScreen extends React.Component {
@@ -24,11 +15,29 @@ export default class HomeScreen extends React.Component {
             screenName: ''
         };
     }
+    MPTypeColor = () =>{
+        if(this.state.feedType === true){
+            return <Text style={{fontSize: 12, color:'gray'}}>Most Popular</Text>
+        }else {
+            return <Text style={{fontSize: 12, color:'#4704a5'}}>Most Popular</Text>
+        }
+    };
+    MRTypeColor = () =>{
+        if(this.state.feedType === false){
+            return <Text style={{fontSize: 12, color:'gray'}}>Most Recent</Text>
+        }else {
+            return <Text style={{fontSize: 12, color:'#4704a5'}}>Most Recent</Text>
+        }
+    };
     componentDidMount() {
         AsyncStorage.getItem('screenName').then((token) => {
             this.setState({
                 screenName: token,
             });
+        });
+        const { navigation } = this.props;
+        navigation.addListener("focus", () => {
+            this.fetchData();
         });
     };
     toggleLikeIcon = (id) =>{
@@ -39,26 +48,29 @@ export default class HomeScreen extends React.Component {
           this.setState({likeIcon: require('../assets/loveIcon.png')})
       }
     };
-    fetchDataRecent = () =>{
-        const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
-            ":8080/posts/recentPosts";
-        fetch(getAllPostUrl).then(response => response.json()).then( dataAPI => this.setState({data : dataAPI}));
-        console.log("fetchedRecent");
+    dataRecent = () =>{
+        fetchDataRecent().then( dataAPI => this.setState({data : dataAPI}));
         this.setState({feedType: true});
+        console.log("fetchedRecent");
     };
-    fetchDataLiked = () =>{
-        const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
-            ":8080/posts/mostLikedPosts";
-        fetch(getAllPostUrl).then(response => response.json()).then( dataAPI => this.setState({data : dataAPI}));
+    dataLiked = () =>{
+        fetchDataLiked().then( dataAPI => this.setState({data : dataAPI}));
         console.log("fetchedLikes");
         this.setState({feedType: false})
     };
+    postDetail = (id) =>{
+        this.props.navigation.navigate('PostDetail', {id})
+    };
+    postScreenMove = () => {
+        console.log('pressed');
+        this.props.navigation.navigate('PostScreen');
+    };
     fetchData = () =>{
         if(this.state.feedType === true){
-            this.fetchDataRecent();
+            this.dataRecent()
         }
         else {
-            this.fetchDataLiked();
+            this.dataLiked();
         }
     };
     fetchLike = (id) =>{
@@ -72,30 +84,28 @@ export default class HomeScreen extends React.Component {
         }).then(response => response.json()).then( () => this.fetchData());
         console.log("added Like");
     };
-    componentDidMount() {
-        const { navigation } = this.props;
-        this.focusListener = navigation.addListener("focus", () => {
-            this.fetchData();
-        });
-    }
 
-    componentWillUnmount() {
-        this.focusListener.remove();
-    }
+
     render() {
         let that = this;
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection:'column', backgroundColor: '#4704a5'}}>
-                <ImageBackground source={require('../assets/background.png')}
-                                 style={{width: '100%', height: '100%',justifyContent: 'center', alignItems: 'center', flexDirection:'column'}}>
-                    <Image style={{width: 100, height: 100, resizeMode: 'contain'}}
-                           source={require('../assets/logo.png')}/>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-around', }}>
-                        <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.fetchDataRecent()}>
-                            <Text style={styles.toggleFeedText}>Most Recent</Text>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection:'column', backgroundColor: '#gray'}}>
+                <View style={styles.topFeed}>
+                    <View style={{flexDirection: 'row', paddingTop: '33%', justifyContent: 'space-between',paddingHorizontal:30}}>
+                        <Image style={{width: 50, height: 50, resizeMode: 'contain'}}
+                               source={require('../assets/feed.png')}/>
+                        <TouchableOpacity style={{padding: 10, flexDirection: 'row', justifyContent: 'center'}} onPress={()=>that.postScreenMove()}>
+                            <Ionicons name={'ios-create'} size={30} color={'#4704a5'}/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.fetchDataLiked()}>
-                            <Text style={styles.toggleFeedText}>Most Popular</Text>
+                    </View>
+                </View>
+                <View style={{justifyContent: 'center', alignItems: 'center', flexDirection:'column'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+                        <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataRecent()}>
+                            {that.MRTypeColor()}
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataLiked()}>
+                            {that.MPTypeColor()}
                         </TouchableOpacity>
                     </View>
                     <FlatList
@@ -106,30 +116,38 @@ export default class HomeScreen extends React.Component {
                         renderItem={({ item }) => {
                              return(
                                  <View style = {styles.postContainer}>
-                                     <TouchableWithoutFeedback>
+                                     <TouchableWithoutFeedback onPress={() => that.postDetail(item.post_id)}>
                                          <View>
                                              <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestampFront}</Text>
-                                             <Text style={{marginVertical: 6}}>{item.content}</Text>
+                                             <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
                                          </View>
                                      </TouchableWithoutFeedback>
                                      <View style = {styles.featureContainer}>
-                                         <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.toggleLikeIcon(item.post_id)}>
-                                             <Image style={{width: 20, height: 20, resizeMode: 'contain'}}
-                                                    source={that.state.likeIcon}/>
-                                         </TouchableOpacity>
-                                         <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                         <View style={{flexDirection:'row'}}>
+                                             <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.toggleLikeIcon(item.post_id)}>
+                                                 <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
+                                                        source={that.state.likeIcon}/>
+                                             </TouchableOpacity>
+                                             <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                         </View>
+                                         <View style={{flexDirection:'row'}}>
+                                             <TouchableOpacity style={{marginHorizontal: 10}}>
+                                                 <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
+                                                        source={require('../assets/commentIcon.png')}/>
+                                             </TouchableOpacity>
+                                             <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                         </View>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
-                                             <Image style={{width: 20, height: 20, resizeMode: 'contain'}}
-                                                    source={require('../assets/commentIcon.png')}/>
-                                         </TouchableOpacity>
-                                         <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
-                                         <TouchableOpacity style={{marginHorizontal: 10}}>
-                                             <Image style={{width: 20, height: 20, resizeMode: 'contain'}}
+                                             <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
                                                     source={require('../assets/followIcon.png')}/>
                                          </TouchableOpacity>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
-                                             <Image style={{width: 20, height: 20, resizeMode: 'contain'}}
+                                             <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
                                                     source={require('../assets/shareIcon.png')}/>
+                                         </TouchableOpacity>
+                                         <TouchableOpacity style={{marginHorizontal: 10}}>
+                                             <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
+                                                    source={require('../assets/flagIcon.png')}/>
                                          </TouchableOpacity>
                                      </View>
                                  </View>
@@ -138,27 +156,28 @@ export default class HomeScreen extends React.Component {
                             }
                         }
                     />
-                </ImageBackground>
+                </View>
             </View>
         );
     }
 }
 const styles = StyleSheet.create({
+    topFeed: {
+        backgroundColor: 'white',
+        width: '100%',
+        height: '25%'
+    },
     postContainer: {
-        width: 370,
-        borderRadius: 20,
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: 'black',
-        shadowOpacity: 1,
+        width: 400,
+        borderRadius: 10,
         justifyContent: 'center',
         alignContent: 'center',
-        marginVertical: 10,
+        marginBottom: 10,
         padding: 20,
-        elevation: 3,
         backgroundColor: 'white',
     },
     toggleFeedText:{
-        fontSize: 10, color:'white'
+        fontSize: 10, color:'black'
     },
     toggleFeedButton: {
       padding: 20,

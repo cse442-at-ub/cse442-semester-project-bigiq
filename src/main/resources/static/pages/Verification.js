@@ -3,7 +3,7 @@ import {
     Image, KeyboardAvoidingView,
     StyleSheet, Text, TextInput, TouchableOpacity, ImageBackground,
     View,
-    Platform, AsyncStorage,
+    Platform, AsyncStorage, FlatList, TouchableWithoutFeedback,
 } from 'react-native'
 
 export default class Verification extends React.Component {
@@ -143,4 +143,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 });
+
+/**/
 
