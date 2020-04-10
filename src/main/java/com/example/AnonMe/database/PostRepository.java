@@ -150,6 +150,7 @@ public class PostRepository {
         List<PostEntry> ret = new ArrayList<>();
         String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
+                "AND a.comment_delim = 0 " +
                 "where a.phone_number = b.phone_number";
         ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
@@ -169,6 +170,7 @@ public class PostRepository {
         String sql = "select a.post_id, b.screen_name,  SUBSTRING(a.content, 1, "+ lim + ") as content,  a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number "+
+                "AND a.comment_delim = 0 " +
                 "order by timestamp DESC limit " + num;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
@@ -188,6 +190,7 @@ public class PostRepository {
         String sql = "select a.post_id, b.screen_name,  SUBSTRING(a.content, 1, "+ lim + ") as content,  a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
                 "where a.phone_number = b.phone_number "+
+                "AND a.comment_delim = 0 " +
                 "order by like_ctr DESC limit " + num;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
@@ -204,7 +207,9 @@ public class PostRepository {
 
         String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number AND a.phone_number = '" + phone_number + "'";
+                "where a.phone_number = b.phone_number " +
+                "AND a.comment_delim = 0 " +
+                "AND a.phone_number = '" + phone_number + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         return ret;
@@ -220,7 +225,9 @@ public class PostRepository {
 
         String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number AND b.screen_name = '" + screen_name + "'";
+                "where a.phone_number = b.phone_number " +
+                "AND a.comment_delim = 0 " +
+                "AND b.screen_name = '" + screen_name + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         return ret;
@@ -237,7 +244,9 @@ public class PostRepository {
 
         String sql = "select a.post_id, b.screen_name, a.content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number AND a.post_id = '"  + postID + "'";
+                "where a.phone_number = b.phone_number " +
+                "AND a.comment_delim = 0 " +
+                "AND a.post_id = '"  + postID + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         if (ret.size() == 0) return null;
@@ -259,9 +268,10 @@ public class PostRepository {
         boolean change = false;
         String sql = "SELECT a.phone_number, a.post_id, a.like " +
                 "FROM user_flag_like a, user_info b " +
-                "WHERE a.phone_number = b.phone_number AND " +
-                "b.screen_name = '" + screen_name + "' AND " +
-                "a.post_id = '" + postId + "'";
+                "WHERE a.phone_number = b.phone_number " +
+                "AND b.screen_name = '" + screen_name + "' " +
+                "AND a.comment_delim = 0 " +
+                "AND a.post_id = '" + postId + "'";
 
         List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
 
@@ -463,9 +473,9 @@ public class PostRepository {
     public boolean getLike(String postId, String screen_name){
         String sql = "SELECT a.phone_number, a.post_id, a.like " +
                 "FROM user_flag_like a, user_info b " +
-                "WHERE a.phone_number = b.phone_number AND " +
-                "b.screen_name = '" + screen_name + "' AND " +
-                "a.post_id = '" + postId + "'";
+                "WHERE a.phone_number = b.phone_number " +
+                "AND b.screen_name = '" + screen_name + "' " +
+                "AND a.post_id = '" + postId + "'";
 
         List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
         if (interaction.size() == 0) return false;
@@ -483,9 +493,9 @@ public class PostRepository {
     public boolean getFlag(String postId, String screen_name){
         String sql = "SELECT a.phone_number, a.post_id, a.flag " +
                 "FROM user_flag_like a, user_info b " +
-                "WHERE a.phone_number = b.phone_number AND " +
-                "b.screen_name = '" + screen_name + "' AND " +
-                "a.post_id = '" + postId + "'";
+                "WHERE a.phone_number = b.phone_number " +
+                "AND b.screen_name = '" + screen_name + "' " +
+                "AND a.post_id = '" + postId + "'";
 
         List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
         if (interaction.size() == 0) return false;
@@ -513,7 +523,10 @@ public class PostRepository {
 
         String sql = "SELECT b.post_id, c.screen_name, b.content, b.flag_ctr, b.like_ctr, b.timestamp_front " +
                 "FROM user_flag_like a, post_data b, user_info c " +
-                "WHERE b.post_id = a.post_id AND b.phone_number = c.phone_number AND a.like = '1' AND a.phone_number = '" + phone_number +"'";
+                "WHERE b.post_id = a.post_id " +
+                "AND b.phone_number = c.phone_number " +
+                "AND a.like = '1' " +
+                "AND a.phone_number = '" + phone_number +"'";
 
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
         return ret;
