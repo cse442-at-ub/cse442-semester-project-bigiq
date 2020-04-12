@@ -6,11 +6,9 @@ import {
     Text,
     TouchableOpacity,
     AsyncStorage,
-    FlatList,
-    Platform,
-    TouchableWithoutFeedback
+    Alert,
 } from 'react-native';
-
+import {deleteAllPostAuth} from "../../fetches/PostFetch";
 
 export default class SettingScreen extends React.Component{
     constructor(props) {
@@ -21,9 +19,46 @@ export default class SettingScreen extends React.Component{
             notificationIcon: require('../../assets/settingNotificationIcon.png')
         }
     }
-
+    deleteAllPostHandler = () =>{
+        deleteAllPostAuth(this.state.phoneNumber).then(res => res.text())
+    };
     goBack = () =>{
         this.props.navigation.navigate('AccountScreen');
+    };
+    signOutHandler = async () =>{
+        AsyncStorage.clear();
+        this.props.navigation.navigate('Splash');
+    };
+    deleteAccountAlert = () =>
+        Alert.alert(
+            "Are You Sure?",
+            "Deleting your account will not delete any of your posts. By deleting your account" +
+            "you will only unlink your phone number and screen name. In order to delete all post go to settings and" +
+            "click Delete All Post.",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => this.signOutHandler() }
+            ],
+            { cancelable: false }
+        );
+    deleteAllPostAlert = () =>{
+        Alert.alert(
+            "Are You Sure?",
+            "This will make your post invisible on the feed but if someone is following it, they will still be able to see it.",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => this.deleteAllPostHandler() }
+            ],
+            { cancelable: false }
+        );
     };
     componentDidMount() {
         AsyncStorage.getItem('screenName').then((token) => {
@@ -61,7 +96,7 @@ export default class SettingScreen extends React.Component{
                 <View style={{padding: 20}}>
                     <Text style={{color: 'gray'}}>Personal Information</Text>
                 </View>
-                <View style={{paddingHorizontal: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={styles.sectionContainer}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image style={{width: 35, height: 35, resizeMode: 'contain', marginRight: 20}}
                                source={require('../../assets/settingName.png')}/>
@@ -72,7 +107,7 @@ export default class SettingScreen extends React.Component{
                                source={require('../../assets/rightIcon.png')}/>
                     </View>
                 </View>
-                <View style={{paddingHorizontal: 30, paddingTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={styles.sectionContainer}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image style={{width: 35, height: 35, resizeMode: 'contain', marginRight: 20}}
                                source={require('../../assets/settingPhoneIcon.png')}/>
@@ -86,7 +121,7 @@ export default class SettingScreen extends React.Component{
                 <View style={{padding: 20}}>
                     <Text style={{color: 'gray'}}>Phone Setting</Text>
                 </View>
-                <View style={{paddingHorizontal: 30, paddingTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={styles.sectionContainer}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <TouchableOpacity onPress={() => that.switchNotiIcon()}>
                             <Image style={{width: 35, height: 35, resizeMode: 'contain', marginRight: 20}}
@@ -98,31 +133,32 @@ export default class SettingScreen extends React.Component{
                 <View style={{padding: 20}}>
                     <Text style={{color: 'gray'}}>Account</Text>
                 </View>
-                <View style={{paddingHorizontal: 30, paddingTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <TouchableOpacity style={styles.sectionContainer} onPress={() => that.deleteAllPostAlert()}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => that.switchNotiIcon()}>
-                            <Image style={{width: 33, height: 33, resizeMode: 'contain', marginRight: 20}}
+                        <Image style={{width: 33, height: 33, resizeMode: 'contain', marginRight: 20}}
                                    source={require('../../assets/deletePostIcon.png')}/>
-                        </TouchableOpacity>
                         <Text>Delete All Post</Text>
                     </View>
                     <View style={{right: 0, backgroundColor: 'white'}}>
                         <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
                                source={require('../../assets/rightIcon.png')}/>
                     </View>
-                </View>
-                <View style={{paddingHorizontal: 30, paddingTop: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.sectionContainer} onPress={()=> that.deleteAccountAlert()}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => that.switchNotiIcon()}>
                             <Image style={{width: 35, height: 35, resizeMode: 'contain', marginRight: 20}}
                                    source={require('../../assets/deleteAccountIcon.png')}/>
-                        </TouchableOpacity>
                         <Text>Delete Account</Text>
                     </View>
                     <View style={{right: 0, backgroundColor: 'white'}}>
                         <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
                                source={require('../../assets/rightIcon.png')}/>
                     </View>
+                </TouchableOpacity>
+                <View style={styles.signOutContainer}>
+                    <TouchableOpacity style={styles.signOut} onPress={() => that.signOutHandler()}>
+                        <Text style={{color: 'white'}}>Sign Out</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -138,8 +174,26 @@ const styles = StyleSheet.create({
     SETTING:{
         alignItems: 'center',
         top: '25%'
+    },
+    sectionContainer: {
+        paddingHorizontal: 30,
+        paddingTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'},
+    signOutContainer:{
+        position:'absolute',
+        bottom: 20,
+        width: '100%',
+        alignItems: 'center'
+    },
+    signOut:{
+        width: '20%',
+        backgroundColor: 'red',
+        alignItems: 'center',
+        borderRadius: 20,
+        height: 30,
+        justifyContent: 'center'
     }
-
-
 });
 

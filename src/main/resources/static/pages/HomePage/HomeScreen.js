@@ -63,7 +63,6 @@ export default class HomeScreen extends React.Component {
     };
     dataLiked = () =>{
         fetchDataLiked().then( dataAPI => this.setState({data : dataAPI}));
-
         this.setState({feedType: false})
     };
     postDetail = (id) =>{

@@ -44,10 +44,6 @@ export default class AccountScreen extends React.Component{
             this.fetchUserPost();
         });
     };
-    signOutHandler = async () =>{
-        AsyncStorage.clear();
-        this.props.navigation.navigate('Splash');
-    };
     _listEmptyComponent = () => {
         return (
             <View style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
