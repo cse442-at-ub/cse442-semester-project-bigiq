@@ -5,19 +5,19 @@ import {
     View,
     Text,
     TouchableOpacity,
-    TextInput,
+    TextInput, AsyncStorage,
 } from 'react-native';
-import {fetchPostDetails} from "../fetches/PostDetailFetch";
+import {insertComment} from "../../fetches/CommentFetch";
 
 export default class CommentScreen extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            type: '',
             id: '',
             content: '',
-            comment: ''
+            comment: '',
+            screenName: ''
         }
     }
 
@@ -25,15 +25,31 @@ export default class CommentScreen extends React.Component{
         const { navigation } = this.props;
         navigation.addListener("focus", () => {
             this.setState({
-                type: this.props.route.params.type,
                 id: this.props.route.params.id,
                 content: this.props.route.params.content
             });
+        });
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token
+            });
+            console.log(this.state.screenName)
         });
     }
 
     goBack = () =>{
       this.props.navigation.pop();
+    };
+
+    postComment = () =>{
+        const that = this;
+        const screenName = this.state.screenName;
+        console.log("sd "+screenName);
+        insertComment(this.state.id, screenName, this.state.comment).then(function(response) {
+            if(response.ok){
+                that.goBack();
+            }
+        });
     };
 
     render() {
@@ -42,12 +58,12 @@ export default class CommentScreen extends React.Component{
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => this.goBack()}>
                         <Image style={styles.topIcons}
-                               source={require('../assets/exitIcon.png')}/>
+                               source={require('../../assets/exitIcon.png')}/>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.iconContainer}>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.postComment()}>
                         <Image style={styles.topIcons}
-                               source={require('../assets/uploadIcon.png')}/>
+                               source={require('../../assets/uploadIcon.png')}/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.commentDetailsContainer}>
@@ -60,7 +76,6 @@ export default class CommentScreen extends React.Component{
                                placeholder="Write here"
                                placeholderTextColor='gray'
                                multiline = {true}
-                               autoFocus={true}
                                onChangeText={input => this.setState({comment: input})}
                                keyboardType='default'
                     />

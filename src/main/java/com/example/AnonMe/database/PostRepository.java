@@ -63,7 +63,7 @@ public class PostRepository {
         //Retrieving phone_number attributed to screen name.
         System.out.println(post.getScreenName());
         UserEntry tmp = repo.getUserScreen(post.getScreenName());
-        if (tmp.equals(null)) return 1;
+        if (tmp.isEmpty()) return 1;
         String phone_number = tmp.getPhone_number();
         System.out.println(phone_number);
 

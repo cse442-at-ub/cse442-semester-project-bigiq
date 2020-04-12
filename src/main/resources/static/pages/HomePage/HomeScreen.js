@@ -1,6 +1,6 @@
 import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback, ImageBackground, AsyncStorage} from "react-native";
 import * as React from 'react';
-import {fetchDataRecent,fetchDataLiked} from "../fetches/HomeScreenFetch";
+import {fetchDataRecent,fetchDataLiked, deletePost} from "../../fetches/PostFetch";
 import {Ionicons} from "@expo/vector-icons";
 
 
@@ -11,10 +11,15 @@ export default class HomeScreen extends React.Component {
             data : [],
             like: 0,
             feedType: true,
-            likeIcon: require('../assets/loveIcon.png'),
-            screenName: ''
+            likeIcon: require('../../assets/loveIcon.png'),
+            screenName: '',
+            isFetching: false
         };
     }
+
+    onRefresh = () => {
+        this.setState({ isFetching: true }, function() { this.fetchData() });
+    };
     MPTypeColor = () =>{
         if(this.state.feedType === true){
             return <Text style={{fontSize: 12, color:'gray'}}>Most Popular</Text>
@@ -41,28 +46,30 @@ export default class HomeScreen extends React.Component {
         });
     };
     toggleLikeIcon = (id) =>{
-      if(this.state.likeIcon === require('../assets/loveIcon.png')) {
-          this.setState({likeIcon: require('../assets/loveIconClick.png')})
+      if(this.state.likeIcon === require('../../assets/loveIcon.png')) {
+          this.setState({likeIcon: require('../../assets/loveIconClick.png')})
           this.fetchLike(id)
       } else {
-          this.setState({likeIcon: require('../assets/loveIcon.png')})
+          this.setState({likeIcon: require('../../assets/loveIcon.png')})
       }
+    };
+    deletePost =(id) =>{
+        deletePost(id).then(res => res.text())
     };
     dataRecent = () =>{
         fetchDataRecent().then( dataAPI => this.setState({data : dataAPI}));
         this.setState({feedType: true});
-        console.log("fetchedRecent");
+
     };
     dataLiked = () =>{
         fetchDataLiked().then( dataAPI => this.setState({data : dataAPI}));
-        console.log("fetchedLikes");
+
         this.setState({feedType: false})
     };
     postDetail = (id) =>{
         this.props.navigation.navigate('PostDetail', {id})
     };
     postScreenMove = () => {
-        console.log('pressed');
         this.props.navigation.navigate('PostScreen');
     };
     fetchData = () =>{
@@ -82,32 +89,30 @@ export default class HomeScreen extends React.Component {
                 'Content-Type': 'application/json',
             }),
         }).then(response => response.json()).then( () => this.fetchData());
-        console.log("added Like");
     };
 
 
     render() {
         let that = this;
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection:'column', backgroundColor: '#gray'}}>
+            <View style={{flex: 1, flexDirection:'column', backgroundColor: '#gray'}}>
                 <View style={styles.topFeed}>
-                    <View style={{flexDirection: 'row', paddingTop: '33%', justifyContent: 'space-between',paddingHorizontal:30}}>
-                        <Image style={{width: 50, height: 50, resizeMode: 'contain'}}
-                               source={require('../assets/feed.png')}/>
-                        <TouchableOpacity style={{padding: 10, flexDirection: 'row', justifyContent: 'center'}} onPress={()=>that.postScreenMove()}>
+                    <View style={styles.postnfeed}>
+                        <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 27}}>FEED</Text>
+                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center'}} onPress={()=>that.postScreenMove()}>
                             <Ionicons name={'ios-create'} size={30} color={'#4704a5'}/>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{justifyContent: 'center', alignItems: 'center', flexDirection:'column'}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataRecent()}>
-                            {that.MRTypeColor()}
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataLiked()}>
-                            {that.MPTypeColor()}
-                        </TouchableOpacity>
-                    </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataRecent()}>
+                        {that.MRTypeColor()}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataLiked()}>
+                        {that.MPTypeColor()}
+                    </TouchableOpacity>
+                </View>
+                <View style={{justifyContent: 'center', alignItems: 'center', flexDirection:'column', height: '80%'}}>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         keyExtractor={(item) => item.post_id}
@@ -133,21 +138,21 @@ export default class HomeScreen extends React.Component {
                                          <View style={{flexDirection:'row'}}>
                                              <TouchableOpacity style={{marginHorizontal: 10}}>
                                                  <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                        source={require('../assets/commentIcon.png')}/>
+                                                        source={require('../../assets/commentIcon.png')}/>
                                              </TouchableOpacity>
                                              <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
                                          </View>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
                                              <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                    source={require('../assets/followIcon.png')}/>
+                                                    source={require('../../assets/followIcon.png')}/>
                                          </TouchableOpacity>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
                                              <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                    source={require('../assets/shareIcon.png')}/>
+                                                    source={require('../../assets/shareIcon.png')}/>
                                          </TouchableOpacity>
-                                         <TouchableOpacity style={{marginHorizontal: 10}}>
+                                         <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.deletePost(item.post_id)}>
                                              <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                    source={require('../assets/flagIcon.png')}/>
+                                                    source={require('../../assets/flagIcon.png')}/>
                                          </TouchableOpacity>
                                      </View>
                                  </View>
@@ -162,10 +167,17 @@ export default class HomeScreen extends React.Component {
     }
 }
 const styles = StyleSheet.create({
+    postnfeed:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 30,
+        position: 'relative',
+        top: '10%'
+    },
     topFeed: {
         backgroundColor: 'white',
         width: '100%',
-        height: '25%'
+        height: '13%'
     },
     postContainer: {
         width: 400,

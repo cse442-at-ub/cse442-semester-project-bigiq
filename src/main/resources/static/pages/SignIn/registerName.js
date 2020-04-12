@@ -61,11 +61,11 @@ export default class registerName extends React.Component{
         }
         return (
             <View style={styles.container}>
-                <ImageBackground source={require('../assets/background.png')}
+                <ImageBackground source={require('../../assets/background.png')}
                                  style={{width: '100%', height: '100%'}}>
                     <View style={styles.containerLogo}>
                         <Image style={{width: 150, height: 150, resizeMode: 'contain'}}
-                               source={require('../assets/logo.png')}/>
+                               source={require('../../assets/logo.png')}/>
                         <Text style={styles.logoText}> Welcome to AnonMe! </Text>
                         <Text style={styles.registerText}> Please Create Your NameTag </Text>
                         {printTryAgain()}

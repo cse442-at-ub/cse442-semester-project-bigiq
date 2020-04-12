@@ -1,18 +1,19 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import Splash from "./pages/Splash";
-import Verification from "./pages/Verification";
-import registerName from "./pages/registerName";
+import Splash from "./pages/SignIn/Splash";
+import Verification from "./pages/SignIn/Verification";
+import registerName from "./pages/SignIn/registerName";
 import { NavigationContainer } from '@react-navigation/native';
 import React from "react";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import HomeScreen from "./pages/HomeScreen";
+import HomeScreen from "./pages/HomePage/HomeScreen";
 import {Ionicons} from "@expo/vector-icons";
-import FollowingScreen from "./pages/FollowingScreen";
-import PostScreen from "./pages/PostScreen";
-import GroupScreen from "./pages/GroupScreen";
-import AccountScreen from "./pages/AccountScreen";
-import PostDetailScreen from "./pages/PostDetailScreen";
-import CommentScreen from "./pages/CommentScreen";
+import FollowingScreen from "./pages/FollowingPages/FollowingScreen";
+import PostScreen from "./pages/HomePage/PostScreen";
+import GroupScreen from "./pages/GroupPages/GroupScreen";
+import AccountScreen from "./pages/AccountSettings/AccountScreen";
+import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
+import CommentScreen from "./pages/HomePage/CommentScreen";
+import SettingScreen from "./pages/AccountSettings/SettingScreen";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -30,6 +31,19 @@ function HomePageScreen() {
             <Stack.Screen name="PostScreen" component={PostScreen} />
             <Stack.Screen name="PostDetail" component={PostDetailScreen} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} />
+        </HomeStack.Navigator>
+    )
+}
+function AccountScreens() {
+    return (
+        <HomeStack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
+            <Stack.Screen name="AccountScreen" component={AccountScreen} />
+            <Stack.Screen name="SettingScreen" component={SettingScreen} />
+
         </HomeStack.Navigator>
     )
 }
@@ -62,7 +76,7 @@ function AppScreen() {
                                     <Ionicons name={'ios-paper'} size={size} color={color}/>
                                 ),
                             }}/>
-                <Tab.Screen name="Account" component={AccountScreen}
+                <Tab.Screen name="Account" component={AccountScreens}
                             options={{
                                 tabBarLabel: 'Account',
                                 tabBarIcon: ({color, size}) => (
@@ -86,6 +100,7 @@ export default function Routes() {
                 <Stack.Screen name="Verification" component={Verification} />
                 <Stack.Screen name="registerName" component={registerName} />
                 <Stack.Screen name="AppScreen" component={AppScreen} />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

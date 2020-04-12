@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     KeyboardAvoidingView, Platform, StyleSheet, Text,
-    TextInput, TouchableOpacity, View, Keyboard, Image
+    TextInput, TouchableOpacity, View, Keyboard, Image, AsyncStorage
 } from 'react-native'
 
 
@@ -14,7 +14,13 @@ export default class PostScreen extends React.Component {
             textInput: ''
         }
     }
-
+    componentDidMount() {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
+    };
     postFetch = () => {
         const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/posts/insertPost";
         const that = this;
@@ -22,13 +28,13 @@ export default class PostScreen extends React.Component {
         fetch(url, {
             method: "POST",
             body: JSON.stringify( {
-                author: "ewee",
+                author: that.state.screenName,
                 content: that.state.content
             } ),
             headers: new Headers({'content-type': 'application/json'}),
         }).then(function(response) {
             if(response.ok){
-                console.log("POSTED")
+                that.goBack()
             }
         });
     };
@@ -36,40 +42,17 @@ export default class PostScreen extends React.Component {
     goBack = () => {
         this.props.navigation.pop();
     };
-    /*render() {
-        return (
-                <View style={{flex: 1, position: 'relative', top: 45}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                        <TouchableOpacity style={styles.button} onPress = {() => this.postFetch()}>
-                            <Text style={styles.loginButton}>Post</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress = {Keyboard.dismiss}>
-                            <Text style={styles.loginButton}>Exit</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                        <TextInput style={styles.postInput}
-                                   placeholder="Your NameTag"
-                                   placeholderTextColor='#ffffff'
-                                   onChangeText={input => this.setState({content: input})}
-                                   keyboardType='default'
-                                   multiline = {true}
-                        />
-                </View>
-
-        );
-    }*/
     render() {
         return (
             <View style={{flex: 1 }}>
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => this.goBack()}>
                         <Image style={styles.topIcons}
-                               source={require('../assets/exitIcon.png')}/>
+                               source={require('../../assets/exitIcon.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => this.postFetch()}>
                         <Image style={styles.topIcons}
-                               source={require('../assets/uploadIcon.png')}/>
+                               source={require('../../assets/uploadIcon.png')}/>
                     </TouchableOpacity>
                 </View>
                 <View style={{paddingVertical: 20, paddingHorizontal: 20}}>
@@ -79,8 +62,7 @@ export default class PostScreen extends React.Component {
                                placeholder="Write here"
                                placeholderTextColor='gray'
                                multiline = {true}
-                               autoFocus={true}
-                               onChangeText={input => this.setState({comment: input})}
+                               onChangeText={input => this.setState({content: input})}
                                keyboardType='default'
                     />
                 </View>
