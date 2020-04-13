@@ -16,6 +16,8 @@ import CommentScreen from "./pages/HomePage/CommentScreen";
 import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
 import CreateGroupScreen from "./pages/GroupPages/CreateGroupScreen";
+import PDFollowingScreen from "./pages/FollowingPages/PDFollowingScreen";
+import CSFollowingScreen from "./pages/FollowingPages/CommentScreen";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -60,9 +62,8 @@ function FollowingScreens() {
             }}
         >
             <Stack.Screen name="FollowingScreen" component={FollowingScreen} />
-
-
-
+            <Stack.Screen name="PDFollowingScreen" component={PDFollowingScreen}/>
+            <Stack.Screen name="CSFollowingScreen" component={CSFollowingScreen}/>
         </FollowingStack.Navigator>
     )
 }

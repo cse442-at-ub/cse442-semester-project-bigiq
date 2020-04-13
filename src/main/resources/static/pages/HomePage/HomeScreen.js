@@ -53,8 +53,8 @@ export default class HomeScreen extends React.Component {
         fetchDataLiked(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
         this.setState({feedType: false})
     };
-    postDetail = (id) =>{
-        this.props.navigation.navigate('PostDetail', {id})
+    postDetail = (item) =>{
+        this.props.navigation.navigate('PostDetail', {post: item})
     };
     postScreenMove = () => {
         this.props.navigation.navigate('PostScreen');
@@ -120,7 +120,7 @@ export default class HomeScreen extends React.Component {
                         renderItem={({ item, index }) => {
                              return(
                                  <View style = {styles.postContainer}>
-                                     <TouchableWithoutFeedback onPress={() => that.postDetail(item.post_id)}>
+                                     <TouchableWithoutFeedback onPress={() => that.postDetail(item)}>
                                          <View>
                                              <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestampFront}</Text>
                                              <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
