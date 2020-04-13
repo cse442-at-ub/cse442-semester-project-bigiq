@@ -197,6 +197,7 @@ public class PostRepository {
         return ret;
     }
 
+
     /**
      * getPostsPnum - returns all posts associated to a user by phone number.
      * @param phone_number phone number of user to retrieve posts by.
@@ -529,6 +530,24 @@ public class PostRepository {
                 "AND a.phone_number = '" + phone_number +"'";
 
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+        return ret;
+    }
+
+    /**
+     * getPostsLikedBy - returns posts liked by a user
+     * @param screenName - screen name of user targeted
+     * @return list of
+     */
+    public List<PostEntry> getPostsLikedBy(String screenName) {
+        List<PostEntry> ret = new ArrayList<>();
+
+        String phone_number = repo.getUserScreen(screenName).getPhone_number();
+        String sql = "SELECT b.post_id, c.screen_name, b.content, b.flag_ctr, b.like_ctr, b.timestamp_front " +
+                "FROM user_flag_like a, post_data b, user_info c " +
+                "WHERE b.post_id = a.post_id AND b.phone_number = c.phone_number AND a.like = '1' AND a.phone_number = '" + phone_number +"'";
+
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
         return ret;
     }
 }
