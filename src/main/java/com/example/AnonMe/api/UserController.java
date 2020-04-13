@@ -1,4 +1,6 @@
 package com.example.AnonMe.api;
+import com.example.AnonMe.database.PostRepository;
+import com.example.AnonMe.model.PostEntry;
 import com.example.AnonMe.model.UserEntry;
 import com.example.AnonMe.database.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class UserController {
 
     @Autowired
     UserRepository user_repo;
+
+    @Autowired
+    PostRepository postRepository;
 
     @GetMapping(path="/getusers")
     public List<UserEntry> getUsers(){
@@ -39,6 +44,19 @@ public class UserController {
         if(entry == null) response.put("screenName", "null");
         else response.put("screenName", entry.getScreen_name());
         return response;
+    }
+
+    @GetMapping(path="/getUserNumPosts")
+    public int postByScreenName(@RequestParam String screenName){
+        return postRepository.getPostsAuth(screenName).size();
+    }
+    @GetMapping(path="/getUserNumLiked")
+    public int likesByScreenName(@RequestParam String screenName){
+        return postRepository.getPostsLikedBy(screenName).size();
+    }
+    @GetMapping(path="/getUserLikedPosts")
+    public List<PostEntry> likedPostsScreen(@RequestParam String screenName){
+        return postRepository.getPostsLikedBy(screenName);
     }
 
     @PostMapping(path="/adduser")
