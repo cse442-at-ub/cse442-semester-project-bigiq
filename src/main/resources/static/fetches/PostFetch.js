@@ -5,12 +5,12 @@ export const fetchPostDetails = (id) =>{
     const URL = baseURL + ":8080/posts/postById?id=" + id;
     return fetch(URL).then(response => response.json());
 };
-export const fetchDataRecent = () =>{
-    const URL = baseURL + ":8080/posts/recentPosts";
+export const fetchDataRecent = (screenName) =>{
+    const URL = baseURL + ":8080/posts/recentPosts?screenName=" + screenName;
     return fetch(URL).then(response => response.json());
 };
-export const fetchDataLiked = () =>{
-    const URL = baseURL + ":8080/posts/mostLikedPosts";
+export const fetchDataLiked = (screenName) =>{
+    const URL = baseURL + ":8080/posts/mostLikedPosts?screenName=" + screenName;
     return fetch(URL).then(response => response.json());
 };
 export const deletePost = (id) =>{

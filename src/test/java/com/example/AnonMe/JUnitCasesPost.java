@@ -29,9 +29,9 @@ public class JUnitCasesPost extends TestCase {
 
     @Before
     public void setUp(){
-        post1 = new PostEntry("1111111", userrepo.getAllUsers().get(0).getScreen_name(), "1",0,0,"0000-00-00");
-        post2 = new PostEntry("2111112", userrepo.getAllUsers().get(0).getScreen_name(), "1",0,0,"0000-00-00");
-        post3 = new PostEntry("3111113", userrepo.getAllUsers().get(0).getScreen_name(), "1",0,0,"0000-00-00");
+        post1 = new PostEntry("1111111", userrepo.getAllUsers().get(0).getScreen_name(), "1",0,0,"0000-00-00", false, false);
+        post2 = new PostEntry("2111112", userrepo.getAllUsers().get(0).getScreen_name(), "1",0,0,"0000-00-00", false, false);
+        post3 = new PostEntry("3111113", userrepo.getAllUsers().get(0).getScreen_name(), "1",0,0,"0000-00-00", false, false);
 
     }
 

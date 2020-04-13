@@ -63,7 +63,7 @@ public class PostRepository {
         //Retrieving phone_number attributed to screen name.
         System.out.println(post.getScreenName());
         UserEntry tmp = repo.getUserScreen(post.getScreenName());
-        if (tmp.isEmpty()) return 1;
+        if (tmp.equals(null)) return 1;
         String phone_number = tmp.getPhone_number();
         System.out.println(phone_number);
 
@@ -158,12 +158,32 @@ public class PostRepository {
     }
 
     /**
+     * getAllPosts - returns all posts.
+     * @param lim - limit number of chars for content
+     * @param user - username of current session pulling
+     * @return
+     */
+    public List<PostEntry> getAllPosts(int lim, String user){
+        List<PostEntry> ret = new ArrayList<>();
+        String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number";
+        ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),user));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),user));
+        }
+        return ret;
+    }
+
+    /**
      * getPostsRecent - returns all n-posts sorted by most recent
      * @param num number of posts to be returned from database.
      * @param lim - limit on number of chars of content
      * @return List of PostEntry of all num-th most recent posts in DB.
      */
-    public List<PostEntry> getPostsRecent(int num, int lim){
+    public List<PostEntry> getPostsRecent(int num, int lim, String user){
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
@@ -174,6 +194,10 @@ public class PostRepository {
                 "order by timestamp DESC limit " + num;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),user));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),user));
+        }
         return ret;
     }
 
@@ -183,7 +207,7 @@ public class PostRepository {
      * @param lim - limit on number of chars of content
      * @return List of PostEntry of all num-th most liked posts in DB.
      */
-    public List<PostEntry> getPostsLiked(int num, int lim){
+    public List<PostEntry> getPostsLiked(int num, int lim, String user){
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
@@ -194,6 +218,10 @@ public class PostRepository {
                 "order by like_ctr DESC limit " + num;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),user));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),user));
+        }
         return ret;
     }
 

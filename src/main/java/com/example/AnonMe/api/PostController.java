@@ -16,20 +16,21 @@ public class PostController {
 
 
     @GetMapping(path="/getAllPosts")
-    public List<PostEntry> getAllPosts(){
-        return postRepository.getAllPosts(50);
+    public List<PostEntry> getAllPosts(@RequestParam String user){
+        if (user == null) return postRepository.getAllPosts(50);
+        else return postRepository.getAllPosts(50, user);
     }
     @GetMapping(path="/postsByScreenName")
     public List<PostEntry> postByScreenName(@RequestParam String screenName){
         return postRepository.getPostsAuth(screenName);
     }
     @GetMapping(path="/recentPosts")
-    public List<PostEntry> recentPosts(){
-        return postRepository.getPostsRecent(25,50);
+    public List<PostEntry> recentPosts(@RequestParam String screenName){
+        return postRepository.getPostsRecent(25,50,screenName);
     }
     @GetMapping(path="/mostLikedPosts")
-    public List<PostEntry> mostLikedPosts(){
-        return postRepository.getPostsLiked(25,50);
+    public List<PostEntry> mostLikedPosts(@RequestParam String screenName){
+        return postRepository.getPostsLiked(25,50,screenName);
     }
     @GetMapping(path="/postsByPhone")
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
@@ -37,36 +38,33 @@ public class PostController {
     }
     @GetMapping(path="/postById")
     public PostEntry postById(@RequestParam String id){
+        System.out.println(id);
         return postRepository.getPostID(id);
-    }
-    @GetMapping(path="/PostInterest")
-    public List<PostEntry> PostInterest(@RequestParam String user){
-        return postRepository.postInterest(user);
     }
     @PostMapping(path="/insertPost")
     public void insertPost(@RequestBody PostEntry postEntry){
-        System.out.println("Inserted Post: " + postEntry.getPost_id());
+        postEntry.setScreenName(postEntry.getScreenName().trim());
         postRepository.insertPost(postEntry);
     }
 
     @PostMapping(path="/LikePost")
-    public boolean LikePost(@RequestParam String id, @RequestParam String user){
-        System.out.println("Liked Post: " + id);
-        return postRepository.postLike(id,user);
+    public boolean LikePost(@RequestParam String id, @RequestParam String screenName){
+        return postRepository.postLike(id,screenName);
     }
     @PostMapping(path="/FlagPost")
-    public boolean FlagPost(@RequestParam String id, @RequestParam String user){
-        System.out.println("Flagged Post: " + id);
-        return postRepository.postFlag(id,user);
+    public boolean FlagPost(@RequestParam String id, @RequestParam String screenName){
+        return postRepository.postFlag(id,screenName);
+    }
+    @PostMapping(path="/PostInterest")
+    public List<PostEntry> PostInterest(@RequestParam String user){
+        return postRepository.postInterest(user);
     }
     @DeleteMapping(path="/deletePostByID")
     public void deletePost(@RequestParam String id){
-        System.out.println("Deleted Post: " + id);
         postRepository.removePostID(id);
     }
     @DeleteMapping(path="/deleteAllAuthorPosts")
     public void deleteAllAuthorPost(@RequestParam String phoneNumber){
-        System.out.println("Deleted Posts by user: " + phoneNumber);
         postRepository.removePost(phoneNumber);
     }
 

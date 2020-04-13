@@ -11,7 +11,7 @@ import {
 import {fetchPostDetails} from "../../fetches/PostFetch";
 import {fetchComments} from "../../fetches/CommentFetch";
 
-export default class AccountScreen extends React.Component{
+export default class PostDetailScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {

@@ -17,9 +17,6 @@ export default class HomeScreen extends React.Component {
         };
     }
 
-    onRefresh = () => {
-        this.setState({ isFetching: true }, function() { this.fetchData() });
-    };
     MPTypeColor = () =>{
         if(this.state.feedType === true){
             return <Text style={{fontSize: 12, color:'gray'}}>Most Popular</Text>
@@ -57,12 +54,12 @@ export default class HomeScreen extends React.Component {
         deletePost(id).then(res => res.text())
     };
     dataRecent = () =>{
-        fetchDataRecent().then( dataAPI => this.setState({data : dataAPI}));
+        fetchDataRecent(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
         this.setState({feedType: true});
 
     };
     dataLiked = () =>{
-        fetchDataLiked().then( dataAPI => this.setState({data : dataAPI}));
+        fetchDataLiked(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
         this.setState({feedType: false})
     };
     postDetail = (id) =>{
@@ -90,14 +87,26 @@ export default class HomeScreen extends React.Component {
         }).then(response => response.json()).then( () => this.fetchData());
     };
 
-
+    checkLike = (bool) =>{
+        if(bool === false){
+            return(
+                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
+                       source={require('../../assets/loveIcon.png')}/>
+            )
+        }else {
+            return(
+                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
+                       source={require('../../assets/loveIconClick.png')}/>
+            )
+        }
+    };
     render() {
         let that = this;
         return (
             <View style={{flex: 1, flexDirection:'column', backgroundColor: '#gray'}}>
                 <View style={styles.topFeed}>
                     <View style={styles.postnfeed}>
-                        <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 27}}>FEED</Text>
+                        <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 27}}>Feed</Text>
                         <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center'}} onPress={()=>that.postScreenMove()}>
                             <Ionicons name={'ios-create'} size={30} color={'#4704a5'}/>
                         </TouchableOpacity>
@@ -129,8 +138,7 @@ export default class HomeScreen extends React.Component {
                                      <View style = {styles.featureContainer}>
                                          <View style={{flexDirection:'row'}}>
                                              <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.toggleLikeIcon(item.post_id)}>
-                                                 <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                        source={that.state.likeIcon}/>
+                                                 {that.checkLike(item.flag_button)}
                                              </TouchableOpacity>
                                              <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
                                          </View>
@@ -139,7 +147,7 @@ export default class HomeScreen extends React.Component {
                                                  <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
                                                         source={require('../../assets/commentIcon.png')}/>
                                              </TouchableOpacity>
-                                             <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                             <Text style = {{color: '#cccccc'}}>{0}</Text>
                                          </View>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
                                              <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
