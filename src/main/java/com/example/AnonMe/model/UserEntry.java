@@ -3,6 +3,7 @@ package com.example.AnonMe.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -35,5 +36,12 @@ public class UserEntry {
     public void setScreen_name(String screenName) {
         this.screenName = screenName;
     }
-    
+
+    public boolean isEmpty(){
+        if(phoneNumber == null) {
+            System.out.println("empty class");
+            return true;
+        }
+        return false;
+    }
 }
