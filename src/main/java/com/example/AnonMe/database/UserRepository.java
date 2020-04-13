@@ -119,7 +119,7 @@ public class UserRepository {
         List<UserEntry> access = new ArrayList<>();
         access.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
 
-        if (access.size() == 0) return null;
+        if (access.size() == 0) return new UserEntry();
         else return access.get(0);
     }
 
@@ -133,7 +133,7 @@ public class UserRepository {
         List<UserEntry> ret = new ArrayList<>();
         String sql = "select * from user_info where screen_name = '" + screen_name + "'";
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(UserEntry.class)));
-        if (ret.size() == 0) return null;
+        if (ret.size() == 0) return new UserEntry();
         else return ret.get(0);
     }
 

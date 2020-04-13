@@ -19,34 +19,6 @@ public class PostController {
     public List<PostEntry> getAllPosts(){
         return postRepository.getAllPosts(50);
     }
-    @PostMapping(path="/insertPost")
-    public void insertPost(@RequestBody PostEntry postEntry){
-        postEntry.setScreenName(postEntry.getScreenName().trim());
-        postRepository.insertPost(postEntry);
-    }
-
-    @PostMapping(path="/LikePost")
-    public boolean LikePost(@RequestParam String id, @RequestParam String user){
-        return postRepository.postLike(id,user);
-    }
-    @PostMapping(path="/FlagPost")
-    public boolean FlagPost(@RequestParam String id, @RequestParam String user){
-        return postRepository.postFlag(id,user);
-    }
-    @PostMapping(path="/PostInterest")
-    public List<PostEntry> PostInterest(@RequestParam String user){
-        return postRepository.postInterest(user);
-    }
-
-
-    @DeleteMapping(path="/deletePostByID")
-    public void deletePost(@RequestParam String id){
-        postRepository.removePostID(id);
-    }
-    @DeleteMapping(path="/deleteAllAuthorPosts")
-    public void deleteAllAuthorPost(@RequestParam String phoneNumber){
-        postRepository.removePost(phoneNumber);
-    }
     @GetMapping(path="/postsByScreenName")
     public List<PostEntry> postByScreenName(@RequestParam String screenName){
         return postRepository.getPostsAuth(screenName);
@@ -63,4 +35,39 @@ public class PostController {
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
         return postRepository.getPostsPnum(phoneNumber);
     }
+    @GetMapping(path="/postById")
+    public PostEntry postById(@RequestParam String id){
+        return postRepository.getPostID(id);
+    }
+    @GetMapping(path="/PostInterest")
+    public List<PostEntry> PostInterest(@RequestParam String user){
+        return postRepository.postInterest(user);
+    }
+    @PostMapping(path="/insertPost")
+    public void insertPost(@RequestBody PostEntry postEntry){
+        System.out.println("Inserted Post: " + postEntry.getPost_id());
+        postRepository.insertPost(postEntry);
+    }
+
+    @PostMapping(path="/LikePost")
+    public boolean LikePost(@RequestParam String id, @RequestParam String user){
+        System.out.println("Liked Post: " + id);
+        return postRepository.postLike(id,user);
+    }
+    @PostMapping(path="/FlagPost")
+    public boolean FlagPost(@RequestParam String id, @RequestParam String user){
+        System.out.println("Flagged Post: " + id);
+        return postRepository.postFlag(id,user);
+    }
+    @DeleteMapping(path="/deletePostByID")
+    public void deletePost(@RequestParam String id){
+        System.out.println("Deleted Post: " + id);
+        postRepository.removePostID(id);
+    }
+    @DeleteMapping(path="/deleteAllAuthorPosts")
+    public void deleteAllAuthorPost(@RequestParam String phoneNumber){
+        System.out.println("Deleted Posts by user: " + phoneNumber);
+        postRepository.removePost(phoneNumber);
+    }
+
 }

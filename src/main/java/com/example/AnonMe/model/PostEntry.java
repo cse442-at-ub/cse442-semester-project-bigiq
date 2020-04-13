@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public class PostEntry {
     private int flag_ctr = 0;
     private int like_ctr = 0;
     private String timestamp;
+
 
     public PostEntry(){
     }
