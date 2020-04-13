@@ -69,15 +69,5 @@ public class JUnitCasesPost extends TestCase {
         assertTrue(postrepo.removePost(userrepo.getUserScreen(post3.getScreenName()).getPhone_number()) == 0);
     }
 
-    //#32+33
-    @Test
-    public void testpostLike(){
-
-    }
-
-    @Test
-    public void testpostFlag(){
-
-    }
 
 }

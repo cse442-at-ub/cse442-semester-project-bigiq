@@ -6,9 +6,9 @@ import {
     Text,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    FlatList,
+    FlatList, AsyncStorage,
 } from 'react-native';
-import {fetchPostDetails, flagPost, likePost} from "../../fetches/PostFetch";
+import {flagPost, likePost} from "../../fetches/PostFetch";
 import {fetchComments} from "../../fetches/CommentFetch";
 import {Ionicons} from "@expo/vector-icons";
 
@@ -16,21 +16,25 @@ export default class PostDetailScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            screenName: '',
             postDetail : [],
             comments: []
         }
     }
     componentDidMount() {
-        const { navigation } = this.props;
-        navigation.addListener("focus", () => {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
+        this.props.navigation.addListener("focus", () => {
             this.getPostDetail();
             this.getAllComments();
         });
     }
 
     getPostDetail = () =>{
-        const postId = this.props.route.params.id;
-        fetchPostDetails(postId).then(dataAPI => this.setState({postDetail : dataAPI}));
+        this.setState({postDetail: this.props.route.params.post});
     };
     getAllComments = () =>{
         const postId = this.props.route.params.id;
@@ -78,7 +82,7 @@ export default class PostDetailScreen extends React.Component{
         this.setState({ postDetail: newArray });
         this.fetchFlag(id)
     };
-    fetchLikeComment = (id) =>{
+    /*fetchLikeComment = (id) =>{
         likePost(id,this.state.screenName).then(res => res.text);
     };
     fetchFlagComment = (id) =>{
@@ -100,7 +104,7 @@ export default class PostDetailScreen extends React.Component{
         newArray[index].flag_button = !newArray[index].flag_button;
         this.setState({ data: newArray });
         this.fetchFlagComment(id)
-    };
+    };*/
     render() {
         const that = this;
         return (
@@ -178,14 +182,14 @@ export default class PostDetailScreen extends React.Component{
                                     </View>
                                     <View style = {styles.featureContainer}>
                                         <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLikeComment(index, item.post_id)}>
+                                            <TouchableOpacity style={{marginHorizontal: 10}}>
                                                 <Ionicons
                                                     name={'md-thumbs-up'}
                                                     size={16}
                                                     color={item.like_button ? '#4704a5' : 'gray'}
                                                 />
                                             </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                            <Text style = {{color: '#cccccc'}}>{0}</Text>
                                         </View>
 
                                         <TouchableOpacity style={{marginHorizontal: 10}}>

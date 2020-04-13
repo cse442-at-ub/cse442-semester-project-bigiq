@@ -6,41 +6,45 @@ import {
     Text,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    FlatList,
+    FlatList, AsyncStorage,
 } from 'react-native';
 import {fetchPostDetails, flagPost, likePost} from "../../fetches/PostFetch";
 import {fetchComments} from "../../fetches/CommentFetch";
 import {Ionicons} from "@expo/vector-icons";
 
-export default class PostDetailFollowingScreen extends React.Component{
+export default class PDFollowingScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            screenName: '',
             postDetail : [],
             comments: []
         }
     }
     componentDidMount() {
-        const { navigation } = this.props;
-        navigation.addListener("focus", () => {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
+        this.props.navigation.addListener("focus", () => {
             this.getPostDetail();
             this.getAllComments();
         });
     }
 
     getPostDetail = () =>{
-        const postId = this.props.route.params.id;
-        fetchPostDetails(postId).then(dataAPI => this.setState({postDetail : dataAPI}));
+        this.setState({postDetail: this.props.route.params.post});
     };
     getAllComments = () =>{
         const postId = this.props.route.params.id;
         fetchComments(postId).then(dataAPI => this.setState({comments : dataAPI}));
     };
     backHomeScreen = () =>{
-        this.props.navigation.navigate('HomeScreen');
+        this.props.navigation.pop();
     };
     addComment = () =>{
-        this.props.navigation.navigate('CommentScreen', {id: this.state.postDetail.post_id, content: this.state.postDetail.content});
+        this.props.navigation.navigate('CSFollowingScreen', {id: this.state.postDetail.post_id, content: this.state.postDetail.content});
     };
     _listEmptyComponent = () => {
         return (
@@ -78,6 +82,29 @@ export default class PostDetailFollowingScreen extends React.Component{
         this.setState({ postDetail: newArray });
         this.fetchFlag(id)
     };
+    /*fetchLikeComment = (id) =>{
+        likePost(id,this.state.screenName).then(res => res.text);
+    };
+    fetchFlagComment = (id) =>{
+        flagPost(id,this.state.screenName).then(res => res.text);
+    };
+    checkLikeComment = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].like_button = !newArray[index].like_button;
+        if(newArray[index].like_button === false){
+            newArray[index].like_ctr = newArray[index].like_ctr - 1;
+        }else {
+            newArray[index].like_ctr = newArray[index].like_ctr + 1;
+        }
+        this.setState({ data: newArray });
+        this.fetchLikeComment(id)
+    };
+    flagComment = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].flag_button = !newArray[index].flag_button;
+        this.setState({ data: newArray });
+        this.fetchFlagComment(id)
+    };*/
     render() {
         const that = this;
         return (
@@ -146,35 +173,37 @@ export default class PostDetailFollowingScreen extends React.Component{
                         keyExtractor={(item) => item.comment_id}
                         extraData={this.state}
                         data={this.state.comments}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
                             return(
                                 <View style = {styles.commentContainer}>
                                     <View>
                                         <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestamp_front}</Text>
                                         <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
                                     </View>
-                                    <View style = {styles.featuresContainer}>
+                                    <View style = {styles.featureContainer}>
                                         <View style={{flexDirection:'row'}}>
                                             <TouchableOpacity style={{marginHorizontal: 10}}>
-                                                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                       source={require('../../assets/loveIcon.png')}/>
+                                                <Ionicons
+                                                    name={'md-thumbs-up'}
+                                                    size={16}
+                                                    color={item.like_button ? '#4704a5' : 'gray'}
+                                                />
                                             </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                            <Text style = {{color: '#cccccc'}}>{0}</Text>
                                         </View>
-                                        <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}}>
-                                                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                       source={require('../../assets/commentIcon.png')}/>
-                                            </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
-                                        </View>
+
                                         <TouchableOpacity style={{marginHorizontal: 10}}>
-                                            <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                   source={require('../../assets/shareIcon.png')}/>
+                                            <Ionicons
+                                                name={'ios-share'}
+                                                size={16}
+                                                color={'gray'}/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={{marginHorizontal: 10}}>
-                                            <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                   source={require('../../assets/flagIcon.png')}/>
+                                        <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flagComment(index, item.post_id)}>
+                                            <Ionicons
+                                                name={'ios-flag'}
+                                                size={16}
+                                                color={item.flag_button ? '#4704a5' : 'gray'}
+                                            />
                                         </TouchableOpacity>
                                     </View>
                                 </View>

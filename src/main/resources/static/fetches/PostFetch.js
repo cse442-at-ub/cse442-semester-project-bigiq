@@ -42,7 +42,7 @@ export const postByAuthor = (screenName) =>{
     return fetch(URL).then(response => response.json());
 };
 export const fetchInterest = (screenName) =>{
-    const getAllPostUrl = baseURL + ":8080/posts/PostInterest?screenName=" + screenName;
+    const getAllPostUrl = baseURL + ":8080/posts/postLikeBy?screenName=" + screenName;
     return fetch(getAllPostUrl).then(response => response.json());
 };
 

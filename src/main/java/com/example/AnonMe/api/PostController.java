@@ -16,9 +16,9 @@ public class PostController {
 
 
     @GetMapping(path="/getAllPosts")
-    public List<PostEntry> getAllPosts(@RequestParam String user){
-        if (user == null) return postRepository.getAllPosts(50);
-        else return postRepository.getAllPosts(50, user);
+    public List<PostEntry> getAllPosts(@RequestParam String screenName){
+        if (screenName == null) return postRepository.getAllPosts(50);
+        else return postRepository.getAllPosts(50, screenName);
     }
     @GetMapping(path="/postsByScreenName")
     public List<PostEntry> postByScreenName(@RequestParam String screenName){
@@ -31,6 +31,12 @@ public class PostController {
     @GetMapping(path="/mostLikedPosts")
     public List<PostEntry> mostLikedPosts(@RequestParam String screenName){
         return postRepository.getPostsLiked(25,50,screenName);
+    }
+    @GetMapping(path="/postLikeBy")
+    public List<PostEntry> postLikeBy(@RequestParam String screenName){
+        List<PostEntry> a = postRepository.getPostsLikedBy(screenName);
+        System.out.println(a.size());
+        return a;
     }
     @GetMapping(path="/postsByPhone")
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){

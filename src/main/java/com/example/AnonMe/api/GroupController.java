@@ -30,12 +30,18 @@ public class GroupController {
     }
 
     @GetMapping(path="/getusergroups")
-    public List<GroupEntry> GetUserGroups(@RequestParam String screenname){
-        return repo.getUserGroups(screenname);
+    public List<GroupEntry> GetUserGroups(@RequestParam String screenName){
+        return repo.getUserGroups(screenName);
     }
 
     @GetMapping(path="/getallgroups")
     public List<GroupEntry> GetAllGroups(){
         return repo.getAllGroups();
+    }
+
+    @GetMapping(path="/getallgroups")
+    public List<GroupEntry> GetAllGroups(@RequestParam String screenname){
+        if (screenname == null) return repo.getAllGroups();
+        else return (repo.getAllGroups(screenname));
     }
 }

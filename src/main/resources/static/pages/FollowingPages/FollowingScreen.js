@@ -21,6 +21,7 @@ export default class FollowingScreen extends React.Component {
             data : [],
             screenName : '',
         };
+        this.dataRecent()
     }
 
 
@@ -35,13 +36,10 @@ export default class FollowingScreen extends React.Component {
                 screenName: token,
             });
         });
-        this.fetchStartData = this.props.navigation.addListener("focus", () => {
-                this.dataRecent();
+        this.props.navigation.addListener("focus", () => {
+            this.dataRecent();
         });
     }
-    componentWillUnmount() {
-        this.fetchStartData.remove();
-    };
 
 
     fetchLike = (id) =>{
@@ -80,12 +78,12 @@ render() {
         <FlatList
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.post_id}
-            extraData={this.state}
+            extraData={this.state.data}
             data={this.state.data}
             renderItem={({ item, index }) => {
                 return(
                     <View style = {styles.postContainer}>
-                        <TouchableWithoutFeedback onPress={() => that.postDetail(item.post_id)}>
+                        <TouchableWithoutFeedback onPress={() => that.props.navigation.navigate('PDFollowingScreen', {post: item})}>
                             <View>
                                 <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestampFront}</Text>
                                 <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>

@@ -79,6 +79,28 @@ public class GroupRepository {
         return tmp;
     }
 
+    public List<GroupEntry> getAllGroups (String screenName){
+        String sql = "Select * from group_data_table";
+        List<GroupEntry> tmp = new ArrayList<>();
+        tmp.addAll(jdbc_temp.query(sql, new BeanPropertyRowMapper(GroupEntry.class)));
+
+        for (GroupEntry a : tmp){
+            a.setButton(checkMembership(screenName,a.getGroup_name()));
+        }
+        return tmp;
+    }
+
+    public boolean checkMembership(String screenName, String groupName){
+        String sql = "Select a.group_id, a.group_name, a.group_desc from " +
+                "group_data_table a, user_group_data b " +
+                "where a.group_id = b.group_id " +
+                "AND b.screen_name = '" + screenName +"' " +
+                "AND a.group_name = '" + groupName + "' ";
+        List<GroupEntry> tmp = new ArrayList<>();
+        tmp.addAll(jdbc_temp.query(sql, new BeanPropertyRowMapper(GroupEntry.class)));
+        return tmp.size() == 1;
+    }
+
     //Method to remove a user from a group
     public void RemoveUserFromGroup(String screenname, String group_name) {
         String sql = "Select * from group_data_table where group_name = '" + group_name + "' ";
@@ -92,5 +114,18 @@ public class GroupRepository {
         int[] types = new int[]{Types.VARCHAR, Types.VARCHAR};
         
         jdbc_temp.update(sql,params,types);
+    }
+
+    public void removeGroup(GroupEntry target){
+        String sql = "DELETE FROM user_group_data " +
+                "WHERE group_id = '" + target.getGroup_id() + "' ";
+        jdbc_temp.update(sql);
+
+        sql = "DELETE FROM group_data_table WHERE " +
+                "group_id = '" + target.getGroup_id() + "' ";
+        jdbc_temp.update(sql);
+
+        sql = "DELETE FROM user_group_posts WHERE " +
+                "group_id = '" + target.getGroup_id() + "' ";
     }
 }
