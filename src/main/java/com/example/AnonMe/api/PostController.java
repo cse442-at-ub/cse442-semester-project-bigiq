@@ -32,6 +32,12 @@ public class PostController {
     public List<PostEntry> mostLikedPosts(@RequestParam String screenName){
         return postRepository.getPostsLiked(25,50,screenName);
     }
+    @GetMapping(path="/postLikeBy")
+    public List<PostEntry> postLikeBy(@RequestParam String screenName){
+        List<PostEntry> a = postRepository.getPostsLikedBy(screenName);
+        System.out.println(a.size());
+        return a;
+    }
     @GetMapping(path="/postsByPhone")
     public List<PostEntry> postsByPhone(@RequestParam String phoneNumber){
         return postRepository.getPostsPnum(phoneNumber);
