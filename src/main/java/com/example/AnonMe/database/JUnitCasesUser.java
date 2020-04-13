@@ -1,6 +1,5 @@
-package com.example.AnonMe;
+package com.example.AnonMe.database;
 
-import com.example.AnonMe.database.UserRepository;
 import com.example.AnonMe.model.UserEntry;
 import junit.framework.TestCase;
 import org.junit.Before;

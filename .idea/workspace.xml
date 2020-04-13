@@ -56,48 +56,6 @@
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="post_data: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="user_comment: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="user_flag_like: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="user_group_data: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="user_group_posts: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="MySQL - cse442_542_2020_spring_teamab_db@tethys.cse.buffalo.edu" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="cse442_542_2020_spring_teamab_db: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="user_info: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
     </expand>
     <select />
   </component>
@@ -221,7 +179,6 @@
       <workItem from="1584234355734" duration="6213000" />
       <workItem from="1584578180635" duration="4145000" />
       <workItem from="1584927847945" duration="4394000" />
-      <workItem from="1586478969619" duration="15564000" />
     </task>
     <servers />
   </component>
@@ -233,10 +190,6 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1584929445160" />
-    <state x="721" y="187" key="#com.intellij.ide.util.MemberChooser" timestamp="1586491117831">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="721" y="187" key="#com.intellij.ide.util.MemberChooser/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1586491117831" />
     <state x="494" y="170" width="404" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1584229981575">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -285,18 +238,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="467" y="45" key="Maven.ArtifactSearchDialog/0.0.1536.824@0.0.1536.824" timestamp="1583710755500" />
-    <state x="374" y="199" width="1083" height="604" key="RefactorJ.ExtractClass" timestamp="1586491093482">
+    <state x="669" y="161" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1584928417194">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="374" y="199" width="1083" height="604" key="RefactorJ.ExtractClass/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1586491093482" />
-    <state x="828" y="376" width="326" height="300" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1586481022111">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="828" y="376" width="326" height="300" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1586481022111" />
-    <state x="669" y="161" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1586481086080">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="669" y="161" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1586481086080" />
+    <state x="669" y="161" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1584928417194" />
     <state x="633" y="214" key="com.intellij.ide.util.TipDialog" timestamp="1584578302584">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -309,17 +254,6 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="358" y="124" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1584238383200" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/AnonMe/database/PostRepository.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/cse442_semester_project_bigiq$AnonMeApplication.ic" NAME="AnonMeApplication Coverage Results" MODIFIED="1584929356252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
