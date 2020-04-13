@@ -2,7 +2,7 @@ import React, { } from 'react';
 import {
     Image, KeyboardAvoidingView,
     StyleSheet, Text, TextInput, TouchableOpacity, ImageBackground,
-    View, Platform
+    View, Platform, AsyncStorage
 } from 'react-native'
 
 export default class Splash extends React.Component {
@@ -10,8 +10,19 @@ export default class Splash extends React.Component {
         super(props);
         this.state = {
             phoneNumber : "",
-            status : null
+            status : null,
+            signedIn: true
         }
+    }
+    componentDidMount() {
+        AsyncStorage.getItem('phoneNumber')
+            .then((item) => {
+                if (item) {
+                    this.props.navigation.navigate('AppScreen');
+                }else {
+                    this.setState({signedIn: false})
+                }
+            });
     }
     verification = () => {
         const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/verify/phoneVerification?phoneNumber=";
@@ -27,37 +38,46 @@ export default class Splash extends React.Component {
         });
     };
     render() {
-        return (
-            <View style={styles.container}>
-                <ImageBackground source={require('../../assets/background.png')}
-                                 style={{width: '100%', height: '100%'}}>
-                    <View style={styles.containerLogo}>
-                        <Image style={{width: 150, height: 150, resizeMode: 'contain'}}
-                               source={require('../../assets/logo.png')}/>
-                        <Text style={styles.logoText}> Welcome to AnonMe! </Text>
-                    </View>
-                    <KeyboardAvoidingView
-                        behavior="padding"
-                        style={styles.containerForm}>
-                        <TextInput style={styles.phoneNumberBox}
-                                   underlineColorAndroid='rgba(0,0,0,0)'
-                                   placeholder="Click to Enter Phone Number"
-                                   placeholderTextColor='#ffffff'
-                                   keyboardType='number-pad'
-                                   onChangeText={input => this.setState({phoneNumber:input})}
-                                   maxLength= {10}
-                        />
+        const that = this;
+        if(that.state.signedIn){
+            return (
+                <View>
 
-                        <TouchableOpacity style={styles.button} onPress={() => this.verification()}>
-                            <Text style={styles.loginButton}>Login / Signup</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('AppScreen',{phoneNumber: "123"})}>
-                            <Text style={styles.loginButton}>Continue as Guest</Text>
-                        </TouchableOpacity>
-                    </KeyboardAvoidingView>
-                </ImageBackground>
-            </View>
-        )
+                </View>
+            )
+        }else {
+            return (
+                <View style={styles.container}>
+                    <ImageBackground source={require('../../assets/background.png')}
+                                     style={{width: '100%', height: '100%'}}>
+                        <View style={styles.containerLogo}>
+                            <Image style={{width: 150, height: 150, resizeMode: 'contain'}}
+                                   source={require('../../assets/logo.png')}/>
+                            <Text style={styles.logoText}> Welcome to AnonMe! </Text>
+                        </View>
+                        <KeyboardAvoidingView
+                            behavior="padding"
+                            style={styles.containerForm}>
+                            <TextInput style={styles.phoneNumberBox}
+                                       underlineColorAndroid='rgba(0,0,0,0)'
+                                       placeholder="Click to Enter Phone Number"
+                                       placeholderTextColor='#ffffff'
+                                       keyboardType='number-pad'
+                                       onChangeText={input => this.setState({phoneNumber:input})}
+                                       maxLength= {10}
+                            />
+
+                            <TouchableOpacity style={styles.button} onPress={() => this.verification()}>
+                                <Text style={styles.loginButton}>Login / Signup</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('AppScreen',{phoneNumber: "123"})}>
+                                <Text style={styles.loginButton}>Continue as Guest</Text>
+                            </TouchableOpacity>
+                        </KeyboardAvoidingView>
+                    </ImageBackground>
+                </View>
+            )
+        }
     }
 }
 const styles = StyleSheet.create({

@@ -15,12 +15,13 @@ import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
 import CommentScreen from "./pages/HomePage/CommentScreen";
 import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
-import PostDetailFollowingScreen from "./pages/FollowingPages/PostDetailFollowingScreen";
+import CreateGroupScreen from "./pages/GroupPages/CreateGroupScreen";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const AccountStack = createStackNavigator();
 const FollowingStack = createStackNavigator();
+const GroupStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomePageScreen() {
@@ -65,6 +66,19 @@ function FollowingScreens() {
         </FollowingStack.Navigator>
     )
 }
+function GroupScreens() {
+    return (
+        <GroupStack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
+            <Stack.Screen name="GroupScreen" component={GroupScreen} />
+            <Stack.Screen name="CreateGroupScreen" component={CreateGroupScreen} />
+
+        </GroupStack.Navigator>
+    )
+}
 function AppScreen() {
     return (
             <Tab.Navigator
@@ -87,7 +101,7 @@ function AppScreen() {
                                     <Ionicons name={'ios-chatboxes'} size={size} color={color}/>
                                 ),
                             }}/>
-                <Tab.Screen name="Group" component={GroupScreen}
+                <Tab.Screen name="Group" component={GroupScreens}
                             options={{
                                 tabBarLabel: 'Group',
                                 tabBarIcon: ({color, size}) => (
@@ -105,6 +119,7 @@ function AppScreen() {
     )
 
 }
+
 export default function Routes() {
     return (
         <NavigationContainer>

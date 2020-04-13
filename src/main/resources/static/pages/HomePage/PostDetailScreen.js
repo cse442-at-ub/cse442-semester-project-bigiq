@@ -78,6 +78,29 @@ export default class PostDetailScreen extends React.Component{
         this.setState({ postDetail: newArray });
         this.fetchFlag(id)
     };
+    fetchLikeComment = (id) =>{
+        likePost(id,this.state.screenName).then(res => res.text);
+    };
+    fetchFlagComment = (id) =>{
+        flagPost(id,this.state.screenName).then(res => res.text);
+    };
+    checkLikeComment = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].like_button = !newArray[index].like_button;
+        if(newArray[index].like_button === false){
+            newArray[index].like_ctr = newArray[index].like_ctr - 1;
+        }else {
+            newArray[index].like_ctr = newArray[index].like_ctr + 1;
+        }
+        this.setState({ data: newArray });
+        this.fetchLikeComment(id)
+    };
+    flagComment = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].flag_button = !newArray[index].flag_button;
+        this.setState({ data: newArray });
+        this.fetchFlagComment(id)
+    };
     render() {
         const that = this;
         return (
@@ -146,35 +169,37 @@ export default class PostDetailScreen extends React.Component{
                         keyExtractor={(item) => item.comment_id}
                         extraData={this.state}
                         data={this.state.comments}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
                             return(
                                 <View style = {styles.commentContainer}>
                                     <View>
                                         <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestamp_front}</Text>
                                         <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
                                     </View>
-                                    <View style = {styles.featuresContainer}>
+                                    <View style = {styles.featureContainer}>
                                         <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}}>
-                                                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                       source={require('../../assets/loveIcon.png')}/>
+                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLikeComment(index, item.post_id)}>
+                                                <Ionicons
+                                                    name={'md-thumbs-up'}
+                                                    size={16}
+                                                    color={item.like_button ? '#4704a5' : 'gray'}
+                                                />
                                             </TouchableOpacity>
                                             <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
                                         </View>
-                                        <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}}>
-                                                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                       source={require('../../assets/commentIcon.png')}/>
-                                            </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
-                                        </View>
+
                                         <TouchableOpacity style={{marginHorizontal: 10}}>
-                                            <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                   source={require('../../assets/shareIcon.png')}/>
+                                            <Ionicons
+                                                name={'ios-share'}
+                                                size={16}
+                                                color={'gray'}/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={{marginHorizontal: 10}}>
-                                            <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                   source={require('../../assets/flagIcon.png')}/>
+                                        <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flagComment(index, item.post_id)}>
+                                            <Ionicons
+                                                name={'ios-flag'}
+                                                size={16}
+                                                color={item.flag_button ? '#4704a5' : 'gray'}
+                                            />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
