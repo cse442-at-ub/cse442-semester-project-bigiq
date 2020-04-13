@@ -36,13 +36,11 @@ export default class HomeScreen extends React.Component {
                 screenName: token,
             });
         });
-        this.fetchStartData = this.props.navigation.addListener("focus", () => {
+        this.props.navigation.addListener("focus", () => {
             this.fetchData();
         });
     };
-    componentWillUnmount() {
-        this.fetchStartData.remove();
-    };
+
     deletePost =(id) =>{
         deletePost(id).then(res => res.text())
     };

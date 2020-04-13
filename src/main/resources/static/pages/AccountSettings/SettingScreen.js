@@ -24,14 +24,10 @@ export default class SettingScreen extends React.Component{
     deleteAllPostHandler = () =>{
         deleteAllPostAuth(this.state.phoneNumber).then(res => res.text())
     };
-    deleteUserHandler = () =>{
-        deleteUser(this.state.phoneNumber, this.state.screen).then(res => res.text());
-    };
     goBack = () =>{
         this.props.navigation.navigate('AccountScreen');
     };
     signOutHandler = async () =>{
-        this.deleteUserHandler();
         AsyncStorage.clear();
         this.props.navigation.navigate('Splash');
     };

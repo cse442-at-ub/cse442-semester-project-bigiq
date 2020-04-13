@@ -10,11 +10,13 @@ import Navigator from './Routes';
 
 
 export default class App extends Component {
-  render() {
-  return(
-      <Navigator/>
-  );
-  }
+
+    render() {
+
+        return(
+            <Navigator/>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
