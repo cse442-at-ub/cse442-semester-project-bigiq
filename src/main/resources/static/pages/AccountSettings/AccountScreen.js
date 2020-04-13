@@ -10,7 +10,6 @@ import {
     Platform,
     TouchableWithoutFeedback
 } from 'react-native';
-import * as NavigationActions from "react-navigation";
 import {postByAuthor} from "../../fetches/PostFetch";
 
 export default class AccountScreen extends React.Component{

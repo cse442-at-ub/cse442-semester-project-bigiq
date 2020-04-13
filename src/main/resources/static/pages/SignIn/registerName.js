@@ -79,6 +79,7 @@ export default class registerName extends React.Component{
                                    placeholderTextColor='#ffffff'
                                    onChangeText={input => this.setState({screenName: input})}
                                    keyboardType='default'
+                                   maxLength = {16}
                         />
 
                         <TouchableOpacity style={styles.button} onPress={() => this.addUser()}>

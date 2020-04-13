@@ -9,6 +9,7 @@ import {
     Alert,
 } from 'react-native';
 import {deleteAllPostAuth} from "../../fetches/PostFetch";
+import {deleteUser} from "../../fetches/UserFetch";
 
 export default class SettingScreen extends React.Component{
     constructor(props) {
@@ -16,16 +17,21 @@ export default class SettingScreen extends React.Component{
         this.state = {
             screenName: '',
             phoneNumber: '',
-            notificationIcon: require('../../assets/settingNotificationIcon.png')
+            notificationIcon: require('../../assets/settingNotificationIcon.png'),
+            hide: true
         }
     }
     deleteAllPostHandler = () =>{
         deleteAllPostAuth(this.state.phoneNumber).then(res => res.text())
     };
+    deleteUserHandler = () =>{
+        deleteUser(this.state.phoneNumber, this.state.screen).then(res => res.text());
+    };
     goBack = () =>{
         this.props.navigation.navigate('AccountScreen');
     };
     signOutHandler = async () =>{
+        this.deleteUserHandler();
         AsyncStorage.clear();
         this.props.navigation.navigate('Splash');
     };
@@ -33,7 +39,7 @@ export default class SettingScreen extends React.Component{
         Alert.alert(
             "Are You Sure?",
             "Deleting your account will not delete any of your posts. By deleting your account" +
-            "you will only unlink your phone number and screen name. In order to delete all post go to settings and" +
+            " you will only unlink your phone number and screen name. In order to delete all post go to settings and" +
             "click Delete All Post.",
             [
                 {
@@ -96,7 +102,7 @@ export default class SettingScreen extends React.Component{
                 <View style={{padding: 20}}>
                     <Text style={{color: 'gray'}}>Personal Information</Text>
                 </View>
-                <View style={styles.sectionContainer}>
+                <TouchableOpacity style={styles.sectionContainer} onPress={() => that.props.navigation.navigate('NameScreen')}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image style={{width: 35, height: 35, resizeMode: 'contain', marginRight: 20}}
                                source={require('../../assets/settingName.png')}/>
@@ -106,7 +112,7 @@ export default class SettingScreen extends React.Component{
                         <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
                                source={require('../../assets/rightIcon.png')}/>
                     </View>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.sectionContainer}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image style={{width: 35, height: 35, resizeMode: 'contain', marginRight: 20}}

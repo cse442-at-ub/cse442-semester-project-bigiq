@@ -13,6 +13,7 @@ import GroupScreen from "./pages/GroupPages/GroupScreen";
 import AccountScreen from "./pages/AccountSettings/AccountScreen";
 import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
 import CommentScreen from "./pages/HomePage/CommentScreen";
+import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
 
 const Stack = createStackNavigator();
@@ -43,6 +44,7 @@ function AccountScreens() {
         >
             <Stack.Screen name="AccountScreen" component={AccountScreen} />
             <Stack.Screen name="SettingScreen" component={SettingScreen} />
+            <Stack.Screen name="NameScreen" component={NameScreen} />
 
         </HomeStack.Navigator>
     )
