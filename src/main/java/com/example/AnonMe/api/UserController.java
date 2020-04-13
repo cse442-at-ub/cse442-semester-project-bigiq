@@ -49,6 +49,7 @@ public class UserController {
     public void removeUser(@RequestBody UserEntry userEntry){
         user_repo.removeUser(userEntry);
     }
-
+    @PostMapping(path="/changename")
+    public void changeName(@RequestParam String old_screen, @RequestParam String new_screen){ user_repo.changeName(old_screen,new_screen); }
 
 }
