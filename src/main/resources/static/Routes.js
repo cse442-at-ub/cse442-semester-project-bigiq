@@ -15,10 +15,12 @@ import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
 import CommentScreen from "./pages/HomePage/CommentScreen";
 import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
+import PostDetailFollowingScreen from "./pages/FollowingPages/PostDetailFollowingScreen";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
-
+const AccountStack = createStackNavigator();
+const FollowingStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomePageScreen() {
@@ -37,7 +39,7 @@ function HomePageScreen() {
 }
 function AccountScreens() {
     return (
-        <HomeStack.Navigator
+        <AccountStack.Navigator
             screenOptions={{
                 headerShown: false
             }}
@@ -46,7 +48,21 @@ function AccountScreens() {
             <Stack.Screen name="SettingScreen" component={SettingScreen} />
             <Stack.Screen name="NameScreen" component={NameScreen} />
 
-        </HomeStack.Navigator>
+        </AccountStack.Navigator>
+    )
+}
+function FollowingScreens() {
+    return (
+        <FollowingStack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
+            <Stack.Screen name="FollowingScreen" component={FollowingScreen} />
+
+
+
+        </FollowingStack.Navigator>
     )
 }
 function AppScreen() {
@@ -64,7 +80,7 @@ function AppScreen() {
                                     <Ionicons name={'ios-home'} size={size} color={color}/>
                                 ),
                             }}/>
-                <Tab.Screen name="Following" component={FollowingScreen}
+                <Tab.Screen name="Following" component={FollowingScreens}
                             options={{
                                 tabBarLabel: 'Following',
                                 tabBarIcon: ({color, size}) => (

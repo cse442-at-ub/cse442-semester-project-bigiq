@@ -151,4 +151,17 @@ public class UserRepository {
 
         return userList;
     }
+
+    /*
+     * =========================================
+     * changeName(String old_screen, String new_screen)
+     * returns a list of UserEntry objects for all users in the current DB.
+     * */
+    public void changeName(String old_screen, String new_screen){
+        String sql = "Update user_info " +
+                "Set screen_name = '" + new_screen + "' " +
+                "Where screen_name = '" + old_screen +"' ";
+
+        jdbc_temp.update(sql);
+    }
 }

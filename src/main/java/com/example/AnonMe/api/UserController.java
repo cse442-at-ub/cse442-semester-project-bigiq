@@ -1,4 +1,6 @@
 package com.example.AnonMe.api;
+import com.example.AnonMe.database.PostRepository;
+import com.example.AnonMe.model.PostEntry;
 import com.example.AnonMe.model.UserEntry;
 import com.example.AnonMe.database.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class UserController {
 
     @Autowired
     UserRepository user_repo;
+
+    @Autowired
+    PostRepository postRepository;
 
     @GetMapping(path="/getusers")
     public List<UserEntry> getUsers(){
@@ -41,6 +46,19 @@ public class UserController {
         return response;
     }
 
+    @GetMapping(path="/getUserNumPosts")
+    public int postByScreenName(@RequestParam String screenName){
+        return postRepository.getPostsAuth(screenName).size();
+    }
+    @GetMapping(path="/getUserNumLiked")
+    public int likesByScreenName(@RequestParam String screenName){
+        return postRepository.getPostsLikedBy(screenName).size();
+    }
+    @GetMapping(path="/getUserLikedPosts")
+    public List<PostEntry> likedPostsScreen(@RequestParam String screenName){
+        return postRepository.getPostsLikedBy(screenName);
+    }
+
     @PostMapping(path="/adduser")
     public void addUser(@RequestBody UserEntry userEntry){
         user_repo.insertUser(userEntry);
@@ -49,6 +67,9 @@ public class UserController {
     public void removeUser(@RequestBody UserEntry userEntry){
         user_repo.removeUser(userEntry);
     }
-
+    @PostMapping(path="/changename")
+    public void changeName(@RequestParam String old_screen, @RequestParam String new_screen){
+        user_repo.changeName(old_screen,new_screen);
+    }
 
 }

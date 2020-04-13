@@ -63,7 +63,7 @@ public class PostRepository {
         //Retrieving phone_number attributed to screen name.
         System.out.println(post.getScreenName());
         UserEntry tmp = repo.getUserScreen(post.getScreenName());
-        if (tmp.isEmpty()) return 1;
+        if (tmp.equals(null)) return 1;
         String phone_number = tmp.getPhone_number();
         System.out.println(phone_number);
 
@@ -149,11 +149,32 @@ public class PostRepository {
     public List<PostEntry> getAllPosts(int lim){
         List<PostEntry> ret = new ArrayList<>();
         String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
-                "from post_data a, user_info b "+
-                "AND a.comment_delim = 0 " +
-                "where a.phone_number = b.phone_number";
+                "from post_data a, user_info b " +
+                "where a.phone_number = b.phone_number "+
+                "AND a.comment_delim = 0 " ;
         ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
+        return ret;
+    }
+
+    /**
+     * getAllPosts - returns all posts.
+     * @param lim - limit number of chars for content
+     * @param user - username of current session pulling
+     * @return
+     */
+    public List<PostEntry> getAllPosts(int lim, String user){
+        List<PostEntry> ret = new ArrayList<>();
+        String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
+                "from post_data a, user_info b "+
+                "where a.phone_number = b.phone_number "+
+                "AND a.comment_delim = 0 ";
+        ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),user));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),user));
+        }
         return ret;
     }
 
@@ -163,7 +184,7 @@ public class PostRepository {
      * @param lim - limit on number of chars of content
      * @return List of PostEntry of all num-th most recent posts in DB.
      */
-    public List<PostEntry> getPostsRecent(int num, int lim){
+    public List<PostEntry> getPostsRecent(int num, int lim, String user){
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
@@ -174,6 +195,10 @@ public class PostRepository {
                 "order by timestamp DESC limit " + num;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),user));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),user));
+        }
         return ret;
     }
 
@@ -183,7 +208,7 @@ public class PostRepository {
      * @param lim - limit on number of chars of content
      * @return List of PostEntry of all num-th most liked posts in DB.
      */
-    public List<PostEntry> getPostsLiked(int num, int lim){
+    public List<PostEntry> getPostsLiked(int num, int lim, String user){
         List<PostEntry> ret = new ArrayList<>();
         if (num <= 0) return ret;
 
@@ -194,6 +219,10 @@ public class PostRepository {
                 "order by like_ctr DESC limit " + num;
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),user));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),user));
+        }
         return ret;
     }
 
@@ -270,7 +299,6 @@ public class PostRepository {
                 "FROM user_flag_like a, user_info b " +
                 "WHERE a.phone_number = b.phone_number " +
                 "AND b.screen_name = '" + screen_name + "' " +
-                "AND a.comment_delim = 0 " +
                 "AND a.post_id = '" + postId + "'";
 
         List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
@@ -529,6 +557,24 @@ public class PostRepository {
                 "AND a.phone_number = '" + phone_number +"'";
 
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+        return ret;
+    }
+
+    /**
+     * getPostsLikedBy - returns posts liked by a user
+     * @param screenName - screen name of user targeted
+     * @return list of
+     */
+    public List<PostEntry> getPostsLikedBy(String screenName) {
+        List<PostEntry> ret = new ArrayList<>();
+
+        String phone_number = repo.getUserScreen(screenName).getPhone_number();
+        String sql = "SELECT b.post_id, c.screen_name, b.content, b.flag_ctr, b.like_ctr, b.timestamp_front " +
+                "FROM user_flag_like a, post_data b, user_info c " +
+                "WHERE b.post_id = a.post_id AND b.phone_number = c.phone_number AND a.like = '1' AND a.phone_number = '" + phone_number +"'";
+
+        ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
         return ret;
     }
 }

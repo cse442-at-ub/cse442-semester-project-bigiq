@@ -30,7 +30,7 @@ public class CommentRepository {
     public void insertComment(CommentEntry entry){
         //Inserting comment as post
         PostEntry tmp = new PostEntry(entry.getComment_id(), entry.getScreen_name(), entry.getContent(),
-                0, 0, entry.getTimestamp_front());
+                0, 0, entry.getTimestamp_front(), false, false);
         post_repo.insertPost(tmp);
 
         //Setting flag to distinguish between post + comments

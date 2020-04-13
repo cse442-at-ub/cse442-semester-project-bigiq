@@ -5,12 +5,24 @@ export const fetchPostDetails = (id) =>{
     const URL = baseURL + ":8080/posts/postById?id=" + id;
     return fetch(URL).then(response => response.json());
 };
-export const fetchDataRecent = () =>{
-    const URL = baseURL + ":8080/posts/recentPosts";
+export const fetchDataRecent = (screenName) =>{
+    const URL = baseURL + ":8080/posts/recentPosts?screenName=" + screenName;
     return fetch(URL).then(response => response.json());
 };
-export const fetchDataLiked = () =>{
-    const URL = baseURL + ":8080/posts/mostLikedPosts";
+export const likePost = (id,screenName) =>{
+    const URL = baseURL + ":8080/posts/LikePost?id=" + id + "&screenName=" + screenName;
+    return fetch(URL,{
+        method: "POST"
+    }).then(response => response.json());
+};
+export const flagPost = (id,screenName) =>{
+    const URL = baseURL + ":8080/posts/FlagPost?id=" + id + "&screenName=" + screenName;
+    return fetch(URL,{
+        method: "POST"
+    }).then(response => response.json());
+};
+export const fetchDataLiked = (screenName) =>{
+    const URL = baseURL + ":8080/posts/mostLikedPosts?screenName=" + screenName;
     return fetch(URL).then(response => response.json());
 };
 export const deletePost = (id) =>{
@@ -29,3 +41,9 @@ export const postByAuthor = (screenName) =>{
     const URL = baseURL + ":8080/posts/postsByScreenName?screenName=" + screenName;
     return fetch(URL).then(response => response.json());
 };
+export const fetchInterest = (screenName) =>{
+    const getAllPostUrl = baseURL + ":8080/posts/PostInterest?screenName=" + screenName;
+    return fetch(getAllPostUrl).then(response => response.json());
+};
+
+

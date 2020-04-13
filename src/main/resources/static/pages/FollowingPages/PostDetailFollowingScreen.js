@@ -12,7 +12,7 @@ import {fetchPostDetails, flagPost, likePost} from "../../fetches/PostFetch";
 import {fetchComments} from "../../fetches/CommentFetch";
 import {Ionicons} from "@expo/vector-icons";
 
-export default class PostDetailScreen extends React.Component{
+export default class PostDetailFollowingScreen extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
