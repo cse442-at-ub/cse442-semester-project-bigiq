@@ -46,18 +46,18 @@ public class PostController {
         postEntry.setScreenName(postEntry.getScreenName().trim());
         postRepository.insertPost(postEntry);
     }
-
     @PostMapping(path="/LikePost")
     public boolean LikePost(@RequestParam String id, @RequestParam String screenName){
+        System.out.println("liked");
         return postRepository.postLike(id,screenName);
     }
     @PostMapping(path="/FlagPost")
     public boolean FlagPost(@RequestParam String id, @RequestParam String screenName){
         return postRepository.postFlag(id,screenName);
     }
-    @PostMapping(path="/PostInterest")
-    public List<PostEntry> PostInterest(@RequestParam String user){
-        return postRepository.postInterest(user);
+    @GetMapping(path="/PostInterest")
+    public List<PostEntry> PostInterest(@RequestParam String screenName){
+        return postRepository.postInterest(screenName);
     }
     @DeleteMapping(path="/deletePostByID")
     public void deletePost(@RequestParam String id){

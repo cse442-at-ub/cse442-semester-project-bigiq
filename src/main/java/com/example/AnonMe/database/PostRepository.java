@@ -149,9 +149,9 @@ public class PostRepository {
     public List<PostEntry> getAllPosts(int lim){
         List<PostEntry> ret = new ArrayList<>();
         String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
-                "from post_data a, user_info b "+
-                "AND a.comment_delim = 0 " +
-                "where a.phone_number = b.phone_number";
+                "from post_data a, user_info b " +
+                "where a.phone_number = b.phone_number "+
+                "AND a.comment_delim = 0 " ;
         ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         return ret;
@@ -167,7 +167,8 @@ public class PostRepository {
         List<PostEntry> ret = new ArrayList<>();
         String sql = "select a.post_id, b.screen_name, SUBSTRING(a.content, 1, "+ lim + ") as content, a.flag_ctr, a.like_ctr, a.timestamp_front "+
                 "from post_data a, user_info b "+
-                "where a.phone_number = b.phone_number";
+                "where a.phone_number = b.phone_number "+
+                "AND a.comment_delim = 0 ";
         ret.addAll(jdbc_temp.query(sql, BeanPropertyRowMapper.newInstance(PostEntry.class)));
 
         for (PostEntry tmp : ret) {
@@ -224,7 +225,6 @@ public class PostRepository {
         }
         return ret;
     }
-
 
     /**
      * getPostsPnum - returns all posts associated to a user by phone number.
@@ -299,7 +299,6 @@ public class PostRepository {
                 "FROM user_flag_like a, user_info b " +
                 "WHERE a.phone_number = b.phone_number " +
                 "AND b.screen_name = '" + screen_name + "' " +
-                "AND a.comment_delim = 0 " +
                 "AND a.post_id = '" + postId + "'";
 
         List<Map<String, Object>> interaction = jdbc_temp.queryForList(sql);
