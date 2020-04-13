@@ -93,4 +93,17 @@ public class GroupRepository {
         
         jdbc_temp.update(sql,params,types);
     }
+
+    public void removeGroup(GroupEntry target){
+        String sql = "DELETE FROM user_group_data " +
+                "WHERE group_id = '" + target.getGroup_id() + "' ";
+        jdbc_temp.update(sql);
+
+        sql = "DELETE FROM group_data_table WHERE " +
+                "group_id = '" + target.getGroup_id() + "' ";
+        jdbc_temp.update(sql);
+
+        sql = "DELETE FROM user_group_posts WHERE " +
+                "group_id = '" + target.getGroup_id() + "' ";
+    }
 }
