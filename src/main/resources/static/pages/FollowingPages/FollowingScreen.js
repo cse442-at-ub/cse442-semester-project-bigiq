@@ -11,7 +11,7 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 
-import {fetchInterest} from "../../fetches/PostFetch";
+import {fetchInterest, flagPost, likePost} from "../../fetches/PostFetch";
 import {Ionicons} from "@expo/vector-icons";
 
 export default class FollowingScreen extends React.Component {
@@ -24,25 +24,50 @@ export default class FollowingScreen extends React.Component {
     }
 
 
-dataRecent = () =>{
-    fetchInterest(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
+    dataRecent = () =>{
+        fetchInterest(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
 
-};
+    };
 
-componentDidMount() {
-    AsyncStorage.getItem('screenName').then((token) => {
-        this.setState({
-            screenName: token,
+    componentDidMount() {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
         });
-    });
-    const { navigation } = this.props;
-        navigation.addListener("focus", () => {
-            this.dataRecent();
-    });
-}
+        this.fetchStartData = this.props.navigation.addListener("focus", () => {
+                this.dataRecent();
+        });
+    }
+    componentWillUnmount() {
+        this.fetchStartData.remove();
+    };
 
 
+    fetchLike = (id) =>{
+        likePost(id,this.state.screenName).then(res => res.text);
+    };
+    fetchFlag = (id) =>{
+        flagPost(id,this.state.screenName).then(res => res.text);
+    };
 
+    checkLike = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].like_button = !newArray[index].like_button;
+        if(newArray[index].like_button === false){
+            newArray[index].like_ctr = newArray[index].like_ctr - 1;
+        }else {
+            newArray[index].like_ctr = newArray[index].like_ctr + 1;
+        }
+        this.setState({ data: newArray });
+        this.fetchLike(id)
+    };
+    flag = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].flag_button = !newArray[index].flag_button;
+        this.setState({ data: newArray });
+        this.fetchFlag(id)
+    };
 render() {
     let that = this;
     return (
@@ -57,7 +82,7 @@ render() {
             keyExtractor={(item) => item.post_id}
             extraData={this.state}
             data={this.state.data}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
                 return(
                     <View style = {styles.postContainer}>
                         <TouchableWithoutFeedback onPress={() => that.postDetail(item.post_id)}>
