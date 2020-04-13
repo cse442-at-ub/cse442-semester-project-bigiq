@@ -16,9 +16,9 @@ public class PostController {
 
 
     @GetMapping(path="/getAllPosts")
-    public List<PostEntry> getAllPosts(@RequestParam String user){
-        if (user == null) return postRepository.getAllPosts(50);
-        else return postRepository.getAllPosts(50, user);
+    public List<PostEntry> getAllPosts(@RequestParam String screenName){
+        if (screenName == null) return postRepository.getAllPosts(50);
+        else return postRepository.getAllPosts(50, screenName);
     }
     @GetMapping(path="/postsByScreenName")
     public List<PostEntry> postByScreenName(@RequestParam String screenName){
