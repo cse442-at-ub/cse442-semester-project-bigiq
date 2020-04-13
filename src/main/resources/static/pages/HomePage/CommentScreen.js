@@ -60,7 +60,6 @@ export default class CommentScreen extends React.Component{
                         <Image style={styles.topIcons}
                                source={require('../../assets/exitIcon.png')}/>
                     </TouchableOpacity>
-
                     <TouchableOpacity style={styles.iconContainer} onPress={() => this.postComment()}>
                         <Image style={styles.topIcons}
                                source={require('../../assets/uploadIcon.png')}/>

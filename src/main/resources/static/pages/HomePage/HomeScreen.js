@@ -1,8 +1,7 @@
 import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback, ImageBackground, AsyncStorage} from "react-native";
 import * as React from 'react';
-import {fetchDataRecent,fetchDataLiked, deletePost} from "../../fetches/PostFetch";
+import {fetchDataRecent,fetchDataLiked, deletePost, likePost, flagPost} from "../../fetches/PostFetch";
 import {Ionicons} from "@expo/vector-icons";
-
 
 export default class HomeScreen extends React.Component {
     constructor(props) {
@@ -37,18 +36,12 @@ export default class HomeScreen extends React.Component {
                 screenName: token,
             });
         });
-        const { navigation } = this.props;
-        navigation.addListener("focus", () => {
+        this.fetchStartData = this.props.navigation.addListener("focus", () => {
             this.fetchData();
         });
     };
-    toggleLikeIcon = (id) =>{
-      if(this.state.likeIcon === require('../../assets/loveIcon.png')) {
-          this.setState({likeIcon: require('../../assets/loveIconClick.png')})
-          this.fetchLike(id)
-      } else {
-          this.setState({likeIcon: require('../../assets/loveIcon.png')})
-      }
+    componentWillUnmount() {
+        this.fetchStartData.remove();
     };
     deletePost =(id) =>{
         deletePost(id).then(res => res.text())
@@ -77,28 +70,28 @@ export default class HomeScreen extends React.Component {
         }
     };
     fetchLike = (id) =>{
-        const getAllPostUrl = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") +
-            ":8080/posts/LikePost?id=" +id + "&user=" + this.state.screenName;
-        fetch(getAllPostUrl, {
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-            }),
-        }).then(response => response.json()).then( () => this.fetchData());
+        likePost(id,this.state.screenName).then(res => res.text);
+    };
+    fetchFlag = (id) =>{
+        flagPost(id,this.state.screenName).then(res => res.text);
     };
 
-    checkLike = (bool) =>{
-        if(bool === false){
-            return(
-                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                       source={require('../../assets/loveIcon.png')}/>
-            )
+    checkLike = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].like_button = !newArray[index].like_button;
+        if(newArray[index].like_button === false){
+            newArray[index].like_ctr = newArray[index].like_ctr - 1;
         }else {
-            return(
-                <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                       source={require('../../assets/loveIconClick.png')}/>
-            )
+            newArray[index].like_ctr = newArray[index].like_ctr + 1;
         }
+        this.setState({ data: newArray });
+        this.fetchLike(id)
+    };
+    flag = (index, id) =>{
+        const newArray = [...this.state.data];
+        newArray[index].flag_button = !newArray[index].flag_button;
+        this.setState({ data: newArray });
+        this.fetchFlag(id)
     };
     render() {
         let that = this;
@@ -124,9 +117,9 @@ export default class HomeScreen extends React.Component {
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         keyExtractor={(item) => item.post_id}
-                        extraData={this.state}
+                        extraData={this.state.data}
                         data={this.state.data}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
                              return(
                                  <View style = {styles.postContainer}>
                                      <TouchableWithoutFeedback onPress={() => that.postDetail(item.post_id)}>
@@ -137,29 +130,42 @@ export default class HomeScreen extends React.Component {
                                      </TouchableWithoutFeedback>
                                      <View style = {styles.featureContainer}>
                                          <View style={{flexDirection:'row'}}>
-                                             <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.toggleLikeIcon(item.post_id)}>
-                                                 {that.checkLike(item.flag_button)}
+                                             <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLike(index, item.post_id)}>
+                                                 <Ionicons
+                                                     name={'md-thumbs-up'}
+                                                     size={16}
+                                                     color={item.like_button ? '#4704a5' : 'gray'}
+                                                     />
                                              </TouchableOpacity>
                                              <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
                                          </View>
                                          <View style={{flexDirection:'row'}}>
-                                             <TouchableOpacity style={{marginHorizontal: 10}}>
-                                                 <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                        source={require('../../assets/commentIcon.png')}/>
+                                             <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.postDetail(item.post_id)}>
+                                                 <Ionicons
+                                                     name={'md-chatbubbles'}
+                                                     size={16}
+                                                     color={'gray'}/>
                                              </TouchableOpacity>
                                              <Text style = {{color: '#cccccc'}}>{0}</Text>
                                          </View>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
-                                             <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                    source={require('../../assets/followIcon.png')}/>
+                                             <Ionicons
+                                                 name={'md-add-circle'}
+                                                 size={16}
+                                                 color={'gray'}/>
                                          </TouchableOpacity>
                                          <TouchableOpacity style={{marginHorizontal: 10}}>
-                                             <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                    source={require('../../assets/shareIcon.png')}/>
+                                             <Ionicons
+                                                 name={'ios-share'}
+                                                 size={16}
+                                                 color={'gray'}/>
                                          </TouchableOpacity>
-                                         <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.deletePost(item.post_id)}>
-                                             <Image style={{width: 15, height: 15, resizeMode: 'contain'}}
-                                                    source={require('../../assets/flagIcon.png')}/>
+                                         <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flag(index, item.post_id)}>
+                                             <Ionicons
+                                                 name={'ios-flag'}
+                                                 size={16}
+                                                 color={item.flag_button ? '#4704a5' : 'gray'}
+                                             />
                                          </TouchableOpacity>
                                      </View>
                                  </View>
