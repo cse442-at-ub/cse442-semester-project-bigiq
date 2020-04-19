@@ -37,7 +37,7 @@ export default class PostDetailScreen extends React.Component{
         this.setState({postDetail: this.props.route.params.post});
     };
     getAllComments = () =>{
-        const postId = this.props.route.params.id;
+        const postId = this.props.route.params.post.post_id;
         fetchComments(postId).then(dataAPI => this.setState({comments : dataAPI}));
     };
     backHomeScreen = () =>{
@@ -153,7 +153,7 @@ export default class PostDetailScreen extends React.Component{
                                     size={16}
                                     color={'gray'}/>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flag(that.state.postDetail.post_id)}>
+                            <TouchableOpacity style={{marginHorizontal: 10}} >
                                 <Ionicons
                                     name={'ios-flag'}
                                     size={16}

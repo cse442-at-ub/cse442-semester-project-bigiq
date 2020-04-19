@@ -91,15 +91,20 @@ export default class HomeScreen extends React.Component {
         this.setState({ data: newArray });
         this.fetchFlag(id)
     };
+    _listEmptyComponent = () =>{
+        return(
+            <View></View>
+        )
+    };
     render() {
         let that = this;
         return (
             <View style={{flex: 1, flexDirection:'column', backgroundColor: '#gray'}}>
                 <View style={styles.topFeed}>
                     <View style={styles.postnfeed}>
-                        <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 27}}>Feed</Text>
+                        <Text style={{color: 'white', fontWeight: 'bold', fontSize: 27}}>Feed</Text>
                         <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center'}} onPress={()=>that.postScreenMove()}>
-                            <Ionicons name={'ios-create'} size={30} color={'#4704a5'}/>
+                            <Ionicons name={'ios-create'} size={30} color={'white'}/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -115,6 +120,7 @@ export default class HomeScreen extends React.Component {
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         keyExtractor={(item) => item.post_id}
+                        ListEmptyComponent={this._listEmptyComponent}
                         extraData={this.state.data}
                         data={this.state.data}
                         renderItem={({ item, index }) => {
@@ -183,12 +189,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 30,
         position: 'relative',
-        top: '10%'
+        top: '9%'
     },
     topFeed: {
-        backgroundColor: 'white',
+        backgroundColor: '#4704a5',
         width: '100%',
-        height: '13%'
+        height: '10%'
     },
     postContainer: {
         width: 400,

@@ -35,9 +35,9 @@ public class JUnitCasesComments extends TestCase{
     public void setUp(){
         post = new PostEntry("11144411",userrepo.getAllUsers().get(0).getScreen_name(),"LOL Post", 0,0, "0000-00-00",false,false);
 
-        comment1 = new CommentEntry("1111111", post.getPost_id(), "1", userrepo.getAllUsers().get(0).getScreen_name(), "0000-00-00", false, false);
-        comment2 = new CommentEntry("2111112", post.getPost_id(), "1", userrepo.getAllUsers().get(0).getScreen_name(), "0000-00-00", false, false);
-        comment3 = new CommentEntry("3111113", post.getPost_id(), "1", userrepo.getAllUsers().get(0).getScreen_name(),"0000-00-00", false, false);
+        comment1 = new CommentEntry("1111111", post.getPost_id(), "1", userrepo.getAllUsers().get(0).getScreen_name(), "0000-00-00");
+        comment2 = new CommentEntry("2111112", post.getPost_id(), "1", userrepo.getAllUsers().get(0).getScreen_name(), "0000-00-00");
+        comment3 = new CommentEntry("3111113", post.getPost_id(), "1", userrepo.getAllUsers().get(0).getScreen_name(),"0000-00-00");
 
     }
 

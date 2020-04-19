@@ -30,8 +30,8 @@ public class JUnitCasesGroup extends TestCase {
 
     @Before
     public void setUp(){
-        group1 = new GroupEntry("1111111","Group 1");
-        group2 = new GroupEntry("2222222","Group 2");
+        group1 = new GroupEntry("1111111","Group 1", false);
+        group2 = new GroupEntry("2222222","Group 2", false);
         user = new UserEntry("3474358889","USERTEST");
     }
 

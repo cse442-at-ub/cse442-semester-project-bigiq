@@ -99,14 +99,14 @@ function AppScreen() {
                             options={{
                                 tabBarLabel: 'Following',
                                 tabBarIcon: ({color, size}) => (
-                                    <Ionicons name={'ios-chatboxes'} size={size} color={color}/>
+                                    <Ionicons name={'ios-paper'} size={size} color={color}/>
                                 ),
                             }}/>
                 <Tab.Screen name="Group" component={GroupScreens}
                             options={{
                                 tabBarLabel: 'Group',
                                 tabBarIcon: ({color, size}) => (
-                                    <Ionicons name={'ios-paper'} size={size} color={color}/>
+                                    <Ionicons name={'ios-chatboxes'} size={size} color={color}/>
                                 ),
                             }}/>
                 <Tab.Screen name="Account" component={AccountScreens}
