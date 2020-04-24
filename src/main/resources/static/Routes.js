@@ -15,9 +15,13 @@ import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
 import CommentScreen from "./pages/HomePage/CommentScreen";
 import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
-import CreateGroupScreen from "./pages/GroupPages/CreateGroupScreen";
+import CreateGroupName from "./pages/GroupPages/CreateGroupName";
 import PDFollowingScreen from "./pages/FollowingPages/PDFollowingScreen";
 import CSFollowingScreen from "./pages/FollowingPages/CommentScreen";
+import CreateGroupDes from "./pages/GroupPages/CreateGroupDes";
+import CreateGroupFinal from "./pages/GroupPages/CreateGroupFinal";
+import GroupChat from "./pages/GroupPages/GroupChat";
+import CreateGroupImage from "./pages/GroupPages/CreateGroupImage";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -75,7 +79,11 @@ function GroupScreens() {
             }}
         >
             <Stack.Screen name="GroupScreen" component={GroupScreen} />
-            <Stack.Screen name="CreateGroupScreen" component={CreateGroupScreen} />
+            <Stack.Screen name="GroupChat" component={GroupChat} />
+            <Stack.Screen name="CreateGroupName" component={CreateGroupName} />
+            <Stack.Screen name="CreateGroupDes" component={CreateGroupDes} />
+            <Stack.Screen name="CreateGroupImage" component={CreateGroupImage} />
+            <Stack.Screen name="CreateGroupFinal" component={CreateGroupFinal} />
 
         </GroupStack.Navigator>
     )
@@ -86,6 +94,7 @@ function AppScreen() {
                 tabBarOptions={{
                     activeTintColor: '#4704a5',
                     inactiveTintColor: 'gray',
+                    keyboardHidesTabBar: true,
                 }}
             >
                 <Tab.Screen name="Home" component={HomePageScreen}

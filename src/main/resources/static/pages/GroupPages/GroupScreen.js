@@ -23,11 +23,14 @@ export default class GroupScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [{group_name: "Video Games", group_id: "2"},
-                {group_name: "Soccer", group_id: "12"},
-                {group_name: "Video Games", group_id: "22"},
-                {group_name: "Video Games", group_id: "23"},
-                {group_name: "Video Games", group_id: "222"},],
+            data: [{group_name: "Video Games", group_id: "If you're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
+                {group_name: "Soccer", group_id: "If yous're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
+                {group_name: "Video Games", group_id: "2If you're visiting this page, you're likely here becsuse you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where 2"},
+                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely here asads you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
+                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely aasc because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
+                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely here because you're searching fdgh a random sentence. Sometimes a random word just isn't enough, and that is where "},
+                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely here because you're ew423ewe for a random sentence. Sometimes a random word just isn't enough, and that is where "},
+            ],
             search: '',
             groupName: '',
             groupDes: '',
@@ -65,38 +68,11 @@ export default class GroupScreen extends React.Component {
                 screenName: token,
             });
         });
-        this.getPermissionAsync();
         /*this.props.navigation.addListener("focus", () => {
             this.dataGroups();
         });*/
     };
 
-    getPermissionAsync = async () => {
-        if (Constants.platform.ios) {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-            }
-        }
-    };
-    _pickImage = async () => {
-        try {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
-            if (!result.cancelled) {
-                this.setState({ image: result.uri });
-            }
-        } catch (E) {
-            console.log(E);
-        }
-    };
-    fetchCreateGroup = () =>{
-        this.getS3(this.state.groupImage);
-    };
     headerComponent = () =>{
         return (
             <View style={{width: '100%'}}>
@@ -120,23 +96,24 @@ export default class GroupScreen extends React.Component {
                         horizontal={true}
                         renderItem={({ item }) => {
                             return (
-                                <View style={styles.cardContainer}>
-                                    <View style={{paddingVertical: 10}}>
-                                        <Image style={{width: 75, height: 75, resizeMode: 'contain'}}
-                                               source={require('../../assets/avatars/2.png')}/>
+                                <TouchableWithoutFeedback onPress={() => this.goToGroupChat(item.group_id)}>
+                                    <View style={styles.cardContainer}>
+                                        <View style={{paddingVertical: 5}}>
+                                            <Image style={{width: 60, height: 60, resizeMode: 'contain'}}
+                                                   source={require('../../assets/avatars/2.png')}/>
+                                        </View>
+                                        <View>
+                                            <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 15}}>{item.group_name}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{textAlign: 'center',color: 'green', fontWeight: 'bold', fontSize: 10}}>{item.group_id}</Text>
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 15}}>{item.group_name}</Text>
-                                    </View>
-                                    <View>
-                                        <Text style={{color: 'green', fontWeight: 'bold', fontSize: 10}}>Members: {item.group_id}</Text>
-                                    </View>
-                                </View>
+                                </TouchableWithoutFeedback>
                             )
                         }}/>
                 </View>
             </View>
-
         );
     };
     empty = () =>{
@@ -165,50 +142,11 @@ export default class GroupScreen extends React.Component {
                         <Image style={{width: 40, height: 40, resizeMode: 'contain'}}
                                source={require('../../assets/avatars/1.png')}/>
                         <Text style={{color: 'white', fontWeight: 'bold', fontSize: 27}}>Groups</Text>
-                        <TouchableOpacity onPress={() => this.setState({ isVisible: true })}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateGroupName')}>
                             <Ionicons name={'ios-add'} size={40} color={'white'}/>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Overlay
-                    onBackdropPress={() => this.setState({ isVisible: false })}
-                    width="60%"
-                    height="40%"
-                    overlayStyle={styles.overlayContainer}
-                    isVisible={this.state.isVisible}>
-                    <View style={{width: '100%', alignItems: 'center', paddingVertical: 20}}>
-                        <View style={{marginBottom: 10}}>
-                            <Text>Lets Create A New Group</Text>
-                        </View>
-                        <TouchableOpacity onPress={() => that._pickImage()}>
-                            <Image style={{width: 100, height: 100, borderRadius: 100/ 2,resizeMode: 'contain'}}
-                                   source={{uri: that.state.groupImage}}/>
-                        </TouchableOpacity>
-                        <View style={{marginTop: 10, alignItems: 'center'}}>
-                            <Text>Group Name</Text>
-                            <TextInput style={styles.searchBox}
-                                       placeholder="Enter Group Name"
-                                       placeholderTextColor='gray'
-                                       onChangeText={input => this.setState({ groupName: input })}>
-                            </TextInput>
-                        </View>
-                        <View style={{marginTop: 10, alignItems: 'center'}}>
-                            <Text>Group Description (160 Character)</Text>
-                            <TextInput style={styles.searchBox}
-                                       placeholder="Enter Group Description"
-                                       placeholderTextColor='gray'
-                                       multiline = {true}
-                                       maxLength={160}
-                                       onChangeText={input => this.setState({ groupDes: input })}>
-                            </TextInput>
-                        </View>
-                        <TouchableOpacity style={{backgroundColor:'#4704a5', width: 70, alignItems: 'center',
-                            borderRadius: 20, marginTop: 20, height: 20, justifyContent: 'center'}}>
-                            <Text style={{color:'white'}}>Submit</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                </Overlay>
                 <View style={{width: '100%', height: '90%'}}>
                     <FlatList
                         showsHorizontalScrollIndicator={false}

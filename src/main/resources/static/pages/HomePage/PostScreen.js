@@ -44,7 +44,7 @@ export default class PostScreen extends React.Component {
     };
     render() {
         return (
-            <View style={{flex: 1 }}>
+            <View style={{flex: 1, position:'relative' }}>
                 <View style={styles.topContainer}>
                     <TouchableOpacity style={styles.iconContainer} onPress={() => this.goBack()}>
                         <Image style={styles.topIcons}
@@ -76,7 +76,7 @@ export default class PostScreen extends React.Component {
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '100%',
-            height: '13%',
+            height: '10%',
             borderBottomWidth: 2,
             borderBottomColor: '#e0e0e0',
         },
@@ -85,7 +85,7 @@ export default class PostScreen extends React.Component {
         },
         iconContainer:{
             paddingHorizontal: 30,
-            paddingTop: '15%'
+            paddingTop: '10%'
         },
     });
 
