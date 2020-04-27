@@ -33,36 +33,46 @@ public class GroupRepository {
     }
 
     //Method to add group to DB
-    public void AddGroupToDB (GroupEntry groupentry){
+    public void AddGroupToDB (GroupEntry groupentry, String screenname){
         String sql = "Insert into group_data_table " +
-                "(group_id, group_name, group_desc) " +
-                "values ( ? , ? , ? ) ";
-        Object[] params = {groupentry.getGroup_id(), groupentry.getGroup_name(), groupentry.getGroup_id()};
-        int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+                "(group_id, group_name, group_desc, memberCount, image) " +
+                "values ( ? , ? , ? , ? , ? ) ";
+        Object[] params = {groupentry.getGroup_id(), groupentry.getGroup_name(), groupentry.getGroup_desc(),
+        groupentry.getmemberCount(), groupentry.getImage()};
+        int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR};
 
-        if (VerifyGroupName(groupentry.getGroup_name())) jdbc_temp.update(sql,params,types);
+        if (VerifyGroupName(groupentry.getGroup_name())) {
+            jdbc_temp.update(sql,params,types);
+            AddUserToGroup(screenname,groupentry.getGroup_name(), '1');
+        }
         else System.out.println("Error: Group Name Invalid.");
     }
 
     //Method to add a user to a group
-    public void AddUserToGroup(String screenname, String group_name){
+    public void AddUserToGroup(String screenname, String group_name, char role){
         //retrieving group_name entry
         String sql = "Select * from group_data_table where group_name = '" + group_name + "' ";
         List<GroupEntry> tmp = new ArrayList<>();
         tmp.addAll(jdbc_temp.query(sql,new BeanPropertyRowMapper(GroupEntry.class)));
 
+        //add user to group
         sql = "INSERT into user_group_data " +
                 "(group_id, screen_name, role_flag) VALUES " +
                 "( ? , ? , ? ) ";
-        Object[] params = {tmp.get(0).getGroup_id(), screenname, '0'};
+        Object[] params = {tmp.get(0).getGroup_id(), screenname, role};
         int[] types = {Types.VARCHAR, Types.VARCHAR, Types.CHAR};
-
         jdbc_temp.update(sql,params,types);
+
+        //update member count
+        sql = "UPDATE group_data_table " +
+                "SET `memberCount` = " + tmp.get(0).getmemberCount()+1 + " " +
+                "WHERE group_id = '" + tmp.get(0).getGroup_id() + "'";
+        jdbc_temp.update(sql);
     }
 
     //Method to get the groups of a user
     public List<GroupEntry> getUserGroups(String screenname){
-        String sql = "Select a.group_id, a.group_name, a.group_desc from " +
+        String sql = "Select a.group_id, a.group_name, a.group_desc, a.memberCount, a.image from " +
                 "group_data_table a, user_group_data b " +
                 "where a.group_id = b.group_id AND b.screen_name = '" + screenname +"'";
         List<GroupEntry> tmp = new ArrayList<>();
@@ -79,6 +89,7 @@ public class GroupRepository {
         return tmp;
     }
 
+    //Get all groups from database
     public List<GroupEntry> getAllGroups (String screenName){
         String sql = "Select * from group_data_table";
         List<GroupEntry> tmp = new ArrayList<>();
@@ -90,6 +101,7 @@ public class GroupRepository {
         return tmp;
     }
 
+    //Checks membership for user with each group available.
     public boolean checkMembership(String screenName, String groupName){
         String sql = "Select a.group_id, a.group_name, a.group_desc from " +
                 "group_data_table a, user_group_data b " +
@@ -112,8 +124,13 @@ public class GroupRepository {
 
         Object[] params = new Object[]{tmp.get(0).getGroup_id(), screenname};
         int[] types = new int[]{Types.VARCHAR, Types.VARCHAR};
-        
         jdbc_temp.update(sql,params,types);
+
+        //update member count
+        sql = "UPDATE group_data_table " +
+                "SET `memberCount` = " + (tmp.get(0).getmemberCount()-1) + " " +
+                "WHERE group_id = '" + tmp.get(0).getGroup_id() + "'";
+        jdbc_temp.update(sql);
     }
 
     public void removeGroup(GroupEntry target){
@@ -128,4 +145,17 @@ public class GroupRepository {
         sql = "DELETE FROM user_group_posts WHERE " +
                 "group_id = '" + target.getGroup_id() + "' ";
     }
+
+    //Method to search for a group by keyword
+    public List<GroupEntry> SearchForGroup(String keyword){
+        String sql = "SELECT group_id, group_name, group_desc, memberCount, image FROM group_data_table " +
+        "WHERE group_desc LIKE '%" + keyword + "%' ";
+        List<GroupEntry> ret = new ArrayList<>();
+        ret.addAll(jdbc_temp.query(sql,new BeanPropertyRowMapper<>(GroupEntry.class)));
+        return ret;
+    }
+
+
+
+
 }

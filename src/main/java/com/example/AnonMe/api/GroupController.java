@@ -15,18 +15,27 @@ public class GroupController {
     GroupRepository repo;
 
     @PostMapping(path="/insertGroup")
-    public void AddGroup(@RequestBody GroupEntry groupentry){
-        repo.AddGroupToDB(groupentry);
+    public void AddGroup(@RequestParam String screenname, @RequestBody GroupEntry groupentry){
+        if (screenname == null) System.out.println("Guests cannot create new groups");
+        else repo.AddGroupToDB(groupentry,screenname);
     }
+
+    @PostMapping(path="/removeGroup")
+    public void RemoveGroup(@RequestParam GroupEntry groupentry) { repo.removeGroup(groupentry); }
 
     @PostMapping(path="/addUser")
     public void AddUser(@RequestParam String screenname, @RequestParam String group_name){
-        repo.AddUserToGroup(screenname,group_name);
+        repo.AddUserToGroup(screenname,group_name, '0');
     }
 
     @PostMapping(path="/removeUser")
     public void RemoveUser(@RequestParam String screenname, @RequestParam String group_name){
         repo.RemoveUserFromGroup(screenname,group_name);
+    }
+
+    @GetMapping(path="/searchGroup")
+    public List<GroupEntry> searchgroup(@RequestParam String keyword){
+        return repo.SearchForGroup(keyword);
     }
 
     @GetMapping(path="/getusergroups")
@@ -35,13 +44,9 @@ public class GroupController {
     }
 
     @GetMapping(path="/getallgroups")
-    public List<GroupEntry> GetAllGroups(){
-        return repo.getAllGroups();
-    }
-
-    @GetMapping(path="/getallgroups")
     public List<GroupEntry> GetAllGroups(@RequestParam String screenname){
         if (screenname == null) return repo.getAllGroups();
         else return (repo.getAllGroups(screenname));
     }
+
 }
