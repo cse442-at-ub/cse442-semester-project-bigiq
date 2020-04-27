@@ -30,8 +30,8 @@ public class JUnitCasesGroup extends TestCase {
 
     @Before
     public void setUp(){
-        group1 = new GroupEntry("1111111","Group 1", false);
-        group2 = new GroupEntry("2222222","Group 2", false);
+        group1 = new GroupEntry("1111111","Group 1", "groupdesc", false, "img", 0);
+        group2 = new GroupEntry("2222222","Group 2", "groupdesc", false, "img", 0);
         user = new UserEntry("3474358889","USERTEST");
     }
 
@@ -46,16 +46,16 @@ public class JUnitCasesGroup extends TestCase {
     @Test
     public void TestAdd(){
         assertTrue(grouprepo.getAllGroups().size() == 0);
-        grouprepo.AddGroupToDB(group1);
+        grouprepo.AddGroupToDB(group1,user.getScreen_name());
         assertTrue(grouprepo.getAllGroups().size() == 1);
-        grouprepo.AddGroupToDB(group2);
+        grouprepo.AddGroupToDB(group2,user.getScreen_name());
         assertTrue(grouprepo.getAllGroups().size() == 2);
     }
 
     @Test
     public void TestRemoval(){
-        grouprepo.AddGroupToDB(group1);
-        grouprepo.AddGroupToDB(group2);
+        grouprepo.AddGroupToDB(group1,user.getScreen_name());
+        grouprepo.AddGroupToDB(group2,user.getScreen_name());
         assertTrue(grouprepo.getAllGroups().size() == 2);
         grouprepo.removeGroup(group1);
         assertTrue(grouprepo.getAllGroups().size() == 1);
@@ -67,16 +67,16 @@ public class JUnitCasesGroup extends TestCase {
     @Test
     public void TestUserAdd(){
         assertTrue(grouprepo.getUserGroups(user.getScreen_name()).size() == 0);
-        grouprepo.AddUserToGroup(user.getScreen_name(),group1.getGroup_name());
+        grouprepo.AddUserToGroup(user.getScreen_name(),group1.getGroup_name(),'0');
         assertTrue(grouprepo.getUserGroups(user.getScreen_name()).size() == 1);
-        grouprepo.AddUserToGroup(user.getScreen_name(),group2.getGroup_name());
+        grouprepo.AddUserToGroup(user.getScreen_name(),group2.getGroup_name(),'0');
         assertTrue(grouprepo.getUserGroups(user.getScreen_name()).size() == 2);
     }
 
     @Test
     public void TestUserRemoval(){
-        grouprepo.AddUserToGroup(user.getScreen_name(),group1.getGroup_name());
-        grouprepo.AddUserToGroup(user.getScreen_name(),group2.getGroup_name());
+        grouprepo.AddUserToGroup(user.getScreen_name(),group1.getGroup_name(),'0');
+        grouprepo.AddUserToGroup(user.getScreen_name(),group2.getGroup_name(),'0');
         assertTrue(grouprepo.getUserGroups(user.getScreen_name()).size() == 2);
         grouprepo.RemoveUserFromGroup(user.getScreen_name(),group1.getGroup_name());
         assertTrue(grouprepo.getUserGroups(user.getScreen_name()).size() == 1);

@@ -2,6 +2,7 @@ package com.example.AnonMe.api;
 
 import com.example.AnonMe.database.GroupRepository;
 import com.example.AnonMe.model.GroupEntry;
+import com.example.AnonMe.model.UserEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class GroupController {
     }
 
     @PostMapping(path="/removeGroup")
-    public void RemoveGroup(@RequestParam GroupEntry groupentry) { repo.removeGroup(groupentry); }
+    public void RemoveGroup(@RequestBody GroupEntry groupentry) { repo.removeGroup(groupentry); }
 
     @PostMapping(path="/addUser")
     public void AddUser(@RequestParam String screenname, @RequestParam String group_name){
@@ -49,4 +50,28 @@ public class GroupController {
         else return (repo.getAllGroups(screenname));
     }
 
+    @GetMapping(path="/getallusers")
+    public List<String> GetAllUsers(@RequestParam String screenname, @RequestParam String group_name){
+        return repo.getAllUsers(group_name,screenname);
+    }
+
+    @PostMapping(path="/changeImage")
+    public void changeImage(@RequestParam String image, @RequestParam String group_name){
+        repo.modifyGroup(group_name, image, "image");
+    }
+
+    @PostMapping(path="/changeDesc")
+    public void changeDesc(@RequestParam String desc, @RequestParam String group_name){
+        repo.modifyGroup(group_name, desc, "desc");
+    }
+
+    @PostMapping(path="/changeName")
+    public void changeName(@RequestParam String name, @RequestParam String group_name){
+        repo.modifyGroup(group_name, name, "name");
+    }
+
+    @PostMapping(path="/changeOwner")
+    public void changeOwner(@RequestParam String screenname, @RequestParam String group_name){
+        repo.modifyGroup(group_name, screenname, "owner");
+    }
 }

@@ -2,6 +2,7 @@ package com.example.AnonMe.database;
 import com.example.AnonMe.model.CommentEntry;
 import com.example.AnonMe.model.GroupEntry;
 import com.example.AnonMe.model.PostEntry;
+import com.example.AnonMe.model.UserEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,7 +66,7 @@ public class GroupRepository {
 
         //update member count
         sql = "UPDATE group_data_table " +
-                "SET `memberCount` = " + tmp.get(0).getmemberCount()+1 + " " +
+                "SET `memberCount` = " + (tmp.get(0).getmemberCount()+1) + " " +
                 "WHERE group_id = '" + tmp.get(0).getGroup_id() + "'";
         jdbc_temp.update(sql);
     }
@@ -156,6 +157,50 @@ public class GroupRepository {
     }
 
 
+    public List<String> getAllUsers(String group_name, String screenname) {
+        String sql = "Select * from group_data_table where group_name = '" + group_name + "' ";
+        List<GroupEntry> tmp = new ArrayList<>();
+        tmp.addAll(jdbc_temp.query(sql,new BeanPropertyRowMapper(GroupEntry.class)));
 
+        sql = "SELECT screen_name from user_group_data "+
+                "WHERE group_id = '" + tmp.get(0).getGroup_id() +"' " +
+                "AND NOT screen_name = '"+ screenname +"' ";
+        List<String> ret = new ArrayList<>();
+        ret.addAll(jdbc_temp.queryForList(sql,String.class));
 
+        return ret;
+    }
+
+    public void modifyGroup(String group_name, String change, String flag) {
+        String group_id = "";
+
+        String sql = "UPDATE ";
+        if (flag == "owner") {
+            List<GroupEntry> tmp = new ArrayList<>();
+            tmp.addAll(jdbc_temp.query("Select * from group_data_table where group_name = '" + group_name + "' ",new BeanPropertyRowMapper(GroupEntry.class)));
+            group_id = tmp.get(0).getGroup_id();
+
+            sql += "user_group_data SET ";
+            jdbc_temp.update("UPDATE user_group_data SET role_flag = 0 WHERE role_flag = 1 AND group_id = '" + group_id +"'");
+        }
+        else sql += "group_data_table SET ";
+
+        switch (flag){
+            case "image":
+                sql += "image = ";
+                break;
+            case "desc":
+                sql += "group_desc = ";
+                break;
+            case "name":
+                sql += "group_name = ";
+                break;
+            case "owner":
+                sql += "role_flag = 1 WHERE screen_name = ";
+                break;
+        }
+
+        sql += "'"+ change +"' " + (flag == "owner" ? ("AND group_id = '"+ group_id+"'"):("WHERE group_name = '"+ group_name+ "'"));
+        jdbc_temp.update(sql);
+    }
 }
