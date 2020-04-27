@@ -2,7 +2,6 @@ package com.example.AnonMe.api;
 
 import com.example.AnonMe.database.CommentRepository;
 import com.example.AnonMe.model.CommentEntry;
-import com.example.AnonMe.model.PostEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
