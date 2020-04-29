@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
         width: '100%',
-        height: '13%'
+        height: '10%'
     },
     postnfeed:{
         flexDirection: 'row',

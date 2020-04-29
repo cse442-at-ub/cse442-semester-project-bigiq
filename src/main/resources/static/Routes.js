@@ -29,6 +29,7 @@ const AccountStack = createStackNavigator();
 const FollowingStack = createStackNavigator();
 const GroupStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+        
 
 function HomePageScreen() {
     return (

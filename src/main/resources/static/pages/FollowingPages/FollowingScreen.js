@@ -26,8 +26,7 @@ export default class FollowingScreen extends React.Component {
 
 
     dataRecent = () =>{
-        fetchInterest(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
-
+        fetchInterest(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
     };
 
     componentDidMount() {
@@ -40,8 +39,6 @@ export default class FollowingScreen extends React.Component {
             this.dataRecent();
         });
     }
-
-
     fetchLike = (id) =>{
         likePost(id,this.state.screenName).then(res => res.text);
     };
@@ -53,9 +50,10 @@ export default class FollowingScreen extends React.Component {
         const newArray = [...this.state.data];
         newArray[index].like_button = !newArray[index].like_button;
         if(newArray[index].like_button === false){
-            newArray[index].like_ctr = newArray[index].like_ctr - 1;
+            newArray[index].likes = newArray[index].likes - 1;
+            newArray.splice(index, 1)
         }else {
-            newArray[index].like_ctr = newArray[index].like_ctr + 1;
+            newArray[index].likes = newArray[index].likes + 1;
         }
         this.setState({ data: newArray });
         this.fetchLike(id)
@@ -74,7 +72,7 @@ export default class FollowingScreen extends React.Component {
     render() {
         let that = this;
         return (
-        <View style = {{flex: 1,}}>
+        <View style = {{flex: 1}}>
             <View style={styles.topFeed}>
                 <View style={styles.Following}>
                     <Text style={{color: 'white', fontWeight: 'bold', fontSize: 27}}>Following</Text>
@@ -82,58 +80,61 @@ export default class FollowingScreen extends React.Component {
             </View>
             <FlatList
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.post_id}
+                keyExtractor={(item) => item.id}
                 ListEmptyComponent={this._listEmptyComponent}
                 extraData={this.state.data}
                 data={this.state.data}
                 renderItem={({ item, index }) => {
                     return(
-                        <View style = {styles.postContainer}>
-                            <TouchableWithoutFeedback onPress={() => that.props.navigation.navigate('PDFollowingScreen', {post: item})}>
-                                <View>
-                                    <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestampFront}</Text>
-                                    <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                            <View style = {styles.featureContainer}>
-                                <View style={{flexDirection:'row'}}>
-                                    <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLike(index, item.post_id)}>
+                        <View style={{alignItems: 'center', flexDirection:'column', width: '100%'}}>
+                            
+                            <View style = {styles.postContainer}>
+                                <TouchableWithoutFeedback onPress={() => that.props.navigation.navigate('PDFollowingScreen', {post: item})}>
+                                    <View>
+                                        <Text style={{fontSize: 10, color: '#cccccc'}}>{item.time}</Text>
+                                        <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <View style = {styles.featureContainer}>
+                                    <View style={{flexDirection:'row'}}>
+                                        <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLike(index, item.id)}>
+                                            <Ionicons
+                                                name={'md-thumbs-up'}
+                                                size={16}
+                                                color={item.like_button ? '#4704a5' : 'gray'}
+                                            />
+                                        </TouchableOpacity>
+                                        <Text style = {{color: '#cccccc'}}>{item.likes}</Text>
+                                    </View>
+                                    <View style={{flexDirection:'row'}}>
+                                        <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.props.navigation.navigate('PDFollowingScreen', {post: item})}>
+                                            <Ionicons
+                                                name={'md-chatbubbles'}
+                                                size={16}
+                                                color={'gray'}/>
+                                        </TouchableOpacity>
+                                        <Text style = {{color: '#cccccc'}}>{0}</Text>
+                                    </View>
+                                    <TouchableOpacity style={{marginHorizontal: 10}}>
                                         <Ionicons
-                                            name={'md-thumbs-up'}
-                                            size={16}
-                                            color={item.like_button ? '#4704a5' : 'gray'}
-                                        />
-                                    </TouchableOpacity>
-                                    <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
-                                </View>
-                                <View style={{flexDirection:'row'}}>
-                                    <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.postDetail(item.post_id)}>
-                                        <Ionicons
-                                            name={'md-chatbubbles'}
+                                            name={'md-add-circle'}
                                             size={16}
                                             color={'gray'}/>
                                     </TouchableOpacity>
-                                    <Text style = {{color: '#cccccc'}}>{0}</Text>
+                                    <TouchableOpacity style={{marginHorizontal: 10}}>
+                                        <Ionicons
+                                            name={'ios-share'}
+                                            size={16}
+                                            color={'gray'}/>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flag(index, item.id)}>
+                                        <Ionicons
+                                            name={'ios-flag'}
+                                            size={16}
+                                            color={item.flag_button ? '#4704a5' : 'gray'}
+                                        />
+                                    </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={{marginHorizontal: 10}}>
-                                    <Ionicons
-                                        name={'md-add-circle'}
-                                        size={16}
-                                        color={'gray'}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{marginHorizontal: 10}}>
-                                    <Ionicons
-                                        name={'ios-share'}
-                                        size={16}
-                                        color={'gray'}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flag(index, item.post_id)}>
-                                    <Ionicons
-                                        name={'ios-flag'}
-                                        size={16}
-                                        color={item.flag_button ? '#4704a5' : 'gray'}
-                                    />
-                                </TouchableOpacity>
                             </View>
                         </View>
                     )
@@ -171,7 +172,7 @@ topFeed: {
 },
 postContainer: {
     marginTop : 20,
-    width: 400,
+    width: '95%',
     borderRadius: 10,
     justifyContent: 'center',
     alignContent: 'center',

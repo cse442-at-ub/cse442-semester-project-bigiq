@@ -3,7 +3,6 @@ import { Text, View, FlatList, Switch, TouchableOpacity, StyleSheet, Image, Text
 import {Ionicons, Entypo} from "@expo/vector-icons";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
-import {RNS3} from "react-native-aws3/src/RNS3";
 import * as ImagePicker from "expo-image-picker";
 
 export default class CreateGroupImage extends React.Component {
@@ -29,40 +28,20 @@ export default class CreateGroupImage extends React.Component {
         this.getPermissionAsync();
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 1,
             });
             if (!result.cancelled) {
-                this.setState({ image: result.uri });
+                this.setState({ groupImage: result.uri });
             }
+        
         } catch (E) {
             console.log(E);
         }
     };
-    getS3 = (uri) =>{
-        const file = {
-            uri: uri,
-            name: this.state.groupName + '.jpg',
-            type: 'image/jpeg'
-        };
-        const option = {
-            keyPrefix: 'GroupImage/',
-            bucket: 'anonmebucket',
-            region: 'us-east-2',
-            accessKey: 'AKIATKMN22MYCP5X3E7K',
-            secretKey: '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',
-            successActionStatus: 201
-        };
-        RNS3.put(file, option).then(response =>{
-            if(response.status !== 201){
-                throw new Error('Failed to upload image ', response)
-            }
-            console.log(response.body)
-        })
 
-    };
     goFinalScreen = () =>{
         this.props.navigation.navigate('CreateGroupFinal', {image: this.state.groupImage, name: this.props.route.params.name,
         description: this.props.route.params.description})

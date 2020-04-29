@@ -13,7 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as React from 'react';
-import {SearchBar, ListItem, Overlay} from 'react-native-elements'
+import {SearchBar, ListItem, Avatar} from 'react-native-elements'
 import { fetchGroups } from "../../fetches/GroupFetch";
 import {Ionicons} from "@expo/vector-icons";
 import {RNS3} from "react-native-aws3/src/RNS3";
@@ -23,14 +23,7 @@ export default class GroupScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [{group_name: "Video Games", group_id: "If you're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
-                {group_name: "Soccer", group_id: "If yous're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
-                {group_name: "Video Games", group_id: "2If you're visiting this page, you're likely here becsuse you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where 2"},
-                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely here asads you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
-                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely aasc because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where "},
-                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely here because you're searching fdgh a random sentence. Sometimes a random word just isn't enough, and that is where "},
-                {group_name: "Video Games", group_id: "If you're visiting this page, you're likely here because you're ew423ewe for a random sentence. Sometimes a random word just isn't enough, and that is where "},
-            ],
+            data: [],
             search: '',
             groupName: '',
             groupDes: '',
@@ -39,28 +32,6 @@ export default class GroupScreen extends React.Component {
         };
     }
 
-    getS3 = (uri) =>{
-        const file = {
-            uri: uri,
-            name: this.state.groupName + '.jpg',
-            type: 'image/jpeg'
-        };
-        const option = {
-            keyPrefix: 'GroupImage/',
-            bucket: 'anonmebucket',
-            region: 'us-east-2',
-            accessKey: 'AKIATKMN22MYCP5X3E7K',
-            secretKey: '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',
-            successActionStatus: 201
-        };
-        RNS3.put(file, option).then(response =>{
-            if(response.status !== 201){
-                throw new Error('Failed to upload image ', response)
-            }
-            console.log(response.body)
-        })
-
-    };
 
     componentDidMount() {
         AsyncStorage.getItem('screenName').then((token) => {
@@ -68,10 +39,13 @@ export default class GroupScreen extends React.Component {
                 screenName: token,
             });
         });
-        /*this.props.navigation.addListener("focus", () => {
+        this.props.navigation.addListener("focus", () => {
             this.dataGroups();
-        });*/
+        });
     };
+    dataGroups = () =>{
+        fetchGroups(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
+    }
 
     headerComponent = () =>{
         return (
@@ -90,23 +64,28 @@ export default class GroupScreen extends React.Component {
                 <View>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.group_id}
+                        keyExtractor={(item) => item.id}
                         data={this.state.data}
                         ListEmptyComponent={this.empty}
                         horizontal={true}
                         renderItem={({ item }) => {
                             return (
-                                <TouchableWithoutFeedback onPress={() => this.goToGroupChat(item.group_id)}>
+                                <TouchableWithoutFeedback>
                                     <View style={styles.cardContainer}>
-                                        <View style={{paddingVertical: 5}}>
-                                            <Image style={{width: 60, height: 60, resizeMode: 'contain'}}
-                                                   source={require('../../assets/avatars/2.png')}/>
+                                        <View style={{paddingVertical: 5, flexDirection: 'row'}}>
+                                        <Avatar
+                                            size="medium"
+                                            rounded
+                                            source= {{uri:item.image}}
+                                            />
+                                            <View style={{marginTop: 15, marginLeft: 10}}>
+                                                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>{item.group_name}</Text>
+                                                <Text style={{color: 'gray', fontSize: 10, textAlign: 'center'}}>{item.memberCount} Members</Text>
+                                            </View>
                                         </View>
+                                    
                                         <View>
-                                            <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 15}}>{item.group_name}</Text>
-                                        </View>
-                                        <View>
-                                            <Text style={{textAlign: 'center',color: 'green', fontWeight: 'bold', fontSize: 10}}>{item.group_id}</Text>
+                                            <Text style={{textAlign: 'center',color: 'black', fontSize: 10}}>{item.group_desc}</Text>
                                         </View>
                                     </View>
                                 </TouchableWithoutFeedback>
@@ -125,11 +104,11 @@ export default class GroupScreen extends React.Component {
         <ListItem
             containerStyle = {styles.listItemContainer}
             title={item.group_name}
-            subtitle={item.group_name}
-            leftAvatar={{source: require('../../assets/avatars/4.png'),
-                size:"medium"}}
+            subtitle={item.group_desc}
+            leftAvatar={{ source: { uri: item.image }, size:"medium"}}
             bottomDivider
             titleStyle={styles.listTitle}
+            onPress={() => this.props.navigation.navigate('GroupChat',{group: item})}
             chevron
         />
     );
@@ -150,7 +129,8 @@ export default class GroupScreen extends React.Component {
                 <View style={{width: '100%', height: '90%'}}>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.group_id}
+                        showsVerticalScrollIndicator={false}
+                        keyExtractor={(item) => item.id}
                         ListHeaderComponent={this.headerComponent()}
                         ListEmptyComponent={this.empty}
                         data={this.state.data}
@@ -189,8 +169,8 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     cardContainer:{
-        width: 150,
-        height: 150,
+        width: 250,
+        height: 80,
         borderRadius: 20,
         alignItems: 'center',
         backgroundColor: 'white',

@@ -1,56 +1,71 @@
-import React from 'react';
-import {
-    Image,
-    StyleSheet,
-    View,
-    Text,
-    TouchableOpacity,
-    AsyncStorage,
-    FlatList,
-    Platform,
-    TouchableWithoutFeedback
-} from 'react-native';
-import {flagPost, likePost, postByAuthor} from "../../fetches/PostFetch";
+import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback, ImageBackground, AsyncStorage} from "react-native";
+import * as React from 'react';
+import {fetchDataRecent,fetchDataLiked, deletePost, likePost, flagPost} from "../../fetches/PostFetch";
 import {Ionicons} from "@expo/vector-icons";
 
-export default class AccountScreen extends React.Component{
+export default class TextScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            data : [],
+            like: 0,
+            feedType: true,
+            likeIcon: require('../../assets/loveIcon.png'),
             screenName: '',
-            doneLoading: false,
-            data: [],
-        }
+            isFetching: false
+        };
     }
-
-    fetchUserPost = () =>{
-        postByAuthor(this.state.screenName).then( dataAPI =>
-            this.setState({data : dataAPI})
-        );
-
+    MPTypeColor = () =>{
+        if(this.state.feedType === true){
+            return <Text style={{fontSize: 12, color:'gray'}}>Most Popular</Text>
+        }else {
+            return <Text style={{fontSize: 12, color:'#4704a5'}}>Most Popular</Text>
+        }
     };
-    settingScreen = () =>{
-        this.props.navigation.navigate('SettingScreen');
+    MRTypeColor = () =>{
+        if(this.state.feedType === false){
+            return <Text style={{fontSize: 12, color:'gray'}}>Most Recent</Text>
+        }else {
+            return <Text style={{fontSize: 12, color:'#4704a5'}}>Most Recent</Text>
+        }
     };
     componentDidMount() {
         AsyncStorage.getItem('screenName').then((token) => {
             this.setState({
                 screenName: token,
-                doneLoading: true
             });
         });
-        /*this.props.navigation.addListener("focus", () => {
-            this.fetchUserPost();
-        });*/
+        this.props.navigation.addListener("focus", () => {
+            this.fetchData();
+        });
     };
-    _listEmptyComponent = () => {
-        return (
-            <View style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
-                <Text>Looks like you haven't posted anything.</Text>
-            </View>
-        )
+
+    deletePost =(id) =>{
+        deletePost(id).then(res => res.text())
+    };
+    dataRecent = () =>{
+        fetchDataRecent(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
+        this.setState({feedType: true});
+
+    };
+    dataLiked = () =>{
+        fetchDataLiked(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
+        this.setState({feedType: false})
+    };
+    postDetail = (item) =>{
+        this.props.navigation.navigate('PostDetail', {post: item})
+    };
+
+    fetchData = () =>{
+        if(this.state.feedType === true){
+            this.dataRecent()
+        }
+        else {
+            this.dataLiked();
+        }
     };
     fetchLike = (id) =>{
+        console.log( id + "    "+this.state.screenName)
         likePost(id,this.state.screenName).then(res => res.text);
     };
     fetchFlag = (id) =>{
@@ -74,47 +89,35 @@ export default class AccountScreen extends React.Component{
         this.setState({ data: newArray });
         this.fetchFlag(id)
     };
-    render() {
+    _listEmptyComponent = () =>{
+        return(
+            <View></View>
+        )
+    };
+    
+    render(){
         let that = this;
-        return (
-            <View style={{ alignItems: 'center'}}>
-                <TouchableOpacity style={{ position: 'absolute', right: '5%', top: '5%'}} onPress={() => that.settingScreen()}>
-                    <Image style={styles.settingIcon}
-                           source={require('../../assets/settingIcon.png')}/>
-                </TouchableOpacity>
-                <Image style={styles.avatar}
-                       source={require('../../assets/avatars/1.png')}/>
-                <View style={styles.nameContainer}>
-                    <Text style={{color:'white'}}>{that.state.screenName}</Text>
+        return(
+            <View style={{flex: 1, flexDirection:'column', backgroundColor: '#gray'}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataRecent()}>
+                        {that.MRTypeColor()}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => that.dataLiked()}>
+                        {that.MPTypeColor()}
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.statsContainer}>
-                    <View style={styles.statsView}>
-                        <Text style={styles.statsText}>0</Text>
-                        <Text style={{color: 'gray'}}>Posts</Text>
-                    </View>
-                    <View style={styles.statsView}>
-                        <Text style={styles.statsText}>0</Text>
-                        <Text style={{color: 'gray'}}>Likes</Text>
-                    </View>
-                    <View style={styles.statsView}>
-                        <Text style={styles.statsText}>0</Text>
-                        <Text style={{color: 'gray'}}>Following</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 20}}>
-                    <Text style={{color: 'gray'}}>Posts by {that.state.screenName}</Text>
-                </View>
-                <View>
-                    <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.post_id}
-                        extraData={this.state.data}
-                        ListEmptyComponent={this._listEmptyComponent}
-                        data={this.state.data}
-                        renderItem={({ item, index }) => {
+                <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item) => item.id}
+                    ListEmptyComponent={this._listEmptyComponent}
+                    extraData={this.state.data}
+                    data={this.state.data}
+                    renderItem={({ item, index }) => {
                             return(
+                            <View style={{alignItems: 'center', flexDirection:'column', width: '100%'}}>
                                 <View style = {styles.postContainer}>
-                                    <TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={() => that.postDetail(item)}>
                                         <View>
                                             <Text style={{fontSize: 10, color: '#cccccc'}}>{item.time}</Text>
                                             <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
@@ -127,12 +130,12 @@ export default class AccountScreen extends React.Component{
                                                     name={'md-thumbs-up'}
                                                     size={16}
                                                     color={item.like_button ? '#4704a5' : 'gray'}
-                                                />
+                                                    />
                                             </TouchableOpacity>
                                             <Text style = {{color: '#cccccc'}}>{item.likes}</Text>
                                         </View>
                                         <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}}>
+                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.postDetail(item.id)}>
                                                 <Ionicons
                                                     name={'md-chatbubbles'}
                                                     size={16}
@@ -161,61 +164,47 @@ export default class AccountScreen extends React.Component{
                                         </TouchableOpacity>
                                     </View>
                                 </View>
+                                </View>
                             )
                         }
-                        }
-                    />
-                </View>
+                    }
+                />
             </View>
-
-
         );
     }
 }
 const styles = StyleSheet.create({
-    statsText: {fontSize: 30, fontWeight:'bold', color: '#4704a5'},
-    statsView:{
-        flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+    postnfeed:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 30,
+        position: 'relative',
+        top: '9%'
+    },
+    topFeed: {
+        backgroundColor: '#4704a5',
+        width: '100%',
+        height: '10%'
+    },
+    postContainer: {
+        width: '95%',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignContent: 'center',
+        padding: 20,
+        marginBottom: 10,
+        backgroundColor: 'white',
+    },
+    toggleFeedText:{
+        fontSize: 10, color:'black'
+    },
+    toggleFeedButton: {
+      padding: 20,
+      marginHorizontal: 30
     },
     featureContainer : {
         flexDirection: 'row',
         marginTop: 10,
         justifyContent: 'space-between'
-    },
-    postContainer:{
-        width: 380,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignContent: 'center',
-        marginBottom: 10,
-        padding: 20,
-        backgroundColor: 'white',
-    },
-    statsContainer:{
-        width: '80%',
-        height: '10%',
-        borderRadius: 20,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-
-    },
-    nameContainer:{
-        backgroundColor: '#4704a5',
-        borderRadius: 20,
-        position: 'relative',
-        width: 140,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 30,
-        top: -15
-    },
-    avatar:{
-        width: 125, height: 125, resizeMode: 'contain', marginTop: '10%'
-    },
-    settingIcon:{
-        width: 35, height: 35, resizeMode: 'contain'
-    },
-
+    }
 });
-
