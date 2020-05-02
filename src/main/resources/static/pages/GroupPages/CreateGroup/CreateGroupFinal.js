@@ -2,7 +2,7 @@ import * as React from "react";
 import { Text, View, FlatList, Switch, TouchableOpacity, StyleSheet, Image, TextInput, ImageBackground, AsyncStorage } from "react-native";
 import {Entypo, Ionicons} from "@expo/vector-icons";
 import {RNS3} from "react-native-aws3/src/RNS3";
-import {insertGroup} from '../../fetches/GroupFetch';
+import {insertGroup} from '../../../fetches/GroupFetch';
 
 export default class CreateGroupFinal extends React.Component {
     constructor(props) {

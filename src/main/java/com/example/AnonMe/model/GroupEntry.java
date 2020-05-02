@@ -27,14 +27,15 @@ public class GroupEntry {
                       @JsonProperty("image") String image, @JsonProperty("memberCount") int memberCount) {
         if(group_id == null){
             this.group_id = UUID.randomUUID().toString();
+            this.memberCount = 0;
+            this.button = true;
         }else {
             this.group_id = group_id;
+            this.memberCount = memberCount;
+            this.button = button;
         }
-
         this.group_name = group_name;
-        this.memberCount = memberCount;
         this.image = image;
-        this.button = button;
         this.group_desc = group_desc;
     }
 

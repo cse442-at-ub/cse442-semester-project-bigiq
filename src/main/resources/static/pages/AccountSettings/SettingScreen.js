@@ -29,7 +29,7 @@ export default class SettingScreen extends React.Component{
     };
     signOutHandler = async () =>{
         AsyncStorage.clear();
-        this.props.navigation.navigate('Splash');
+        this.props.navigation.dangerouslyGetParent().dangerouslyGetParent().navigate('Splash');
     };
     deleteAccountAlert = () =>
         Alert.alert(

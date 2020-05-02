@@ -557,6 +557,11 @@ public class PostRepository {
                 "AND a.phone_number = '" + phone_number +"'";
 
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),screen_name));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),screen_name));
+        }
         return ret;
     }
 
@@ -574,6 +579,11 @@ public class PostRepository {
                 "WHERE b.post_id = a.post_id AND b.phone_number = c.phone_number AND a.like = '1' AND a.phone_number = '" + phone_number +"'";
 
         ret.addAll(jdbc_temp.query(sql,BeanPropertyRowMapper.newInstance(PostEntry.class)));
+
+        for (PostEntry tmp : ret) {
+            tmp.setLike_button(getLike(tmp.getPost_id(),screenName));
+            tmp.setFlag_button(getFlag(tmp.getPost_id(),screenName));
+        }
 
         return ret;
     }

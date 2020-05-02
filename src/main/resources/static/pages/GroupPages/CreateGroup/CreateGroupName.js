@@ -1,6 +1,6 @@
 import { Text, View, FlatList, Switch, TouchableOpacity, StyleSheet, Image, TextInput, ImageBackground, AsyncStorage } from "react-native";
 import * as React from 'react';
-import { fetchDataRecent, fetchDataLiked, deletePost } from "../../fetches/PostFetch";
+import { fetchDataRecent, fetchDataLiked, deletePost } from "../../../fetches/PostFetch";
 import { Ionicons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";

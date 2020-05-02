@@ -7,16 +7,12 @@ import {
     StyleSheet,
     Image,
     TouchableWithoutFeedback,
-    TextInput, AsyncStorage
+    TextInput, AsyncStorage, Dimensions
 } from "react-native";
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
 import * as React from 'react';
 import {SearchBar, ListItem, Avatar} from 'react-native-elements'
-import { fetchGroups } from "../../fetches/GroupFetch";
+import { fetchAllGroups, searchGroups, fetchUserGroups } from "../../fetches/GroupFetch";
 import {Ionicons} from "@expo/vector-icons";
-import {RNS3} from "react-native-aws3/src/RNS3";
 
 
 export default class GroupScreen extends React.Component {
@@ -24,11 +20,15 @@ export default class GroupScreen extends React.Component {
         super(props);
         this.state = {
             data: [],
+            trendingSearchData: [],
+            trendingSearchD: false,
             search: '',
             groupName: '',
             groupDes: '',
             isVisible: false,
             groupImage: "https://anonmebucket.s3.us-east-2.amazonaws.com/GroupImage/defaultGroupImage.png",
+            isSearching: false,
+
         };
     }
 
@@ -40,13 +40,49 @@ export default class GroupScreen extends React.Component {
             });
         });
         this.props.navigation.addListener("focus", () => {
-            this.dataGroups();
+            this.fetchUserGroups();
+            this.fetchAllGroups();
         });
     };
-    dataGroups = () =>{
-        fetchGroups(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
-    }
+    fetchUserGroups = () =>{
+        fetchUserGroups(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
 
+    };
+    fetchAllGroups = () =>{
+        fetchAllGroups(this.state.screenName).then( dataAPI => this.setState({trendingSearchData : dataAPI}))
+    };
+    updateSearch = search => {
+        this.setState({ search });
+        this.searchFetch();
+    };
+    searchFetch = () =>{
+        searchGroups(this.state.search).then(dataAPI => this.setState({trendingSearchData : dataAPI}))
+    };
+
+    trendingOrSearch =() =>{
+        if(this.state.search.length === 0){
+            this.fetchAllGroups();
+            return(
+                <View style={{paddingHorizontal:20, paddingVertical: 10}}>
+                    <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 20}}>Trending</Text>
+                </View>
+            );
+        }else {
+            return (
+                <View style={{paddingHorizontal:20, paddingVertical: 10}}>
+                    <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 20}}>Search</Text>
+                </View>
+            )
+        }
+    };
+    emptySearch = () =>{
+        return(
+            <View style={{alignItems:'center', width: Dimensions.get('window').width}}>
+                <Text>Sorry but we can't find that group.</Text>
+                <Text>How about you create one?</Text>
+            </View>
+        )
+    };
     headerComponent = () =>{
         return (
             <View style={{width: '100%'}}>
@@ -56,17 +92,18 @@ export default class GroupScreen extends React.Component {
                         round
                         lightTheme
                         containerStyle={styles.searchContainer}
+                        showLoading={this.state.isSearching}
+                        onChangeText={this.updateSearch}
+                        value={this.state.search}
                     />
                 </View>
-                <View style={{paddingHorizontal:20, paddingVertical: 10}}>
-                    <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 20}}>Trending</Text>
-                </View>
-                <View>
+                {this.trendingOrSearch()}
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         keyExtractor={(item) => item.id}
-                        data={this.state.data}
-                        ListEmptyComponent={this.empty}
+                        data={this.state.trendingSearchData}
+                        extraData={this.state.trendingSearchData}
+                        ListEmptyComponent={this.emptySearch()}
                         horizontal={true}
                         renderItem={({ item }) => {
                             return (
@@ -83,7 +120,7 @@ export default class GroupScreen extends React.Component {
                                                 <Text style={{color: 'gray', fontSize: 10, textAlign: 'center'}}>{item.memberCount} Members</Text>
                                             </View>
                                         </View>
-                                    
+
                                         <View>
                                             <Text style={{textAlign: 'center',color: 'black', fontSize: 10}}>{item.group_desc}</Text>
                                         </View>
@@ -91,7 +128,7 @@ export default class GroupScreen extends React.Component {
                                 </TouchableWithoutFeedback>
                             )
                         }}/>
-                </View>
+
             </View>
         );
     };
@@ -100,6 +137,7 @@ export default class GroupScreen extends React.Component {
           <View></View>
       )
     };
+
     renderItem = ({ item }) => (
         <ListItem
             containerStyle = {styles.listItemContainer}
@@ -108,7 +146,8 @@ export default class GroupScreen extends React.Component {
             leftAvatar={{ source: { uri: item.image }, size:"medium"}}
             bottomDivider
             titleStyle={styles.listTitle}
-            onPress={() => this.props.navigation.navigate('GroupChat',{group: item})}
+            onPress={() => this.props.navigation.dangerouslyGetParent().
+                dangerouslyGetParent().navigate('GroupChat',{group: item})}
             chevron
         />
     );
@@ -132,8 +171,9 @@ export default class GroupScreen extends React.Component {
                         showsVerticalScrollIndicator={false}
                         keyExtractor={(item) => item.id}
                         ListHeaderComponent={this.headerComponent()}
-                        ListEmptyComponent={this.empty}
+                        ListEmptyComponent={this.empty()}
                         data={this.state.data}
+                        extraData={this.state.data}
                         renderItem= {this.renderItem}/>
                 </View>
             </View>
