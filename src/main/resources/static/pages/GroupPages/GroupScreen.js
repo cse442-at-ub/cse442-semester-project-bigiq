@@ -7,11 +7,12 @@ import {
     StyleSheet,
     Image,
     TouchableWithoutFeedback,
-    ImageBackground, AsyncStorage
+    TextInput, AsyncStorage, Dimensions
 } from "react-native";
 import * as React from 'react';
-import { fetchGroups } from "../../fetches/GroupFetch";
-
+import {SearchBar, ListItem, Avatar} from 'react-native-elements'
+import { fetchAllGroups, searchGroups, fetchUserGroups } from "../../fetches/GroupFetch";
+import {Ionicons} from "@expo/vector-icons";
 
 
 export default class GroupScreen extends React.Component {
@@ -19,10 +20,18 @@ export default class GroupScreen extends React.Component {
         super(props);
         this.state = {
             data: [],
+            trendingSearchData: [],
+            trendingSearchD: false,
             search: '',
             groupName: '',
+            groupDes: '',
+            isVisible: false,
+            groupImage: "https://anonmebucket.s3.us-east-2.amazonaws.com/GroupImage/defaultGroupImage.png",
+            isSearching: false,
+
         };
     }
+
 
     componentDidMount() {
         AsyncStorage.getItem('screenName').then((token) => {
@@ -30,88 +39,191 @@ export default class GroupScreen extends React.Component {
                 screenName: token,
             });
         });
-        const { navigation } = this.props;
-        navigation.addListener("focus", () => {
-            this.dataGroups();
+        this.props.navigation.addListener("focus", () => {
+            this.fetchUserGroups();
+            this.fetchAllGroups();
         });
     };
+    fetchUserGroups = () =>{
+        fetchUserGroups(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
 
-    dataGroups = () => {
-        fetchGroups().then(dataAPI => this.setState({ data: dataAPI }));
+    };
+    fetchAllGroups = () =>{
+        fetchAllGroups(this.state.screenName).then( dataAPI => this.setState({trendingSearchData : dataAPI}))
+    };
+    updateSearch = search => {
+        this.setState({ search });
+        this.searchFetch();
+    };
+    searchFetch = () =>{
+        searchGroups(this.state.search).then(dataAPI => this.setState({trendingSearchData : dataAPI}))
     };
 
-
-    render() {
-        const { search } = this.state.search;
-        let that = this;
-        return (
-            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column', backgroundColor: '#4704a5' }}>
-                <View style={{ paddingTop: 50, flexDirection: 'column', }}>
-                    <View style={styles.searchBox}>
-                        <Text style={styles.searchText}>Browsing Page</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.searchButton} onPress={() => that.props.navigation.navigate('CreateGroupScreen')}>
-                            <Text style={styles.searchText}>Create Group</Text>
-                        </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.searchButton} onPress={(search) => this.updateSearch()}>
-                            <Text style={styles.searchText}>My Groups</Text>
-                        </TouchableOpacity> */}
-                    </View>
+    trendingOrSearch =() =>{
+        if(this.state.search.length === 0){
+            this.fetchAllGroups();
+            return(
+                <View style={{paddingHorizontal:20, paddingVertical: 10}}>
+                    <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 20}}>Trending</Text>
                 </View>
+            );
+        }else {
+            return (
+                <View style={{paddingHorizontal:20, paddingVertical: 10}}>
+                    <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 20}}>Search</Text>
+                </View>
+            )
+        }
+    };
+    emptySearch = () =>{
+        return(
+            <View style={{alignItems:'center', width: Dimensions.get('window').width}}>
+                <Text>Sorry but we can't find that group.</Text>
+                <Text>How about you create one?</Text>
+            </View>
+        )
+    };
+    headerComponent = () =>{
+        return (
+            <View style={{width: '100%'}}>
                 <View>
+                    <SearchBar
+                        placeholder="Search"
+                        round
+                        lightTheme
+                        containerStyle={styles.searchContainer}
+                        showLoading={this.state.isSearching}
+                        onChangeText={this.updateSearch}
+                        value={this.state.search}
+                    />
+                </View>
+                {this.trendingOrSearch()}
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.group_id}
-                        extraData={this.state}
-                        data={this.state.data}
+                        keyExtractor={(item) => item.id}
+                        data={this.state.trendingSearchData}
+                        extraData={this.state.trendingSearchData}
+                        ListEmptyComponent={this.emptySearch()}
+                        horizontal={true}
                         renderItem={({ item }) => {
                             return (
-                                <View style = {styles.postContainer}>
-                                    <TouchableWithoutFeedback>
-                                        <View>
-                                            <Text style={{ fontSize: 10}}>{item.group_name}</Text>
-                                             {/* <Text style={{marginVertical: 6, fontSize: 14}}>{item.groupName}</Text> */}
+                                <TouchableWithoutFeedback>
+                                    <View style={styles.cardContainer}>
+                                        <View style={{paddingVertical: 5, flexDirection: 'row'}}>
+                                        <Avatar
+                                            size="medium"
+                                            rounded
+                                            source= {{uri:item.image}}
+                                            />
+                                            <View style={{marginTop: 15, marginLeft: 10}}>
+                                                <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>{item.group_name}</Text>
+                                                <Text style={{color: 'gray', fontSize: 10, textAlign: 'center'}}>{item.memberCount} Members</Text>
+                                            </View>
                                         </View>
-                                    </TouchableWithoutFeedback>
-                                </View>
-                            )
-                        }}>
 
-                    </FlatList>
+                                        <View>
+                                            <Text style={{textAlign: 'center',color: 'black', fontSize: 10}}>{item.group_desc}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            )
+                        }}/>
+
+            </View>
+        );
+    };
+    empty = () =>{
+      return(
+          <View></View>
+      )
+    };
+
+    renderItem = ({ item }) => (
+        <ListItem
+            containerStyle = {styles.listItemContainer}
+            title={item.group_name}
+            subtitle={item.group_desc}
+            leftAvatar={{ source: { uri: item.image }, size:"medium"}}
+            bottomDivider
+            titleStyle={styles.listTitle}
+            onPress={() => this.props.navigation.dangerouslyGetParent().
+                dangerouslyGetParent().navigate('GroupChat',{group: item})}
+            chevron
+        />
+    );
+    render() {
+        let that = this;
+        return (
+            <View style={{ flex: 1, alignItems: 'center', flexDirection: 'column', backgroundColor: 'white' }}>
+                <View style={styles.topFeed}>
+                    <View style={styles.postnfeed}>
+                        <Image style={{width: 40, height: 40, resizeMode: 'contain'}}
+                               source={require('../../assets/avatars/1.png')}/>
+                        <Text style={{color: 'white', fontWeight: 'bold', fontSize: 27}}>Groups</Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateGroupName')}>
+                            <Ionicons name={'ios-add'} size={40} color={'white'}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{width: '100%', height: '90%'}}>
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        keyExtractor={(item) => item.id}
+                        ListHeaderComponent={this.headerComponent()}
+                        ListEmptyComponent={this.empty()}
+                        data={this.state.data}
+                        extraData={this.state.data}
+                        renderItem= {this.renderItem}/>
                 </View>
             </View>
         );
     }
 }
+/*
+
+ */
 const styles = StyleSheet.create({
-    postContainer: {
-        width: 370,
-        borderRadius: 20,
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: 'black',
-        shadowOpacity: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
-        marginVertical: 10,
-        padding: 20,
-        elevation: 3,
-        backgroundColor: 'white',
-    },
-    searchText: {
-        fontSize: 16,
-        color: '#ffffff',
-        textAlign: 'center',
+    overlayContainer:{
+        marginBottom: 200
     },
     searchButton: {
-        padding: 20,
+        padding: 0,
         marginHorizontal: 10,
         width: 180,
         backgroundColor: '#1c313a',
         borderRadius: 25,
-        marginVertical: 10,
+        marginVertical: -20,
         paddingVertical: 13,
     },
+    listTitle:{
+      fontWeight: 'bold'
+    },
+    listItemContainer:{
+        borderBottomColor: 'transparent',
+        borderTopColor: 'transparent',
+    },
+    postnfeed:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        position: 'relative',
+    },
+    cardContainer:{
+        width: 250,
+        height: 80,
+        borderRadius: 20,
+        alignItems: 'center',
+        backgroundColor: 'white',
+
+    },
+    topFeed: {
+        backgroundColor: '#4704a5',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: '10%'
+    },
+
     group: {
         padding: 20,
         marginHorizontal: 10,
@@ -126,18 +238,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         justifyContent: 'space-between'
     },
-    searchBox: {
-        width: 280,
-        backgroundColor: 'rgba(255,255,255,0.3)',
-        borderRadius: 25,
-        paddingHorizontal: 16,
-        fontSize: 16,
-        color: '#ffffff',
-        textAlign: 'center',
-        alignItems: 'center',
-        marginVertical: 10,
-        paddingVertical: 13,
-        justifyContent: 'center',
+    searchContainer: {
+        backgroundColor: 'white',
+        borderBottomColor: 'transparent',
+        borderTopColor: 'transparent',
     },
 
 });

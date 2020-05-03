@@ -15,9 +15,14 @@ import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
 import CommentScreen from "./pages/HomePage/CommentScreen";
 import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
-import CreateGroupScreen from "./pages/GroupPages/CreateGroupScreen";
+import CreateGroupName from "./pages/GroupPages/CreateGroup/CreateGroupName";
 import PDFollowingScreen from "./pages/FollowingPages/PDFollowingScreen";
 import CSFollowingScreen from "./pages/FollowingPages/CommentScreen";
+import CreateGroupDes from "./pages/GroupPages/CreateGroup/CreateGroupDes";
+import CreateGroupFinal from "./pages/GroupPages/CreateGroup/CreateGroupFinal";
+import GroupChat from "./pages/GroupPages/GroupChat";
+import CreateGroupImage from "./pages/GroupPages/CreateGroup/CreateGroupImage";
+import GroupChatSetting from "./pages/GroupPages/GroupChatSetting";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -25,6 +30,7 @@ const AccountStack = createStackNavigator();
 const FollowingStack = createStackNavigator();
 const GroupStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 function HomePageScreen() {
     return (
@@ -75,7 +81,10 @@ function GroupScreens() {
             }}
         >
             <Stack.Screen name="GroupScreen" component={GroupScreen} />
-            <Stack.Screen name="CreateGroupScreen" component={CreateGroupScreen} />
+            <Stack.Screen name="CreateGroupName" component={CreateGroupName} />
+            <Stack.Screen name="CreateGroupDes" component={CreateGroupDes} />
+            <Stack.Screen name="CreateGroupImage" component={CreateGroupImage} />
+            <Stack.Screen name="CreateGroupFinal" component={CreateGroupFinal} />
 
         </GroupStack.Navigator>
     )
@@ -86,6 +95,7 @@ function AppScreen() {
                 tabBarOptions={{
                     activeTintColor: '#4704a5',
                     inactiveTintColor: 'gray',
+                    keyboardHidesTabBar: true,
                 }}
             >
                 <Tab.Screen name="Home" component={HomePageScreen}
@@ -99,14 +109,14 @@ function AppScreen() {
                             options={{
                                 tabBarLabel: 'Following',
                                 tabBarIcon: ({color, size}) => (
-                                    <Ionicons name={'ios-chatboxes'} size={size} color={color}/>
+                                    <Ionicons name={'ios-paper'} size={size} color={color}/>
                                 ),
                             }}/>
                 <Tab.Screen name="Group" component={GroupScreens}
                             options={{
                                 tabBarLabel: 'Group',
                                 tabBarIcon: ({color, size}) => (
-                                    <Ionicons name={'ios-paper'} size={size} color={color}/>
+                                    <Ionicons name={'ios-chatboxes'} size={size} color={color}/>
                                 ),
                             }}/>
                 <Tab.Screen name="Account" component={AccountScreens}
@@ -134,7 +144,8 @@ export default function Routes() {
                 <Stack.Screen name="Verification" component={Verification} />
                 <Stack.Screen name="registerName" component={registerName} />
                 <Stack.Screen name="AppScreen" component={AppScreen} />
-
+                <Stack.Screen name="GroupChat" component={GroupChat} />
+                <Stack.Screen name="GroupChatSetting" component={GroupChatSetting} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -33,7 +33,6 @@ export default class CSFollowingScreen extends React.Component{
             this.setState({
                 screenName: token
             });
-            console.log(this.state.screenName)
         });
     }
 
@@ -43,9 +42,7 @@ export default class CSFollowingScreen extends React.Component{
 
     postComment = () =>{
         const that = this;
-        const screenName = this.state.screenName;
-        console.log("sd "+screenName);
-        insertComment(this.state.id, screenName, this.state.comment).then(function(response) {
+        insertComment(this.state.id, this.state.screenName, this.state.comment).then(function(response) {
             if(response.ok){
                 that.goBack();
             }

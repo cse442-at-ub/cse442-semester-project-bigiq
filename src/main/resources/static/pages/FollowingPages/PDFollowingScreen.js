@@ -37,8 +37,7 @@ export default class PDFollowingScreen extends React.Component{
         this.setState({postDetail: this.props.route.params.post});
     };
     getAllComments = () =>{
-        const postId = this.props.route.params.id;
-        fetchComments(postId).then(dataAPI => this.setState({comments : dataAPI}));
+        fetchComments(this.props.route.params.post.id).then(dataAPI => this.setState({comments : dataAPI}));
     };
     backHomeScreen = () =>{
         this.props.navigation.pop();
@@ -69,9 +68,9 @@ export default class PDFollowingScreen extends React.Component{
         const newArray = this.state.postDetail;
         newArray.like_button = !newArray.like_button;
         if(newArray.like_button === false){
-            newArray.like_ctr = newArray.like_ctr - 1;
+            newArray.likes = newArray.likes - 1;
         }else {
-            newArray.like_ctr = newArray.like_ctr + 1;
+            newArray.likes = newArray.likes + 1;
         }
         this.setState({ postDetail: newArray });
         this.fetchLike(id)
@@ -118,19 +117,19 @@ export default class PDFollowingScreen extends React.Component{
                 <View style={styles.detailsContainer}>
                     <View style={styles.postDetails}>
                         <View>
-                            <Text style={{fontSize: 10, color: '#cccccc'}}>{that.state.postDetail.timestampFront}</Text>
+                            <Text style={{fontSize: 10, color: '#cccccc'}}>{that.state.postDetail.time}</Text>
                             <Text style={{marginVertical: 6, fontSize: 15}}>{that.state.postDetail.content}</Text>
                         </View>
                         <View style = {styles.featureContainer}>
                             <View style={{flexDirection:'row'}}>
-                                <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.like(that.state.postDetail.post_id)}>
+                                <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.like(that.state.postDetail.id)}>
                                     <Ionicons
                                         name={'md-thumbs-up'}
                                         size={16}
                                         color={that.state.postDetail.like_button ? '#4704a5' : 'gray'}
                                     />
                                 </TouchableOpacity>
-                                <Text style = {{color: '#cccccc'}}>{that.state.postDetail.like_ctr}</Text>
+                                <Text style = {{color: '#cccccc'}}>{that.state.postDetail.likes}</Text>
                             </View>
                             <View style={{flexDirection:'row'}}>
                                 <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.addComment()}>
@@ -175,36 +174,39 @@ export default class PDFollowingScreen extends React.Component{
                         data={this.state.comments}
                         renderItem={({ item, index }) => {
                             return(
-                                <View style = {styles.commentContainer}>
-                                    <View>
-                                        <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestamp_front}</Text>
-                                        <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
-                                    </View>
-                                    <View style = {styles.featureContainer}>
-                                        <View style={{flexDirection:'row'}}>
+                                <View style={{alignItems: 'center', flexDirection:'column', width: '100%'}}>
+                        
+                                    <View style = {styles.commentContainer}>
+                                        <View>
+                                            <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestamp_front}</Text>
+                                            <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
+                                        </View>
+                                        <View style = {styles.featureContainer}>
+                                            <View style={{flexDirection:'row'}}>
+                                                <TouchableOpacity style={{marginHorizontal: 10}}>
+                                                    <Ionicons
+                                                        name={'md-thumbs-up'}
+                                                        size={16}
+                                                        color={item.like_button ? '#4704a5' : 'gray'}
+                                                    />
+                                                </TouchableOpacity>
+                                                <Text style = {{color: '#cccccc'}}>{0}</Text>
+                                            </View>
+
                                             <TouchableOpacity style={{marginHorizontal: 10}}>
                                                 <Ionicons
-                                                    name={'md-thumbs-up'}
+                                                    name={'ios-share'}
                                                     size={16}
-                                                    color={item.like_button ? '#4704a5' : 'gray'}
+                                                    color={'gray'}/>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flagComment(index, item.post_id)}>
+                                                <Ionicons
+                                                    name={'ios-flag'}
+                                                    size={16}
+                                                    color={item.flag_button ? '#4704a5' : 'gray'}
                                                 />
                                             </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{0}</Text>
                                         </View>
-
-                                        <TouchableOpacity style={{marginHorizontal: 10}}>
-                                            <Ionicons
-                                                name={'ios-share'}
-                                                size={16}
-                                                color={'gray'}/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => that.flagComment(index, item.post_id)}>
-                                            <Ionicons
-                                                name={'ios-flag'}
-                                                size={16}
-                                                color={item.flag_button ? '#4704a5' : 'gray'}
-                                            />
-                                        </TouchableOpacity>
                                     </View>
                                 </View>
 

@@ -39,9 +39,9 @@ export default class AccountScreen extends React.Component{
                 doneLoading: true
             });
         });
-        this.props.navigation.addListener("focus", () => {
+        /*this.props.navigation.addListener("focus", () => {
             this.fetchUserPost();
-        });
+        });*/
     };
     _listEmptyComponent = () => {
         return (
@@ -61,9 +61,9 @@ export default class AccountScreen extends React.Component{
         const newArray = [...this.state.data];
         newArray[index].like_button = !newArray[index].like_button;
         if(newArray[index].like_button === false){
-            newArray[index].like_ctr = newArray[index].like_ctr - 1;
+            newArray[index].likes = newArray[index].likes - 1;
         }else {
-            newArray[index].like_ctr = newArray[index].like_ctr + 1;
+            newArray[index].likes = newArray[index].likes + 1;
         }
         this.setState({ data: newArray });
         this.fetchLike(id)
@@ -116,20 +116,20 @@ export default class AccountScreen extends React.Component{
                                 <View style = {styles.postContainer}>
                                     <TouchableWithoutFeedback>
                                         <View>
-                                            <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestampFront}</Text>
+                                            <Text style={{fontSize: 10, color: '#cccccc'}}>{item.time}</Text>
                                             <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <View style = {styles.featureContainer}>
                                         <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLike(index, item.post_id)}>
+                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() =>that.checkLike(index, item.id)}>
                                                 <Ionicons
                                                     name={'md-thumbs-up'}
                                                     size={16}
                                                     color={item.like_button ? '#4704a5' : 'gray'}
                                                 />
                                             </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{item.like_ctr}</Text>
+                                            <Text style = {{color: '#cccccc'}}>{item.likes}</Text>
                                         </View>
                                         <View style={{flexDirection:'row'}}>
                                             <TouchableOpacity style={{marginHorizontal: 10}}>
@@ -161,7 +161,6 @@ export default class AccountScreen extends React.Component{
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-
                             )
                         }
                         }
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     postContainer:{
-        width: 400,
+        width: 380,
         borderRadius: 10,
         justifyContent: 'center',
         alignContent: 'center',

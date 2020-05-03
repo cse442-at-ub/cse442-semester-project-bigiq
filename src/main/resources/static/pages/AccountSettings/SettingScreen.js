@@ -29,7 +29,7 @@ export default class SettingScreen extends React.Component{
     };
     signOutHandler = async () =>{
         AsyncStorage.clear();
-        this.props.navigation.navigate('Splash');
+        this.props.navigation.dangerouslyGetParent().dangerouslyGetParent().navigate('Splash');
     };
     deleteAccountAlert = () =>
         Alert.alert(
@@ -87,7 +87,8 @@ export default class SettingScreen extends React.Component{
         return(
             <View style={{ flex: 1}}>
                 <View style={styles.headerContainer}>
-                    <TouchableOpacity style={{ position:'relative', top: '60%', left: 20}} onPress={() => that.goBack()}>
+                    <TouchableOpacity style={{left: 20, justifyContent: 'flex-end', marginBottom: 10}}
+                                      onPress={() => that.goBack()}>
                         <Image style={{width: 25, height: 25, resizeMode: 'contain'}}
                                source={require('../../assets/backIcon.png')}/>
                     </TouchableOpacity>
@@ -171,11 +172,14 @@ const styles = StyleSheet.create({
     headerContainer: {
         backgroundColor: '#4704a5',
         width: '100%',
-        height: '13%',
+        height: '10%',
+        flexDirection: 'row',
     },
     SETTING:{
         alignItems: 'center',
-        top: '25%'
+        paddingBottom: 10,
+        width: '100%',
+        justifyContent: 'flex-end'
     },
     sectionContainer: {
         paddingHorizontal: 30,
