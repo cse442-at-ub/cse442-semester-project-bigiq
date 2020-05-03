@@ -143,7 +143,7 @@ public class GroupRepository {
                 "group_id = '" + target.getGroup_id() + "' ";
         jdbc_temp.update(sql);
 
-        sql = "DELETE FROM user_group_posts WHERE " +
+        sql = "DELETE FROM user_group_messages WHERE " +
                 "group_id = '" + target.getGroup_id() + "' ";
     }
 
@@ -202,5 +202,48 @@ public class GroupRepository {
 
         sql += "'"+ change +"' " + (flag == "owner" ? ("AND group_id = '"+ group_id+"'"):("WHERE group_name = '"+ group_name+ "'"));
         jdbc_temp.update(sql);
+    }
+
+    public List<GroupEntry> getuserowned(String screenname) {
+        String sql = "SELECT a.group_id, a.group_name, a.group_desc, a.memberCount, a.image " +
+                "FROM group_data_table a, user_group_data b " +
+                "WHERE a.group_id = b.group_id " +
+                "AND b.screen_name = '"+screenname+"' " +
+                "AND b.role_flag = 1 ";
+
+        List<GroupEntry> tmp = new ArrayList<>();
+        tmp.addAll(jdbc_temp.query(sql,new BeanPropertyRowMapper<>(GroupEntry.class)));
+
+        for (GroupEntry t:tmp){
+            t.setButton(true);
+        }
+
+        return tmp;
+    }
+
+    public boolean verifyOwner(String screenname, String group_name) {
+        String sql = "Select a.group_id, a.group_name, a.group_desc from " +
+                "group_data_table a, user_group_data b " +
+                "where a.group_id = b.group_id " +
+                "AND b.screen_name = '" + screenname +"' " +
+                "AND a.group_name = '" + group_name + "' " +
+                "AND b.role_flag = 1 ";
+        List<GroupEntry> tmp = new ArrayList<>();
+        tmp.addAll(jdbc_temp.query(sql, new BeanPropertyRowMapper(GroupEntry.class)));
+        return tmp.size() == 1;
+    }
+
+    public List<GroupEntry> getTrending(String screenname){
+        String sql = "Select a.group_id, a.group_name, a.group_desc, a.memberCount, a.group_desc, a.image " +
+                "from group_data_table a " +
+                "WHERE NOT EXISTS ( " +
+                "Select b.group_id from user_group_data b " +
+                "WHERE b.group_id = a.group_id " +
+                "AND b.screen_name = '"+screenname+"' " +
+                ") ";
+        List<GroupEntry> tmp = new ArrayList<>();
+        tmp.addAll(jdbc_temp.query(sql, new BeanPropertyRowMapper(GroupEntry.class)));
+
+        return tmp;
     }
 }

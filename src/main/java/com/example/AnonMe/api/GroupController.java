@@ -74,5 +74,19 @@ public class GroupController {
     public void changeOwner(@RequestParam String screenname, @RequestParam String group_name){
         repo.modifyGroup(group_name, screenname, "owner");
     }
-}
 
+    @GetMapping(path="/verifyOwner")
+    public boolean verifyOwner(@RequestParam String screenname, @RequestParam String group_name){
+        return repo.verifyOwner(screenname, group_name);
+    }
+
+    @GetMapping(path="/getuserowned")
+    public List<GroupEntry> getUserOwned(@RequestParam String screenname){
+        return repo.getuserowned(screenname);
+    }
+
+    @GetMapping(path="/getTrending")
+    public List<GroupEntry> getTrending(@RequestParam String screenname){
+        return repo.getTrending(screenname);
+    }
+}
