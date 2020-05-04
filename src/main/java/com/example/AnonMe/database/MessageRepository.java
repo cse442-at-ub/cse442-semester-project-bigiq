@@ -85,6 +85,11 @@ public class MessageRepository {
         return tmp;
     }
 
+    public void remove(MessageEntry message1) {
+        String sql = "REMOVE FROM user_group_messages WHERE message_id ='"+message1.getMessageId()+"'";
+        jdbc_temp.update(sql);
+    }
+
     /*public MessageEntry lastMessage(String screenname, String groupname) {
         List<MessageEntry> ret = getMessages(screenname,groupname);
         return ret.get(ret.size()-1);
