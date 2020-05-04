@@ -5,11 +5,14 @@ export const fetchUserGroups = (screenName) =>{
     const URL = baseURL + ":8080/groups/getusergroups?screenName=" + screenName;
     return fetch(URL).then(response => response.json());
 };
-export const fetchAllGroups = (screenName) =>{
-    const URL = baseURL + ":8080/groups/getallgroups?screenname=" + screenName;
+export const fetchTrending = (screenName) =>{
+    const URL = baseURL + ":8080/groups/getTrending?screenname=" + screenName;
     return fetch(URL).then(response => response.json());
 };
-
+export const checkAdmin = (screenName, groupName) =>{
+    const URL = baseURL + ":8080/groups/verifyOwner?screenname=" + screenName + "&group_name=" + groupName;
+    return fetch(URL).then(response => response.json());
+};
 export const searchGroups = (keyword) =>{
     const URL = baseURL + ":8080/groups/searchGroup?keyword=" + keyword;
     return fetch(URL).then(response => response.json());
@@ -18,17 +21,6 @@ export const searchGroups = (keyword) =>{
 export const getAllUsers = (groupName, screenName) =>{
     const URL = baseURL + ":8080/groups/getallusers?screenname=" + screenName + "&group_name=" + groupName;
     return fetch(URL).then(response => response.json());
-};
-
-export const insertUser = (screenName, groupName) =>{
-    const URL = baseURL + ":8080/groups/addUser?screenname=" + screenName + "&group_name=" + groupName;
-    fetch(URL, {
-        method: "POST"
-    }).then(function(response) {
-        if(response.ok){
-            console.log(screenName + " added to " + groupName)
-        }
-    });
 };
 
 export const changeImage = (image, groupName) =>{
@@ -52,6 +44,16 @@ export const changeDesc = (groupName, groupDesc) =>{
         }
     });
 };
+export const leaveGroup = (screenName, groupName) =>{
+    const URL = baseURL + ":8080/groups/removeUser?screenname=" + screenName + "&group_name=" + groupName;
+    fetch(URL, {
+        method: "POST"
+    }).then(function(response) {
+        if(response.ok){
+            console.log(groupName + " changed desc")
+        }
+    });
+};
 
 export const insertGroup = (screenName, groupName, groupDesc, groupImage) =>{
     const URL = baseURL + ":8080/groups/insertGroup?screenname=" + screenName;
@@ -64,6 +66,30 @@ export const insertGroup = (screenName, groupName, groupDesc, groupImage) =>{
                 image: groupImage
             }
          ),
+        headers: new Headers({'content-type': 'application/json'}),
+    }).then(function(response) {
+        if(response.ok){
+            console.log(groupName + " added")
+        }
+    });
+};
+
+export const getMessages = (groupName, screenName) =>{
+    const URL = baseURL + ":8080/groups/messages/getMessages?screenname=" + screenName + "&groupname=" + groupName;
+    return fetch(URL).then(response => response.json());
+};
+
+export const addMessage = (screenName, groupName, message) =>{
+    const URL = baseURL + ":8080/groups/messages/insertMessage" ;
+    fetch(URL, {
+        method: "POST",
+        body: JSON.stringify(
+            {
+                group_name: groupName,
+                text: message,
+                user: {screen_name: screenName}
+            }
+        ),
         headers: new Headers({'content-type': 'application/json'}),
     }).then(function(response) {
         if(response.ok){
