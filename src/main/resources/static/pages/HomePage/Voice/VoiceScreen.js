@@ -15,17 +15,27 @@ import * as React from 'react';
 import { Slider } from 'react-native';
 import { Audio } from 'expo-av';
 import {Ionicons, FontAwesome, Entypo} from "@expo/vector-icons";
+import {VoiceMostLiked, VoiceMostRecent, likeVoice} from "../../../fetches/VoiceFetch";
+import {fetchDataLiked, fetchDataRecent, likePost} from "../../../fetches/PostFetch";
+import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 export default class VoiceScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data : [
-                {"id" : "123", "link" : "https://anonmebucket.s3.us-east-2.amazonaws.com/Audio/Gog.mp3", "bool": false,
-                "duration": 10300 , "time" : "May 03, 7:28 AM", "content": "title", "value": 0},
-                {"id" : "13", "link" : "https://anonmebucket.s3.us-east-2.amazonaws.com/Audio/Gog.mp3", "bool": false,
-                    "duration": 10300 , "time" : "May 03, 7:48 AM", "content": "title", "value": 0}
-                ],
+            data : [{
+                "id": "51543327-9ef4-4301-8615-feaeefecdbfd",
+                "content": "https://anonmebucket.s3.us-east-2.amazonaws.com/Audio/2e42ddbb-07a9-4c02-990b-e745f2c545a2.mp3",
+                "flag_ctr": 0,
+                "likes": 0,
+                "like_button": false,
+                "flag_button": false,
+                "duration": 30100,
+                "timestamp": "May 04, 2:05 PM",
+                "play_button": false,
+                "value": 0,
+                "screenName": "dumby1"
+            }],
             isPlaying: false,
             playbackInstance: null,
             timeGone: 0,
@@ -34,10 +44,16 @@ export default class VoiceScreen extends React.Component {
             isBuffering: false,
             value: 0,
             interval: null,
-            feedType: true
+            feedType: true,
+            screenName: ''
         };
     }
     async componentDidMount() {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
         await Audio.setAudioModeAsync({
             interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
             playsInSilentModeIOS: true,
@@ -45,15 +61,31 @@ export default class VoiceScreen extends React.Component {
             interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
             playThroughEarpieceAndroid: true,
         });
+        await this.fetchData();
         this._loadNewPlaybackInstance();
     }
+    fetchData = () =>{
+        this.state.feedType ? this.getDataRecent(): this.getDataLiked()
+    };
+    getDataRecent = async () =>{
+        await VoiceMostRecent(this.state.screenName).then( dataAPI => {
+            this.setState({data : dataAPI})
+        });
+        this.setState({feedType: true});
+
+    };
+    getDataLiked = () =>{
+        VoiceMostLiked(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
+        this.setState({feedType: false})
+    };
     async _loadNewPlaybackInstance() {
         const {isPlaying, volume, currentIndex} = this.state;
 
         try {
             const playbackInstance = new Audio.Sound();
+            console.log(this.state.data[currentIndex].content)
             const source = {
-                uri: this.state.data[currentIndex].link
+                uri: this.state.data[currentIndex].content
             };
             const status = {
                 shouldPlay: isPlaying,
@@ -66,6 +98,11 @@ export default class VoiceScreen extends React.Component {
             console.log(e)
         }
     }
+    onPlaybackStatusUpdate = status => {
+        this.setState({
+            isBuffering: status.isBuffering
+        })
+    };
     updateValue = (status, index) =>{
         const array = [...this.state.data];
         array[index].value = status.positionMillis;
@@ -95,7 +132,7 @@ export default class VoiceScreen extends React.Component {
     };
     flipPlay = () =>{
         const array = [...this.state.data];
-        array[this.state.currentIndex].bool = !array[this.state.currentIndex].bool;
+        array[this.state.currentIndex].play_button = !array[this.state.currentIndex].play_button;
         this.setState({ data: array });
     };
     playAudio = async (index) => {
@@ -103,16 +140,18 @@ export default class VoiceScreen extends React.Component {
         if(this.state.currentIndex === index){
             this.handlePlayPause(index)
         }
-        else if (playbackInstance) {
+        else{
             if(this.state.isPlaying === true){
                 this.setState({isPlaying: false})
                 this.flipPlay();
             }
             await playbackInstance.unloadAsync();
+            console.log("unloaded")
             this.setState({
                 currentIndex: index
             });
             await this._loadNewPlaybackInstance();
+            console.log("loaded")
             this.handlePlayPause(index);
         }
     };
@@ -120,7 +159,9 @@ export default class VoiceScreen extends React.Component {
         this.props.navigation.navigate('PostDetailVoice', {post: item})
     };
     async componentWillUnmount() {
-        await this.playbackInstance.unloadAsync();
+        if(this.state.playbackInstance !== null){
+            await this.state.playbackInstance.unloadAsync();
+        }
     }
     _listEmptyComponent = () =>{
         return(
@@ -141,14 +182,29 @@ export default class VoiceScreen extends React.Component {
             return <Text style={{fontSize: 12, color:'#4704a5'}}>Most Recent</Text>
         }
     };
+    fetchLike = (id) =>{
+        likeVoice(id,this.state.screenName).then(res => res.text);
+    };
+    checkLike = (index, id) =>{
+        const newArray = [...this.state.data];
+        console.log(newArray)
+        newArray[index].like_button = !newArray[index].like_button;
+        if(newArray[index].like_button === false){
+            newArray[index].likes = newArray[index].likes - 1;
+        }else {
+            newArray[index].likes = newArray[index].likes + 1;
+        }
+        this.setState({ data: newArray });
+        this.fetchLike(id)
+    };
     render(){
         return(
             <View style={{flex: 1, flexDirection:'column', backgroundColor: '#gray'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
-                    <TouchableOpacity style={styles.toggleFeedButton}>
+                    <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => this.getDataRecent()}>
                         {this.MRTypeColor()}
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.toggleFeedButton}>
+                    <TouchableOpacity style={styles.toggleFeedButton} onPress = {() => this.getDataLiked()}>
                         {this.MPTypeColor()}
                     </TouchableOpacity>
                 </View>
@@ -162,10 +218,9 @@ export default class VoiceScreen extends React.Component {
                         return(
                             <View style={{alignItems: 'center', flexDirection:'column', width: '100%'}}>
                                 <View style = {styles.postContainer}>
-                                    <TouchableWithoutFeedback onPress={() => this.goToPostDetail(item)}>
+                                    <TouchableWithoutFeedback >
                                         <View>
-                                            <Text style={{fontSize: 10, color: '#cccccc'}}>{item.time}</Text>
-                                            <Text style={{marginVertical: 6, fontSize: 14}}>{item.content}</Text>
+                                            <Text style={{fontSize: 10, color: '#cccccc'}}>{item.timestamp}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <View>
@@ -173,10 +228,9 @@ export default class VoiceScreen extends React.Component {
                                             justifyContent: 'center'}}>
                                             <TouchableOpacity onPress={() => this.playAudio(index)}
                                             style={{justifyContent:'center'}}>
-                                                {!item.bool && <Ionicons name={'md-play'} size={30} color={'black'}/>}
-                                                {item.bool && <Ionicons name={'md-pause'} size={30} color={'black'}/>}
+                                                {!item.play_button && <Ionicons name={'md-play'} size={30} color={'black'}/>}
+                                                {item.play_button && <Ionicons name={'md-pause'} size={30} color={'black'}/>}
                                             </TouchableOpacity>
-
                                             <View style={{paddingHorizontal: 5}}>
                                                 <Slider
                                                     style={{width: Dimensions.get('window').width * .6}}
@@ -191,23 +245,24 @@ export default class VoiceScreen extends React.Component {
                                                 />
                                             </View>
                                             <View style={{justifyContent:'center'}}>
-                                                <Text>{this.millisToMinutesAndSeconds(item.value)} / {this.millisToMinutesAndSeconds(item.duration)}</Text>
+                                                <Text>{this.millisToMinutesAndSeconds(item.value)} /
+                                                    {this.millisToMinutesAndSeconds(item.duration)}</Text>
                                             </View>
                                         </View>
                                     </View>
                                     <View style = {styles.featureContainer}>
                                         <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}}>
+                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => this.checkLike(index, item.id)}>
                                                 <Ionicons
                                                     name={'md-thumbs-up'}
                                                     size={16}
-                                                    color={'gray'}
+                                                    color={item.like_button ? '#4704a5' : 'gray'}
                                                 />
                                             </TouchableOpacity>
-                                            <Text style = {{color: '#cccccc'}}>{0}</Text>
+                                            <Text style = {{color: '#cccccc'}}>{item.likes}</Text>
                                         </View>
                                         <View style={{flexDirection:'row'}}>
-                                            <TouchableOpacity style={{marginHorizontal: 10}}>
+                                            <TouchableOpacity style={{marginHorizontal: 10}} onPress={() => this.goToPostDetail(item)}>
                                                 <Ionicons
                                                     name={'md-chatbubbles'}
                                                     size={16}
@@ -231,7 +286,7 @@ export default class VoiceScreen extends React.Component {
                                             <Ionicons
                                                 name={'ios-flag'}
                                                 size={16}
-                                                color={'gray'}
+                                                color={item.flag_button ? '#4704a5' : 'gray'}
                                             />
                                         </TouchableOpacity>
                                     </View>

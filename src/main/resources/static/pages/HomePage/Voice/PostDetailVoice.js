@@ -126,10 +126,6 @@ export default class PostDetailVoice extends React.Component{
     getPostDetail = () =>{
         this.setState({postDetail: this.props.route.params.post});
     };
-    getAllComments = () =>{
-        const postId = this.props.route.params.post.id;
-        fetchComments(postId).then(dataAPI => this.setState({comments : dataAPI}));
-    };
     backHomeScreen = () =>{
         this.props.navigation.pop();
     };
@@ -146,12 +142,9 @@ export default class PostDetailVoice extends React.Component{
             </View>
         )
     };
-    fetchLike = (id) =>{
-        likePost(id,this.state.screenName).then(res => res.text);
-    };
 
     addComment = () =>{
-        this.props.navigation.navigate('CommentVoice', {id: this.state.postDetail.id, content: this.state.postDetail.content});
+        this.props.navigation.navigate('CommentVoice', {id: this.state.postDetail.id, content: "Voice Audio"});
     };
 
     render() {
@@ -168,15 +161,14 @@ export default class PostDetailVoice extends React.Component{
                     <View style={styles.postDetails}>
                         <View>
                             <Text style={{fontSize: 10, color: '#cccccc'}}>{this.state.postDetail.time}</Text>
-                            <Text style={{marginVertical: 6, fontSize: 15}}>{this.state.postDetail.content}</Text>
                         </View>
                         <View>
                             <View style={{width: '100%', flexDirection: 'row',
                                 justifyContent: 'center'}}>
                                 <TouchableOpacity onPress={() => this.handlePlayPause()}
                                                   style={{justifyContent:'center'}}>
-                                    {!this.state.postDetail.bool && <Ionicons name={'md-play'} size={30} color={'black'}/>}
-                                    {this.state.postDetail.bool && <Ionicons name={'md-pause'} size={30} color={'black'}/>}
+                                    {!this.state.postDetail.play_button && <Ionicons name={'md-play'} size={30} color={'black'}/>}
+                                    {this.state.postDetail.play_button && <Ionicons name={'md-pause'} size={30} color={'black'}/>}
                                 </TouchableOpacity>
 
                                 <View style={{paddingHorizontal: 5}}>
