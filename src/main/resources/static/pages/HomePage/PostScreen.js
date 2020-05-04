@@ -44,6 +44,39 @@ export default class PostScreen extends React.Component {
             }
         });
     };
+    voiceFetch = () => {
+        const url = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156") + ":8080/audio/insertAudio";
+        const fileURL = this.state.video;
+        //const cleanURL = fileURL.replace("file://", "");
+        const photo = {
+            uri: fileURL,
+            type: 'video/mp4',
+            name: 'file.mp4',
+        };
+
+        const body = new FormData();
+        body.append('file', photo);
+        body.append('screenname', this.state.screenName);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url);
+        xhr.send(body);
+        this.goBack()
+        /*fetch(url, {
+            method: "POST",
+            body: JSON.stringify( {
+                author: that.state.screenName,
+                content: that.state.content
+            } ),
+            headers: {
+                'Content-Type': 'multipart/form-data;'
+            },
+        }).then(function(response) {
+            if(response.ok){
+                that.goBack()
+            }
+        });*/
+    };
     getPermissionAsync = async () => {
         if (Constants.platform.ios) {
             const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -71,16 +104,16 @@ export default class PostScreen extends React.Component {
     renderAttachment = () =>{
         if(this.state.picked === false){
             return(
-                <TouchableOpacity onPress={() => this._pickImage()}>
-                    <Ionicons name={'ios-attach'} size={25} color={'gray'}/>
+                <TouchableOpacity onPress={() => this._pickImage()} style={{alignItems: 'center', width: '100%', paddingVertical: 40}}>
+                    <Ionicons name={'ios-attach'} size={70} color={'gray'}/>
                 </TouchableOpacity>
             )
         }else{
             return(
-                <View style={{alignItems: 'center'}}>
+                <View style={{alignItems: 'center', width: '100%', paddingVertical: 40}}>
                     <Text>Attached</Text>
                     <TouchableOpacity onPress={() => this._pickImage()}>
-                        <Ionicons name={'ios-attach'} size={20} color={'gray'}/>
+                        <Ionicons name={'ios-attach'} size={50} color={'gray'}/>
                     </TouchableOpacity>
                 </View>
 
@@ -89,6 +122,9 @@ export default class PostScreen extends React.Component {
     };
     goBack = () => {
         this.props.navigation.pop();
+    };
+    postRequest = () =>{
+        this.state.textVoice ? this.voiceFetch(): this.postFetch()
     };
     textVoiceRender = () =>{
         if(this.state.textVoice === false){
@@ -109,20 +145,12 @@ export default class PostScreen extends React.Component {
             )
         }else {
             return (
-                <View style={{paddingVertical: 20, paddingHorizontal: 25}}>
-                    <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 20, fontWeight: "bold", color: '#4704a5'}}>Title</Text>
+                <View style={{alignItems:'center', justifyContent: 'center'}}>
+                    <View style = {{ justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 20, fontWeight: "bold", color: '#4704a5'}}>Pick an Video</Text>
                         {this.renderAttachment()}
                     </View>
-                    <TextInput style={styles.nameTagBox}
-                               underlineColorAndroid='rgba(0,0,0,0)'
-                               placeholder="Write here"
-                               placeholderTextColor='gray'
-                               multiline = {true}
-                               maxLength={60}
-                               onChangeText={input => this.setState({content: input})}
-                               keyboardType='default'
-                    />
+
                 </View>
             );
         }
@@ -138,7 +166,7 @@ export default class PostScreen extends React.Component {
                     <TouchableOpacity style={styles.iconContainer} onPress={() => this.setState({textVoice: !this.state.textVoice})}>
                         <MaterialCommunityIcons name={'voice'} size={25} color={this.state.textVoice ? '#4704a5':'gray'}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.postFetch()}>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.postRequest()}>
                         <FontAwesome name={'send'} size={20} color={'#4704a5'}/>
                     </TouchableOpacity>
                 </View>

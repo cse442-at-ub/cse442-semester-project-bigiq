@@ -40,9 +40,6 @@ export default class TextScreen extends React.Component {
         });
     };
 
-    deletePost =(id) =>{
-        deletePost(id).then(res => res.text())
-    };
     dataRecent = () =>{
         fetchDataRecent(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}));
         this.setState({feedType: true});
@@ -65,7 +62,6 @@ export default class TextScreen extends React.Component {
         }
     };
     fetchLike = (id) =>{
-        console.log( id + "    "+this.state.screenName)
         likePost(id,this.state.screenName).then(res => res.text);
     };
     fetchFlag = (id) =>{
