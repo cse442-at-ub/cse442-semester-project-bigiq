@@ -2,10 +2,11 @@ import { Text, View, FlatList, KeyboardAvoidingView, Dimensions , TouchableOpaci
 import * as React from "react";
 import {Ionicons, SimpleLineIcons, Entypo} from "@expo/vector-icons";
 import {Avatar} from 'react-native-elements'
-import { Header } from 'react-navigation-stack';
+import {getMessages, addMessage} from "../../fetches/GroupFetch";
 import { GiftedChat, Bubble, Send, InputToolbar,  } from 'react-native-gifted-chat'
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
+import UUIDGenerator from 'react-native-uuid-generator';
 import * as ImagePicker from "expo-image-picker";
 
 export default class GroupChat extends React.Component {
@@ -14,28 +15,53 @@ export default class GroupChat extends React.Component {
         this.state = {
             group: [],
             typing: false,
-            data: [
-                {_id: 1, text: 'My message',createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://anonmebucket.s3.us-east-2.amazonaws.com/GroupImage/defaultGroupImage.png',
-                    },
-                }
-            ],
+            screenName: '',
+            data: [],
             keyboard: false,
-            keyboardHeight: 0
+            keyboardHeight: 0,
+            phoneNumber: '',
         };
     }
-    componentDidMount() {
-        this.setState({group: this.props.route.params.group});
+    async componentDidMount() {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
+        AsyncStorage.getItem('phoneNumber').then((token) => {
+            this.setState({
+                phoneNumber: token,
+            });
+        });
+        await this.setState({group: this.props.route.params.group});
+        await this.getMessages();
     }
 
+    getMessages = async () =>{
+        let data = [];
+        await getMessages(this.state.group.group_name, this.state.screenName).then(r => data = r);
+        const array = [];
+        for (let userObject of data) {
+            const object = JSON.parse(JSON.stringify({
+                _id: userObject.messageId,
+                text: userObject.text,
+                createdAt: userObject.createdAt,
+                user: {
+                    _id: userObject.user.phone_number,
+                    name: userObject.user.screen_name,
+                },
+            }));
+            array.unshift(object)
+        }
+        this.setState({data: array})
+
+    };
+
     onSend(messages = []) {
-        console.log(messages)
         this.setState(previousState => ({
             data: GiftedChat.append(previousState.data, messages),
-        }))
+        }));
+        addMessage(this.state.screenName, this.state.group.group_name,  messages[0].text)
     }
     renderBubble = props => {
         return(
@@ -179,63 +205,15 @@ export default class GroupChat extends React.Component {
                     renderAccessory={this.renderAccessory}
                     isTyping={true}
                     user={{
-                        _id: 1,
-                        name: 'Native',
-                        avatar: 'https://anonmebucket.s3.us-east-2.amazonaws.com/GroupImage/defaultGroupImage.png',
+                        _id: this.state.phoneNumber,
+                        name: this.state.screenName,
                     }}
                 />
             </View>
         );
     }
 }
-/*
-<View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white'}}>
-                <KeyboardAvoidingView behavior={"padding"}  key={keyboardAvoidingViewKey}
-                                      keyboardVerticalOffset = { 88 +30}
-                                      >
 
-
-                    <View style={{height:'84%'}}>
-                        <FlatList
-                            ref={ref => this.flatList = ref}
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item) => item.id}
-                            data={this.state.data}
-                            ListEmptyComponent={this.empty}
-                            onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
-                            onLayout={() => this.flatList.scrollToEnd({animated: true})}
-                            renderItem={({ item }) => {
-                                return (
-                                    <TouchableWithoutFeedback>
-                                        <View style={{height: 30, marginHorizontal: 30}}>
-                                            <Text>{item.message}</Text>
-                                        </View>
-
-                                    </TouchableWithoutFeedback>
-                                )
-                            }}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
-                <View style={that.state.keyboard ? styles.Key : styles.noKey}>
-
-                    <View style={styles.writeContainer}>
-                        <View style = {{flexDirection: 'row'}}>
-                            <View style={{justifyContent: 'center', marginRight: 10}}>
-                                <MaterialCommunityIcons name={'sticker-emoji'} size={25} color= {'gray'}/>
-                            </View>
-                            <View style={{width:'85%',alignItems: 'center', justifyContent: 'center'}}>
-                                <TextInput style={styles.phoneNumberBox}
-                                           placeholder="Send a Message"
-                                           placeholderTextColor='#e3e3e3'
-
-                                />
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
- */
 const windowHeight10 = Dimensions.get('window').height * .10;
 const styles = StyleSheet.create({
 

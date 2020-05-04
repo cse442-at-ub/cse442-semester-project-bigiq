@@ -1,9 +1,8 @@
 import * as React from "react";
 import { Text, View, FlatList, Switch, TouchableOpacity, StyleSheet, Image, TextInput, ImageBackground, AsyncStorage } from "react-native";
 import {Ionicons, Entypo} from "@expo/vector-icons";
-import Constants from "expo-constants";
-import * as Permissions from "expo-permissions";
-import * as ImagePicker from "expo-image-picker";
+import {pickImage} from "../../../fetches/ImageAccess";
+
 
 export default class CreateGroupImage extends React.Component {
     constructor(props) {
@@ -16,30 +15,12 @@ export default class CreateGroupImage extends React.Component {
             nameLength: 16
         };
     }
-    getPermissionAsync = async () => {
-        if (Constants.platform.ios) {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-            }
-        }
-    };
     _pickImage = async () => {
-        this.getPermissionAsync();
-        try {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
-            if (!result.cancelled) {
-                this.setState({ groupImage: result.uri });
+        pickImage().then(r => {
+            if(r.uri !== undefined){
+                this.setState({groupImage: r.uri})
             }
-        
-        } catch (E) {
-            console.log(E);
-        }
+        })
     };
 
     goFinalScreen = () =>{
