@@ -3,6 +3,7 @@ package com.example.AnonMe.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -25,8 +26,8 @@ public class MessageEntry {
     };
 
     @JsonCreator
-    public MessageEntry(@JsonProperty("messageId") String id, @JsonProperty("user") UserEntry user,
-                        @JsonProperty("content") String content, @JsonProperty("timestamp") long timestamp,
+    public MessageEntry(@JsonProperty("_id") String id, @JsonProperty("user") UserEntry user,
+                        @JsonProperty("text") String content, @JsonProperty("createdAt") long timestamp,
                         @JsonProperty("image") String image, @JsonProperty("video") String video,
                         @JsonProperty("duration") int duration, @JsonProperty ("group_name") String group_name){
         if(id == null){
@@ -144,4 +145,6 @@ public class MessageEntry {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+
 }
