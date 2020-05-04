@@ -26,6 +26,7 @@ import GroupChatSetting from "./pages/GroupPages/GroupChatSetting";
 import GroupMember from "./pages/GroupPages/GroupMember";
 import PostDetailVoice from "./pages/HomePage/Voice/PostDetailVoice";
 import CommentVoice from "./pages/HomePage/Voice/CommentVoice";
+import RewardScreen from "./pages/AccountSettings/RewardScreen";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -61,6 +62,7 @@ function AccountScreens() {
             <Stack.Screen name="AccountScreen" component={AccountScreen} />
             <Stack.Screen name="SettingScreen" component={SettingScreen} />
             <Stack.Screen name="NameScreen" component={NameScreen} />
+            <Stack.Screen name="RewardScreen" component={RewardScreen} />
 
         </AccountStack.Navigator>
     )

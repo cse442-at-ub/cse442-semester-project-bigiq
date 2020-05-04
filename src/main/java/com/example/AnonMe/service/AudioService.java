@@ -11,22 +11,26 @@ import java.nio.file.Paths;
 
 public class AudioService {
 
-    public void saveAudio(MultipartFile file, String fileName) {
-        if(!file.getContentType().contains("video")) System.out.println("Not a video");
+    public long saveAudio(MultipartFile file, String fileName) {
+        if(!file.getContentType().contains("video")) {
+            System.out.println("Not a video");
+        }
         else {
             try {
                 Path videoPath = Paths.get( "src/main/resources/VideoFiles/"+ fileName +".mp4");
                 String audioPath = "src/main/resources/AudioFiles/"+ fileName +".mp3";
                 Files.write(videoPath, file.getBytes());
-                videoToAudio(videoPath.toString(), audioPath);
+                long duration = videoToAudio(videoPath.toString(), audioPath);
                 S3DB db = new S3DB();
                 db.uploadFile(audioPath, fileName);
                 deleteAudioFiles();
                 deleteVideoFiles();
+                return duration;
             }catch (IOException e){
                 e.printStackTrace();
             }
         }
+        return 0;
     }
     private void deleteVideoFiles(){
         File folder = new File("src/main/resources/VideoFiles");
@@ -41,7 +45,7 @@ public class AudioService {
         File[] files = folder.listFiles();
         for (File file : files) file.delete();
     }
-    private void videoToAudio (String videoPath, String audioPath) {
+    private long videoToAudio (String videoPath, String audioPath) {
         try {
             File source = new File(videoPath);
             File target = new File(audioPath);
@@ -55,12 +59,12 @@ public class AudioService {
             attrs.setAudioAttributes(audio);
             Encoder encoder = new Encoder();
             encoder.encode(source, target, attrs);
-            System.out.println(encoder.getInfo(target).getDuration());
             System.out.println("Convert video file to audio");
+            return encoder.getInfo(target).getDuration();
         }catch (EncoderException e){
             System.out.println(e.getMessage());
         }
-
+        return 0;
     }
 
 }

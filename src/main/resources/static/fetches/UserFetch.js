@@ -14,3 +14,10 @@ export const deleteUser = (phoneNumber, screenName) =>{
         headers: new Headers({'content-type': 'application/json'}),
     });
 };
+
+export const changeName = (oldName,newName) =>{
+    const URL = baseURL + ":8080/users/changename?old_screen="+ oldName + "&new_screen=" + newName;
+    return fetch(URL,{
+        method: "POST"
+    }).then(response => response.json());
+};
