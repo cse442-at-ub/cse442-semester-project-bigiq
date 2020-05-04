@@ -139,12 +139,16 @@ public class GroupRepository {
                 "WHERE group_id = '" + target.getGroup_id() + "' ";
         jdbc_temp.update(sql);
 
+        sql = "DELETE FROM user_group_messages WHERE " +
+                "group_name = '" + target.getGroup_name() + "' ";
+
+        jdbc_temp.update(sql);
+
         sql = "DELETE FROM group_data_table WHERE " +
                 "group_id = '" + target.getGroup_id() + "' ";
         jdbc_temp.update(sql);
 
-        sql = "DELETE FROM user_group_messages WHERE " +
-                "group_id = '" + target.getGroup_id() + "' ";
+
     }
 
     //Method to search for a group by keyword
@@ -161,6 +165,7 @@ public class GroupRepository {
         String sql = "Select * from group_data_table where group_name = '" + group_name + "' ";
         List<GroupEntry> tmp = new ArrayList<>();
         tmp.addAll(jdbc_temp.query(sql,new BeanPropertyRowMapper(GroupEntry.class)));
+        if (tmp.size() == 0) return new ArrayList<String>();
 
         sql = "SELECT screen_name from user_group_data "+
                 "WHERE group_id = '" + tmp.get(0).getGroup_id() +"' " +

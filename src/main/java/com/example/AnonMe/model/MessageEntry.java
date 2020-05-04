@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.UUID;
 
 public class MessageEntry {
@@ -12,7 +13,7 @@ public class MessageEntry {
     private String group_name;
     private UserEntry user;
     private String content;
-    private String timestamp;
+    private long timestamp;
     private String image;
     private String video;
     private String group_icon;
@@ -25,12 +26,12 @@ public class MessageEntry {
 
     @JsonCreator
     public MessageEntry(@JsonProperty("messageId") String id, @JsonProperty("user") UserEntry user,
-                        @JsonProperty("content") String content, @JsonProperty("timestamp") String timestamp,
+                        @JsonProperty("content") String content, @JsonProperty("timestamp") long timestamp,
                         @JsonProperty("image") String image, @JsonProperty("video") String video,
                         @JsonProperty("duration") int duration, @JsonProperty ("group_name") String group_name){
         if(id == null){
             this.message_id = UUID.randomUUID().toString();
-            this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd',' h:mm a"));
+            this.timestamp = new Date().getTime();
         }else {
             this.message_id = id;
             this.timestamp = timestamp;
@@ -78,19 +79,19 @@ public class MessageEntry {
         this.content = content;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         //System.out.println("Huehhh??GET");
         //System.out.println(timestamp);
         return this.timestamp;
     }
 
-    public void setTimestampfront(String timestamp) {
+    public void setTimestampfront(long timestamp) {
         //System.out.println("Huehhh??");
         //System.out.println(timestamp);
         this.timestamp = timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
