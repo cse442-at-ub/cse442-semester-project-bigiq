@@ -1,6 +1,6 @@
 import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback, ImageBackground, AsyncStorage} from "react-native";
 import * as React from 'react';
-import {fetchDataRecent,fetchDataLiked, deletePost, likePost, flagPost} from "../../fetches/PostFetch";
+import {fetchDataRecent,fetchDataLiked, deletePost, likePost, flagPost} from "../../../fetches/PostFetch";
 import {Ionicons} from "@expo/vector-icons";
 
 export default class TextScreen extends React.Component {
@@ -10,7 +10,7 @@ export default class TextScreen extends React.Component {
             data : [],
             like: 0,
             feedType: true,
-            likeIcon: require('../../assets/loveIcon.png'),
+            likeIcon: require('../../../assets/loveIcon.png'),
             screenName: '',
             isFetching: false
         };
@@ -94,7 +94,7 @@ export default class TextScreen extends React.Component {
             <View></View>
         )
     };
-    
+
     render(){
         let that = this;
         return(

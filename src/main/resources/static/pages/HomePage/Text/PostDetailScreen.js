@@ -8,8 +8,8 @@ import {
     TouchableWithoutFeedback,
     FlatList, AsyncStorage,
 } from 'react-native';
-import {flagPost, likePost} from "../../fetches/PostFetch";
-import {fetchComments} from "../../fetches/CommentFetch";
+import {flagPost, likePost} from "../../../fetches/PostFetch";
+import {fetchComments} from "../../../fetches/CommentFetch";
 import {Ionicons} from "@expo/vector-icons";
 
 export default class PostDetailScreen extends React.Component{
@@ -112,7 +112,7 @@ export default class PostDetailScreen extends React.Component{
                 <View style={{backgroundColor: '#4704a5', width: '100%', height: '13%'}}>
                     <TouchableOpacity style={{ position:'relative', top: '60%', left: 20}} onPress={() => that.backHomeScreen()}>
                         <Image style={{width: 25, height: 25, resizeMode: 'contain'}}
-                               source={require('../../assets/backIcon.png')}/>
+                               source={require('../../../assets/backIcon.png')}/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.detailsContainer}>
@@ -216,7 +216,7 @@ export default class PostDetailScreen extends React.Component{
                         }
                     />
 
-                
+
                 <TouchableWithoutFeedback onPress={() => that.addComment()}>
                     <View style={styles.writeCommentContainer}>
                         <View style={{width: '95%', borderRadius: 3, left: '3%', backgroundColor:'#e4e4e4', height: '60%', justifyContent: 'center'}}>

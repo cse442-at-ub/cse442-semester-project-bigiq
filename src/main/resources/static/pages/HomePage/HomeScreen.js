@@ -2,8 +2,8 @@ import {Text, View, FlatList, Platform, TouchableOpacity, StyleSheet, Image, Tou
 import * as React from 'react';
 import {fetchDataRecent,fetchDataLiked, deletePost, likePost, flagPost} from "../../fetches/PostFetch";
 import {Ionicons} from "@expo/vector-icons";
-import TextScreen from './TextScreen';
-import VoiceScreen from './VoiceScreen';
+import TextScreen from './Text/TextScreen';
+import VoiceScreen from './Voice/VoiceScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -37,10 +37,10 @@ export default class HomeScreen extends React.Component {
                 </View>
                 <TopTab.Navigator
                     tabBarOptions={{
-                    activeTintColor: '#4704a5',  
-                    style: {  
-                        backgroundColor:'white'  
-                    } 
+                    activeTintColor: '#4704a5',
+                    style: {
+                        backgroundColor:'white'
+                    }
                 }}
                 >
                     <TopTab.Screen name="Text" component={TextScreen} />

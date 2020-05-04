@@ -3,7 +3,7 @@ import {
     KeyboardAvoidingView, Platform, StyleSheet, Text,
     TextInput, TouchableOpacity, View, Keyboard, Image, AsyncStorage
 } from 'react-native'
-import {Ionicons} from "@expo/vector-icons";
+import {Ionicons, FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
@@ -16,6 +16,7 @@ export default class PostScreen extends React.Component {
             screenName: '',
             textInput: '',
             video: '',
+            textVoice: false,
             picked: false
         }
     }
@@ -62,7 +63,7 @@ export default class PostScreen extends React.Component {
             if (!result.cancelled) {
                 this.setState({ video: result.uri , picked : true});
             }
-        
+
         } catch (E) {
             console.log(E);
         }
@@ -82,31 +83,19 @@ export default class PostScreen extends React.Component {
                         <Ionicons name={'ios-attach'} size={20} color={'gray'}/>
                     </TouchableOpacity>
                 </View>
-                
+
             )
         }
-    }
+    };
     goBack = () => {
         this.props.navigation.pop();
     };
-    render() {
-        const that = this;
-        return (
-            <View style={{flex: 1, position:'relative' }}>
-                <View style={styles.topContainer}>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.goBack()}>
-                        <Image style={styles.topIcons}
-                               source={require('../../assets/exitIcon.png')}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.postFetch()}>
-                        <Image style={styles.topIcons}
-                               source={require('../../assets/uploadIcon.png')}/>
-                    </TouchableOpacity>
-                </View>
+    textVoiceRender = () =>{
+        if(this.state.textVoice === false){
+            return(
                 <View style={{paddingVertical: 20, paddingHorizontal: 25}}>
                     <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{fontSize: 20, fontWeight: "bold", color: '#4704a5'}}>Let's Start a Conversation</Text>
-                        {this.renderAttachment()}
                     </View>
                     <TextInput style={styles.nameTagBox}
                                underlineColorAndroid='rgba(0,0,0,0)'
@@ -117,6 +106,43 @@ export default class PostScreen extends React.Component {
                                keyboardType='default'
                     />
                 </View>
+            )
+        }else {
+            return (
+                <View style={{paddingVertical: 20, paddingHorizontal: 25}}>
+                    <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 20, fontWeight: "bold", color: '#4704a5'}}>Title</Text>
+                        {this.renderAttachment()}
+                    </View>
+                    <TextInput style={styles.nameTagBox}
+                               underlineColorAndroid='rgba(0,0,0,0)'
+                               placeholder="Write here"
+                               placeholderTextColor='gray'
+                               multiline = {true}
+                               maxLength={60}
+                               onChangeText={input => this.setState({content: input})}
+                               keyboardType='default'
+                    />
+                </View>
+            );
+        }
+    };
+    render() {
+        const that = this;
+        return (
+            <View style={{flex: 1, position:'relative', backgroundColor: 'white'}}>
+                <View style={styles.topContainer}>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.goBack()}>
+                        <FontAwesome name={'close'} size={30} color={'#4704a5'}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.setState({textVoice: !this.state.textVoice})}>
+                        <MaterialCommunityIcons name={'voice'} size={25} color={this.state.textVoice ? '#4704a5':'gray'}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={() => this.postFetch()}>
+                        <FontAwesome name={'send'} size={20} color={'#4704a5'}/>
+                    </TouchableOpacity>
+                </View>
+                {this.textVoiceRender()}
             </View>
 
         );
@@ -131,12 +157,10 @@ export default class PostScreen extends React.Component {
             borderBottomWidth: 2,
             borderBottomColor: '#e0e0e0',
         },
-        topIcons: {
-            width: 20, height: 20, resizeMode: 'contain'
-        },
         iconContainer:{
             paddingHorizontal: 30,
-            paddingTop: '10%'
+            justifyContent: 'flex-end',
+            paddingBottom: 7
         },
     });
 

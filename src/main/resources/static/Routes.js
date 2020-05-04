@@ -11,8 +11,8 @@ import FollowingScreen from "./pages/FollowingPages/FollowingScreen";
 import PostScreen from "./pages/HomePage/PostScreen";
 import GroupScreen from "./pages/GroupPages/GroupScreen";
 import AccountScreen from "./pages/AccountSettings/AccountScreen";
-import PostDetailScreen from "./pages/HomePage/PostDetailScreen";
-import CommentScreen from "./pages/HomePage/CommentScreen";
+import PostDetailScreen from "./pages/HomePage/Text/PostDetailScreen";
+import CommentScreen from "./pages/HomePage/Text/CommentScreen";
 import NameScreen from "./pages/AccountSettings/NameScreen";
 import SettingScreen from "./pages/AccountSettings/SettingScreen";
 import CreateGroupName from "./pages/GroupPages/CreateGroup/CreateGroupName";
@@ -23,6 +23,9 @@ import CreateGroupFinal from "./pages/GroupPages/CreateGroup/CreateGroupFinal";
 import GroupChat from "./pages/GroupPages/GroupChat";
 import CreateGroupImage from "./pages/GroupPages/CreateGroup/CreateGroupImage";
 import GroupChatSetting from "./pages/GroupPages/GroupChatSetting";
+import GroupMember from "./pages/GroupPages/GroupMember";
+import PostDetailVoice from "./pages/HomePage/Voice/PostDetailVoice";
+import CommentVoice from "./pages/HomePage/Voice/CommentVoice";
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
@@ -42,7 +45,9 @@ function HomePageScreen() {
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="PostScreen" component={PostScreen} />
             <Stack.Screen name="PostDetail" component={PostDetailScreen} />
+            <Stack.Screen name="PostDetailVoice" component={PostDetailVoice} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} />
+            <Stack.Screen name="CommentVoice" component={CommentVoice} />
         </HomeStack.Navigator>
     )
 }
@@ -146,6 +151,7 @@ export default function Routes() {
                 <Stack.Screen name="AppScreen" component={AppScreen} />
                 <Stack.Screen name="GroupChat" component={GroupChat} />
                 <Stack.Screen name="GroupChatSetting" component={GroupChatSetting} />
+                <Stack.Screen name="GroupMember" component={GroupMember} />
             </Stack.Navigator>
         </NavigationContainer>
     );
