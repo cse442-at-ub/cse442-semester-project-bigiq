@@ -7,6 +7,10 @@ import com.example.AnonMe.model.AudioEntry;
 import com.example.AnonMe.service.AudioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -23,13 +27,17 @@ public class AudioController {
     @Autowired
     PostRepository post_repo;
 
-    @PostMapping(path="/postAudio")
-    public void insertPost(@RequestParam("file") MultipartFile file, @RequestParam("name") String name) {
-        audioService.saveAudio(file, name);
-    }
 
     @PostMapping(path="/insertAudio")
-    public void insertAudio(@RequestBody AudioEntry audioentry){
+    public void insertAudio(@RequestParam("file") MultipartFile file, @RequestParam("screenname") String name){
+        AudioEntry audioentry = new AudioEntry();
+        String postId = UUID.randomUUID().toString();
+        audioentry.setPost_id(postId);
+        audioentry.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMMM dd',' h:mm a")));
+        String baseUrl = "https://anonmebucket.s3.us-east-2.amazonaws.com/Audio/";
+        audioentry.setDuration(audioService.saveAudio(file, postId));
+        audioentry.setScreenName(name);
+        audioentry.setContent(baseUrl + postId + ".mp3");
         audiorepo.insertPost(audioentry);
     }
 

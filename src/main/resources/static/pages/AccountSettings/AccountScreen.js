@@ -89,13 +89,13 @@ export default class AccountScreen extends React.Component{
                 </View>
                 <View style={styles.statsContainer}>
                     <View style={styles.statsView}>
-                        <Text style={styles.statsText}>0</Text>
+                        <Text style={styles.statsText}>{this.state.data.length}</Text>
                         <Text style={{color: 'gray'}}>Posts</Text>
                     </View>
-                    <View style={styles.statsView}>
-                        <Text style={styles.statsText}>0</Text>
-                        <Text style={{color: 'gray'}}>Likes</Text>
-                    </View>
+                    <TouchableOpacity style={styles.statsView} onPress={() => this.props.navigation.navigate('RewardScreen')}>
+                        <Image style={{width: 70, height: 70, resizeMode: 'contain'}}
+                               source={require('../../assets/rewardBadge/Bronze1.png')}/>
+                    </TouchableOpacity>
                     <View style={styles.statsView}>
                         <Text style={styles.statsText}>0</Text>
                         <Text style={{color: 'gray'}}>Following</Text>
