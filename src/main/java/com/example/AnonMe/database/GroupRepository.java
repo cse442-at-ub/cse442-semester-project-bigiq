@@ -35,6 +35,12 @@ public class GroupRepository {
 
     //Method to add group to DB
     public void AddGroupToDB (GroupEntry groupentry, String screenname){
+        String testUserSQL = "Select * from user_info where screen_name = '"+screenname+"' ";
+
+        List<UserEntry> t = new ArrayList<>();
+        t.addAll(jdbc_temp.query(testUserSQL, new BeanPropertyRowMapper<>(UserEntry.class)));
+        if (t.size() == 0) return;
+
         String sql = "Insert into group_data_table " +
                 "(group_id, group_name, group_desc, memberCount, image) " +
                 "values ( ? , ? , ? , ? , ? ) ";
