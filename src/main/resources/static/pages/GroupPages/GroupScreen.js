@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import * as React from 'react';
 import {SearchBar, ListItem, Avatar} from 'react-native-elements'
-import { fetchAllGroups, searchGroups, fetchUserGroups } from "../../fetches/GroupFetch";
+import { fetchTrending, searchGroups, fetchUserGroups, insertUser } from "../../fetches/GroupFetch";
 import {Ionicons} from "@expo/vector-icons";
 
 
@@ -33,23 +33,22 @@ export default class GroupScreen extends React.Component {
     }
 
 
-    componentDidMount() {
-        AsyncStorage.getItem('screenName').then((token) => {
+    async componentDidMount() {
+        await AsyncStorage.getItem('screenName').then((token) => {
             this.setState({
                 screenName: token,
             });
         });
         this.props.navigation.addListener("focus", () => {
             this.fetchUserGroups();
-            this.fetchAllGroups();
+            this.fetchTrendingGroups();
         });
     };
-    fetchUserGroups = () =>{
-        fetchUserGroups(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
-
+    fetchUserGroups = async () =>{
+        await fetchUserGroups(this.state.screenName).then( dataAPI => this.setState({data : dataAPI}))
     };
-    fetchAllGroups = () =>{
-        fetchAllGroups(this.state.screenName).then( dataAPI => this.setState({trendingSearchData : dataAPI}))
+    fetchTrendingGroups = async () =>{
+        await fetchTrending(this.state.screenName).then( dataAPI => this.setState({trendingSearchData : dataAPI}))
     };
     updateSearch = search => {
         this.setState({ search });
@@ -61,7 +60,7 @@ export default class GroupScreen extends React.Component {
 
     trendingOrSearch =() =>{
         if(this.state.search.length === 0){
-            this.fetchAllGroups();
+            this.fetchTrendingGroups();
             return(
                 <View style={{paddingHorizontal:20, paddingVertical: 10}}>
                     <Text style={{color: '#4704a5', fontWeight: 'bold', fontSize: 20}}>Trending</Text>
@@ -82,6 +81,19 @@ export default class GroupScreen extends React.Component {
                 <Text>How about you create one?</Text>
             </View>
         )
+    };
+    addUserGroup = (item) =>{
+        const baseURL = "http://" + (Platform.OS === 'android' ? "10.0.2.2":"192.168.100.156");
+        const URL = baseURL + ":8080/groups/addUser?screenname=" + this.state.screenName + "&group_name=" + item.group_name;
+        const that = this;
+        fetch(URL, {
+            method: "POST"
+        }).then(function(response) {
+            if(response.ok){
+                const joined = that.state.data.concat(item);
+                that.setState({ data: joined })
+            }
+        });
     };
     headerComponent = () =>{
         return (
@@ -107,7 +119,7 @@ export default class GroupScreen extends React.Component {
                         horizontal={true}
                         renderItem={({ item }) => {
                             return (
-                                <TouchableWithoutFeedback>
+                                <View>
                                     <View style={styles.cardContainer}>
                                         <View style={{paddingVertical: 5, flexDirection: 'row'}}>
                                         <Avatar
@@ -125,7 +137,16 @@ export default class GroupScreen extends React.Component {
                                             <Text style={{textAlign: 'center',color: 'black', fontSize: 10}}>{item.group_desc}</Text>
                                         </View>
                                     </View>
-                                </TouchableWithoutFeedback>
+                                    <View style={{width: '100%', alignItems: 'center'}}>
+                                        <TouchableOpacity style={{backgroundColor: '#4704a5', width: '30%', height: 20,
+                                            justifyContent: 'center', alignItems: 'center', borderRadius: 20}}
+                                                onPress={() => this.addUserGroup(item)}>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <Text style={{color: 'white', marginRight: 5}}>Join</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                             )
                         }}/>
 
@@ -210,7 +231,7 @@ const styles = StyleSheet.create({
     },
     cardContainer:{
         width: 250,
-        height: 80,
+        height: 100,
         borderRadius: 20,
         alignItems: 'center',
         backgroundColor: 'white',
