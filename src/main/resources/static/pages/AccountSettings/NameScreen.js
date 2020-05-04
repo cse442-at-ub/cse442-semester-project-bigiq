@@ -10,11 +10,28 @@ import {
     Platform,
     TouchableWithoutFeedback
 } from 'react-native';
-import {postByAuthor} from "../../fetches/PostFetch";
+import {changeName} from "../../fetches/UserFetch";
 
 export default class AccountScreen extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            screenName: '',
+            newName: ''
+        };
+    }
 
-
+    componentDidMount() {
+        AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
+    }
+    changeName = () =>{
+        changeName(this.state.screenName, this.state.newName).then(r => r.text)
+        AsyncStorage.setItem('screenName', this.state.newName);
+    };
     render() {
         const that = this;
         return(
@@ -37,13 +54,14 @@ export default class AccountScreen extends React.Component{
                                placeholder="New Screen Name"
                                placeholderTextColor='gray'
                                multiline = {true}
-                               onChangeText={input => this.setState({content: input})}
+                               onChangeText={input => this.setState({newName: input})}
                                keyboardType='default'
                                maxLength = {16}
                     />
                 </View>
                 <View style={{width: '100%', alignItems: 'center', marginTop: 20}}>
-                    <TouchableOpacity style={{width: '20%', alignItems: 'center', backgroundColor: '#4704a5', borderRadius: 20}}>
+                    <TouchableOpacity style={{width: '20%', alignItems: 'center', backgroundColor: '#4704a5', borderRadius: 20}}
+                    onPress={() => this.changeName()}>
                         <Text style={{color: 'white'}}>Submit</Text>
                     </TouchableOpacity>
                 </View>
