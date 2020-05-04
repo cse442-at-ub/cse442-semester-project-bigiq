@@ -13,6 +13,10 @@ public class CommentEntry {
     private String screen_name;
     private String content;
     private String timestamp_front;
+    private boolean like_button = false;
+    private boolean flag_button = false;
+    private int like_ctr = 0;
+    private int flag_ctr = 0;
 
     public CommentEntry(){}
 
@@ -72,5 +76,37 @@ public class CommentEntry {
 
     public void setTimestamp_front(String timestamp_front) {
         this.timestamp_front = timestamp_front;
+    }
+
+    public boolean isLike_button() {
+        return like_button;
+    }
+
+    public void setLike_button(boolean like_button) {
+        this.like_button = like_button;
+    }
+
+    public boolean isFlag_button() {
+        return flag_button;
+    }
+
+    public void setFlag_button(boolean flag_button) {
+        this.flag_button = flag_button;
+    }
+
+    public int getLike_ctr() {
+        return like_ctr;
+    }
+
+    public void setLike_ctr(int like_ctr) {
+        this.like_ctr = like_ctr;
+    }
+
+    public int getFlag_ctr() {
+        return flag_ctr;
+    }
+
+    public void setFlag_ctr(int flag_ctr) {
+        this.flag_ctr = flag_ctr;
     }
 }

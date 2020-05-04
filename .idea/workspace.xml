@@ -2,24 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f624089-0046-4964-837e-7f3a1161b609" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/Comment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/Post.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/key.p12" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnonMe.iml" beforeDir="false" afterPath="$PROJECT_DIR$/AnonMe.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/api/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/model/UserEntry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/service/PhoneVerification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/AnonMe/service/PhoneVerification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/CreateGroupDes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/CreateGroupFinal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/CreateGroupImage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/CreateGroupName.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/GroupChat.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/Routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/Routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/Splash.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/Splash.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/Verification.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/Verification.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/fetches/CommentFetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/fetches/CommentFetch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/AccountSettings/SettingScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/AccountSettings/SettingScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/FollowingPages/FollowingScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/FollowingPages/FollowingScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/GroupScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/GroupPages/GroupScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/pages/HomePage/PostScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/pages/HomePage/PostScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

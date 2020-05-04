@@ -1,4 +1,5 @@
 package com.example.AnonMe.database;
+import com.example.AnonMe.model.AudioEntry;
 import com.example.AnonMe.model.CommentEntry;
 import com.example.AnonMe.model.PostEntry;
 import com.example.AnonMe.model.UserEntry;
@@ -51,7 +52,7 @@ public class CommentRepository {
     //Retrieves all comments based off post id
     public List<CommentEntry> getPostComments(String post_id){
         List<CommentEntry> ret = new ArrayList<>();
-        String sql = "SELECT a.comment_id, a.post_id, c.screen_name, b.content, b.timestamp_front " +
+        String sql = "SELECT a.comment_id, a.post_id, c.screen_name, b.content, b.timestamp_front, b.like_ctr, b.flag_ctr " +
                 "FROM user_comment a, post_data b, user_info c " +
                 "WHERE a.post_id = '" + post_id + "' " +
                 "AND a.comment_id = b.post_id " +
@@ -59,6 +60,15 @@ public class CommentRepository {
 
         ret.addAll(jdbc_temp.query(sql, new BeanPropertyRowMapper(CommentEntry.class)));
 
+        return ret;
+    }
+
+    public List<CommentEntry> getPostComments(String post_id, String user){
+        List<CommentEntry> ret = getPostComments(post_id);
+        for (CommentEntry tmp : ret){
+            tmp.setLike_button(post_repo.getLike(tmp.getComment_id(),user));
+            tmp.setFlag_button(post_repo.getFlag(tmp.getComment_id(),user));
+        }
         return ret;
     }
 

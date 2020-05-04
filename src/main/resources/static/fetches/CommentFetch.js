@@ -19,5 +19,6 @@ export const insertComment = (postId, screenName, content) =>{
 
 export const fetchComments = (id) =>{
     const URL = baseURL + ":8080/comments/getAllComments?postId=" + id;
+    console.log("fetched Comments for: " + id );
     return fetch(URL).then(response => response.json());
 };
