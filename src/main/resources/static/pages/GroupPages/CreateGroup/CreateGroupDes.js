@@ -54,7 +54,6 @@ export default class CreateGroupDes extends React.Component {
                     <View style={{ width: '100%'}}>
                         <TextInput
                             autoFocus={true}
-                            autoFocus={true}
                             placeholder="Describe your group"
                             placeholderTextColor='gray'
                             style={ {fontSize: 18, paddingHorizontal: 10}  }

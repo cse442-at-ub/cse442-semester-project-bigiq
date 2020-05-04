@@ -1,10 +1,7 @@
 package com.example.AnonMe.service;
 
 import com.example.AnonMe.database.S3DB;
-import it.sauronsoftware.jave.AudioAttributes;
-import it.sauronsoftware.jave.Encoder;
-import it.sauronsoftware.jave.EncoderException;
-import it.sauronsoftware.jave.EncodingAttributes;
+import it.sauronsoftware.jave.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
@@ -58,6 +55,7 @@ public class AudioService {
             attrs.setAudioAttributes(audio);
             Encoder encoder = new Encoder();
             encoder.encode(source, target, attrs);
+            System.out.println(encoder.getInfo(target).getDuration());
             System.out.println("Convert video file to audio");
         }catch (EncoderException e){
             System.out.println(e.getMessage());

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, View, FlatList, Switch, TouchableOpacity, StyleSheet, Image, TextInput, ImageBackground, AsyncStorage } from "react-native";
 import {Entypo, Ionicons} from "@expo/vector-icons";
-import {RNS3} from "react-native-aws3/src/RNS3";
+import {getS3} from "../../../fetches/S3";
 import {insertGroup} from '../../../fetches/GroupFetch';
 
 export default class CreateGroupFinal extends React.Component {
@@ -17,39 +17,23 @@ export default class CreateGroupFinal extends React.Component {
             nameLength: 160
         };
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({groupName: this.props.route.params.name, groupDes: this.props.route.params.description,
         groupImage: this.props.route.params.image});
+        await AsyncStorage.getItem('screenName').then((token) => {
+            this.setState({
+                screenName: token,
+            });
+        });
     }
-    getS3 = (uri) =>{
-        const file = {
-            uri: uri,
-            name: this.state.groupName + '.jpg',
-            type: 'image/jpeg'
-        };
-        const option = {
-            keyPrefix: 'GroupImage/',
-            bucket: 'anonmebucket',
-            region: 'us-east-2',
-            accessKey: 'AKIATKMN22MYCP5X3E7K',
-            secretKey: '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',
-            successActionStatus: 201
-        };
-        RNS3.put(file, option).then(response =>{
-            if(response.status !== 201){
-                throw new Error('Failed to upload image ', response)
-            }
-            console.log(response.body)
-        })
-
-    };
     addGroup = () =>{
-        this.getS3(this.state.groupImage);
+        getS3(this.state.groupImage, this.state.groupName);
         const imageName = 'https://anonmebucket.s3.us-east-2.amazonaws.com/GroupImage/'+ this.state.groupName+'.jpg';
-        const s3Image = imageName.toString().replace(" ", "+");
-        insertGroup(this.state.screenName, this.state.groupName, this.state.groupDes, s3Image);
+        insertGroup(this.state.screenName, this.state.groupName, this.state.groupDes, imageName);
+        console.log("Name: " + this.state.screenName+ " GroupName: " + this.state.groupName)
+        console.log("Desc: " + this.state.groupDes+ " Image: " + imageName)
         this.props.navigation.navigate('GroupScreen');
-    }
+    };
     render() {
         const that = this;
         return(
